@@ -127,40 +127,6 @@ def get_urls_to_request(nodes_packed, dates, system, node_type, market):
     return urls_list
 
 
-# def resquest_data(nodes, dates, system, node_type, market):
-
-#     # Building node string
-#     nodes_string = ','.join(nodes)
-
-#     # Select correct API base
-#     url = url_frame[node_type]
-
-#     # Building request url with data provided
-#     url_complete = f'{url}{system}/{market}/{nodes_string}/{dates[0][:4]}/{dates[0][5:7]}/{dates[0][8:]}/{dates[1][:4]}/{dates[1][5:7]}/{dates[1][8:]}/JSON'
-
-#     print('Requesting...', end='')
-#     sys.stdout.flush()
-
-#     req = requests.get(url_complete)
-
-#     if req.status_code != 200:
-#         print(req.status_code)
-#         print("Requesting again...", end='')
-#         sys.stdout.flush()
-
-#         req = requests.get(url_complete)
-#         if req.status_code != 200:
-#             print(req.status_code)
-#             sys.stdout.flush()
-#             raise
-
-#     print('Processing...', end='')
-#     sys.stdout.flush()
-
-
-#     return req.json()
-
-
 def check_data(json_data, date_interval):
 
     if json_data['status'] == 'OK':
