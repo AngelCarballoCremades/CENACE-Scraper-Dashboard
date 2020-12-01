@@ -48,7 +48,7 @@ def open_browser(download_folder):
     profile = webdriver.FirefoxProfile()
     profile.set_preference("browser.download.folderList", 2) # Do not use default download folder
     profile.set_preference("browser.download.dir", download_folder) # Use selected download folder
-    profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream") # Do not show download popup for selected mime-type files
+    profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream, application/zip") # Do not show download popup for selected mime-type files
 
     print('Opening Browser.')
     driver = webdriver.Firefox(firefox_profile=profile)
