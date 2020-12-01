@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from datetime import datetime
+import zipfile
 
 from scraper_prices_month import open_browser, wait_download
 
@@ -62,8 +63,46 @@ def get_date_string(last_month, last_year):
     else:
         return None
 
+def date_string_to_numeric(date_string):
+    month_dict = {
+        1:'enero',
+        2:'febrero',
+        3:'marzo',
+        4:'abril',
+        5:'mayo',
+        6:'junio',
+        7:'julio',
+        8:'agosto',
+        9:'septiembre',
+        10:'octubre',
+        11:'noviembre',
+        12:'diciembre'}
 
-def main(last_month = 10,last_year = 2020):
+    date = date_string.split(' ')
+
+    month = [k for k,v in month_dict.items() if date[0] == v]
+    year = date[2]
+
+    return month, year
+
+def check_dates(date_interval, first_date, second_date):
+
+    first_date = date_string_to_numeric(first_date)
+    second_date = date_string_to_numeric(second_date)
+    first_entered = date_string_to_numeric(date_interval[0])
+    second_entered = date_string_to_numeric(date_interval[1])
+
+    if first_date == first_entered and second_date == second_entered:
+        return True
+
+    elif first_entered != first_date and first_entered == second_entered:
+        return False
+
+    else:
+        return True
+
+
+def main(last_month = 0,last_year = 2018):
 
     # download = True
 
@@ -86,65 +125,54 @@ def main(last_month = 10,last_year = 2020):
 
         print("Typing date intervals.")
 
-        textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, date_textbox_xpath.format(Inicial_Final = 'Inicial'))))
+        textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, date_textbox_xpath.format(Inicial_Final='Inicial'))))
         textbox.send_keys(date_interval[0])
-        print(1)
+        textbox.send_keys(Keys.TAB)
+        first_date = textbox.get_attribute("value")
+
 
         textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, date_textbox_xpath.format(Inicial_Final = 'Final'))))
         textbox.send_keys(date_interval[1])
-        print(2)
+        textbox.send_keys(Keys.TAB)
+        second_date = textbox.get_attribute("value")
 
 
-        # REVISAR SI EL TEXTO DE LOS CUADROS CAMBIÓ REALMENTE O REGRESÓ AL TEXTO ANTERIOR
-        # CONDICIONAL SI TEXTBOX.TEXT == date_interval[0] (ALGO PARECIDO)
-
-
+        if not check_dates(date_interval, first_date, second_date):
+            print(f'There is no information available for dates selected, information up to {second_date}')
+            driver.quit()
+            break
 
         download_button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, download_button_xpath)))
-        download_button.click()
-        print(3)
 
         directorio = os.listdir(download_folder)
-        wait_download(directorio,f'{date_interval[0]} a {date_interval[1]}', download_folder)
+        download_button.click()
+        wait_download(directorio,f'{first_date} to {second_date}', download_folder)
+
+        driver.quit()
+        print('Download done.')
+
+        # print('Extracting zip file...')
+
+        # file_name = os.listdir(download_folder)[0]
+        # file_path = f'{download_folder}\\{file_name}'
+        # # print(directorio)
+
+        # with zipfile.ZipFile(file_path, 'r') as zip_file:
+        #     zip_file.extractall(download_folder)
+
+        # print('Removing zip file...')
+        # os.remove(file_path)
+
+        # print('Only keeping first-liquidation files...')
+        # for file_name in os.listdir(download_folder):
+        #     if "Generacion Liquidada_L0" not in file_name:
+        #         file_path = f'{download_folder}\\{file_name}'
+        #         os.remove(file_path)
+
+        # print('Done')
 
 
         break
-#     for month in range(1,len(months)+1):
-
-#         days = len(get_days_of_month(months[month-1]))
-
-#         month_xpath = month_xpath_frame.format(month=month*2-1) # Build info xpath
-#         month_info = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, month_xpath))).text # Wait for and get info
-#         print(month_info)
-
-#         for day in range(1,days+1):
-
-#             file_date_xpath = file_date_xpath_frame.format(month=month*2, day = day) # File date xpath
-#             file_date = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, file_date_xpath))).text # File date
-
-#             download = check_date(date, file_date)
-
-#             if not download:
-#                 print(date, file_date)
-#                 break
-
-#             file_button_xpath = file_button_xpath_frame.format(month=month*2, day = day)
-#             file_button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, file_button_xpath))) #Wait for and get file's button
-
-#             directorio = os.listdir(download_folder)
-#             file_button.click() # Click file's button
-#             wait_download(directorio,file_date, download_folder) # Wait for download to finish
-
-#         if not download:
-#             break
-
-
-#     print(f'\n{len(os.listdir(download_folder))} FILES DOWNLOADED.\n')
-
-#     # Close browser for next year or system to be downloaded
-#     driver.quit()
-
-#     print('YEAR DONE')
 
 
 if __name__ == '__main__':

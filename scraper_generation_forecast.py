@@ -33,10 +33,7 @@ xpath_timelapse = '/html/body/form/div[4]/div[1]/div/div[1]/div[2]/div/table/tbo
 
 # files button's xpath frame
 file_button_xpath_frame = '/html/body/form/div[4]/div[1]/div/div[1]/div[2]/div/table/tbody/tr/td[3]/div[1]/div/table/tbody/tr[{month}]/td[2]/table/tbody/tr[{day}]/td[2]/a[1]/img'
-             # /html/body/form/div[4]/div[1]/div/div[1]/div[2]/div/table/tbody/tr/td[3]/div[1]/div/table/tbody/tr[2]/td[2]/table/tbody/tr[1]/td[2]/a[1]/img
-             # /html/body/form/div[4]/div[1]/div/div[1]/div[2]/div/table/tbody/tr/td[3]/div[1]/div/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/a[1]/img
-             # /html/body/form/div[4]/div[1]/div/div[1]/div[2]/div/table/tbody/tr/td[3]/div[1]/div/table/tbody/tr[2]/td[2]/table/tbody/tr[30]/td[2]/a[1]/img
-             # /html/body/form/div[4]/div[1]/div/div[1]/div[2]/div/table/tbody/tr/td[3]/div[1]/div/table/tbody/tr[4]/td[2]/table/tbody/tr[1]/td[2]/a[1]/img
+
 # File date
 file_date_xpath_frame = '/html/body/form/div[4]/div[1]/div/div[1]/div[2]/div/table/tbody/tr/td[3]/div[1]/div/table/tbody/tr[{month}]/td[2]/table/tbody/tr[{day}]/td[1]'
 
@@ -50,10 +47,8 @@ def get_months(html_code):
     table = soup.find('table', {'id':'products', 'class':'products'})
     body = table.find('tbody')
     months = body.find_all('tr', {'class':'orders'})
-    # months_headers = body.find_all('tr', {'class':'expanded'})
-    # months_content = body.find_all('tr', {'class':'orders'})
-
     return months
+
 
 def get_days_of_month(month):
 
@@ -66,7 +61,6 @@ def check_date(date, file_date):
     year = date[:4] == file_date[:4]
     month = date[5:7] == file_date[5:7]
     day = date[8:] == file_date[8:]
-
     return not all([year, month, day])
 
 
@@ -89,7 +83,6 @@ def main(date='0000-00-00'):
         dummy = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, month_xpath_frame.format(month=1))))
 
         months = get_months(html_code=driver.page_source)
-        # print(len(months))
 
         for month in range(1,len(months)+1):
 
@@ -130,4 +123,4 @@ def main(date='0000-00-00'):
 
 
 if __name__ == '__main__':
-    main()
+    main(date = '2020-11-23')
