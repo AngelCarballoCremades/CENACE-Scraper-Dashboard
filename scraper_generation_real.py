@@ -27,21 +27,25 @@ date_textbox_xpath = r'//*[@id="ctl00_ContentPlaceHolder1_Fecha{Inicial_Final}_d
 download_button_xpath = r'//*[@id="DescargaZip"]'
 
 
-def get_date_string(last_month, last_year):
-    month_dict = {
-        1:'enero',
-        2:'febrero',
-        3:'marzo',
-        4:'abril',
-        5:'mayo',
-        6:'junio',
-        7:'julio',
-        8:'agosto',
-        9:'septiembre',
-        10:'octubre',
-        11:'noviembre',
-        12:'diciembre'}
+def month_dictionary():
 
+    return {1:'enero',
+            2:'febrero',
+            3:'marzo',
+            4:'abril',
+            5:'mayo',
+            6:'junio',
+            7:'julio',
+            8:'agosto',
+            9:'septiembre',
+            10:'octubre',
+            11:'noviembre',
+            12:'diciembre'}
+
+
+def get_date_string(last_month, last_year):
+
+    month_dict = month_dictionary()
     today = datetime.today()
     month = today.month
     year = today.year
@@ -60,30 +64,55 @@ def get_date_string(last_month, last_year):
 
         return [first_string, second_string]
 
+
     else:
         return None
 
-def date_string_to_numeric(date_string):
-    month_dict = {
-        1:'enero',
-        2:'febrero',
-        3:'marzo',
-        4:'abril',
-        5:'mayo',
-        6:'junio',
-        7:'julio',
-        8:'agosto',
-        9:'septiembre',
-        10:'octubre',
-        11:'noviembre',
-        12:'diciembre'}
 
+def pack_dates(last_month, last_year):
+
+    today = datetime.today()
+    month = today.month
+    year = today.year
+
+    if year < last_year:
+        return None
+
+    if month > last_month or year > last_year:
+        dates_packed = []
+
+        while month != last_month or year != last_year:
+
+            if year != last_year:
+                dates_packed.append([date_numeric_to_string(last_month + 1, last_year), date_numeric_to_string(12, last_year)])
+                last_month = 0
+                last_year += 1
+            else:
+                dates_packed.append(get_date_string(last_month, last_year))
+                break
+
+        return dates_packed
+
+    else:
+        return None
+
+
+def date_string_to_numeric(date_string):
+
+    month_dict = month_dictionary()
     date = date_string.split(' ')
 
     month = [k for k,v in month_dict.items() if date[0] == v]
     year = date[2]
 
-    return month, year
+    return [month, year]
+
+
+def date_numeric_to_string(month, year):
+
+    month_dict = month_dictionary()
+    return f'{month_dict[month]} de {year}'
+
 
 def check_dates(date_interval, first_date, second_date):
 
@@ -102,75 +131,77 @@ def check_dates(date_interval, first_date, second_date):
         return True
 
 
-def main(last_month = 0,last_year = 2018):
+def textbox_fill(driver, xpath, date):
 
-    # download = True
+    textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath)))
+    textbox.send_keys(date)
+    textbox.send_keys(Keys.TAB)
+    return textbox.get_attribute("value")
 
-    date_interval = get_date_string(last_month, last_year)
+
+def zip_extract_remove(download_folder):
+
+    for file_name in os.listdir(download_folder):
+        file_path = f'{download_folder}\\{file_name}'
+
+        with zipfile.ZipFile(file_path, 'r') as zip_file:
+            zip_file.extractall(download_folder)
+
+        os.remove(file_path)
+
+
+def filter_files(download_folder, string_to_keep):
+
+    for file_name in os.listdir(download_folder):
+        if string_to_keep not in file_name:
+            file_path = f'{download_folder}\\{file_name}'
+            os.remove(file_path)
+
+
+def main(last_month = 12,last_year = 2020):
+
+    print(f'\nDownloading Energy-type Generation\n')
+    dates_packed = pack_dates(last_month, last_year)
 
     while True:
 
-        if not date_interval:
+        if not dates_packed:
             print('No information available for dates selected')
             break
-
-        print(date_interval[0], date_interval[1])
-
-        print(f'\nDownloading Energy-type Generation from \n')
 
         driver = open_browser(download_folder)
 
         print('Loading page.')
         driver.get(main_url)
 
-        print("Typing date intervals.")
+        for date_interval in dates_packed:
 
-        textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, date_textbox_xpath.format(Inicial_Final='Inicial'))))
-        textbox.send_keys(date_interval[0])
-        textbox.send_keys(Keys.TAB)
-        first_date = textbox.get_attribute("value")
+            print("Selecting dates...")
+            first_date = textbox_fill(driver=driver, xpath=date_textbox_xpath.format(Inicial_Final='Inicial'), date=date_interval[0])
+            second_date = textbox_fill(driver=driver, xpath=date_textbox_xpath.format(Inicial_Final='Final'), date=date_interval[1])
 
+            if not check_dates(date_interval, first_date, second_date):
+                print(f'There is no information available for dates selected, information up to {second_date}')
+                driver.quit()
+                break
 
-        textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, date_textbox_xpath.format(Inicial_Final = 'Final'))))
-        textbox.send_keys(date_interval[1])
-        textbox.send_keys(Keys.TAB)
-        second_date = textbox.get_attribute("value")
+            print('Waiting for download to begin...')
 
+            download_button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, download_button_xpath)))
+            directorio = os.listdir(download_folder)
+            download_button.click()
+            wait_download(directorio,f'{first_date} to {second_date}', download_folder)
 
-        if not check_dates(date_interval, first_date, second_date):
-            print(f'There is no information available for dates selected, information up to {second_date}')
-            driver.quit()
-            break
-
-        download_button = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, download_button_xpath)))
-
-        directorio = os.listdir(download_folder)
-        download_button.click()
-        wait_download(directorio,f'{first_date} to {second_date}', download_folder)
-
-        driver.quit()
         print('Download done.')
 
-        # print('Extracting zip file...')
+        driver.quit()
 
-        # file_name = os.listdir(download_folder)[0]
-        # file_path = f'{download_folder}\\{file_name}'
-        # # print(directorio)
+        print('Extracting zip files...')
 
-        # with zipfile.ZipFile(file_path, 'r') as zip_file:
-        #     zip_file.extractall(download_folder)
+        zip_extract_remove(download_folder)
+        filter_files(download_folder, string_to_keep="Generacion Liquidada_L0")
 
-        # print('Removing zip file...')
-        # os.remove(file_path)
-
-        # print('Only keeping first-liquidation files...')
-        # for file_name in os.listdir(download_folder):
-        #     if "Generacion Liquidada_L0" not in file_name:
-        #         file_path = f'{download_folder}\\{file_name}'
-        #         os.remove(file_path)
-
-        # print('Done')
-
+        print('------------------------Done------------------------')
 
         break
 
