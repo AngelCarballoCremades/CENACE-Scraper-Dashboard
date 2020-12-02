@@ -1,6 +1,5 @@
 import os
 import sys
-import pdb
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver

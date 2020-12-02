@@ -5,7 +5,6 @@ This scraper file downloads data from CENACE web pages.
 """
 import os
 import sys
-import pdb
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -16,9 +15,6 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from scraper_prices_month import open_browser, wait_download
 
-
-# node_types = ['PND','PML']
-# markets = ['MDA','MTR']
 
 # 1 = current year, 2 = last year, 3 = lastlast year.... data exists from 2017
 years = [1,2,3]

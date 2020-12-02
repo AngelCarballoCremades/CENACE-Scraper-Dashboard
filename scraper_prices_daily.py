@@ -13,6 +13,8 @@ import pandas as pd
 from datetime import date, timedelta
 import json
 import psycopg2 as pg2
+from requests_futures.sessions import FuturesSession
+from concurrent.futures import as_completed
 
 # Data and system to be downloaded
 systems = ['BCA','BCS','SIN']
@@ -20,9 +22,8 @@ node_types = ['PND','PML']
 markets = ['MDA','MTR']
 
 # APIs url
-url_frame = {}
-url_frame['PND'] = 'https://ws01.cenace.gob.mx:8082/SWPEND/SIM/' # Agregar al final los parámetros un '/'
-url_frame['PML'] = 'https://ws01.cenace.gob.mx:8082/SWPML/SIM/' # Agregar al final los parámetros un '/'
+url_frame = {'PND':'https://ws01.cenace.gob.mx:8082/SWPEND/SIM/',
+             'PML':'https://ws01.cenace.gob.mx:8082/SWPML/SIM/'} # Agregar al final los parámetros un '/'
 
 
 def get_unique_nodes(cursor, system, node_type, market = 'MTR'):
@@ -47,65 +48,6 @@ def get_last_date(cursor, system, node_type, market):
     return cursor.fetchall()[0][0]
 
 
-def resquest_data(nodes, dates, system, node_type, market):
-
-    # Building node string
-    nodes_string = ','.join(nodes)
-
-    # Select correct API base
-    url = url_frame[node_type]
-
-    # Building request url with data provided
-    url_complete = f'{url}{system}/{market}/{nodes_string}/{dates[0][:4]}/{dates[0][5:7]}/{dates[0][8:]}/{dates[1][:4]}/{dates[1][5:7]}/{dates[1][8:]}/JSON'
-
-    print('Requesting...', end='')
-    sys.stdout.flush()
-
-    req = requests.get(url_complete)
-
-    if req.status_code != 200:
-        print(req.status_code)
-        print("Requesting again...", end='')
-        sys.stdout.flush()
-
-        req = requests.get(url_complete)
-        if req.status_code != 200:
-            print(req.status_code)
-            sys.stdout.flush()
-            raise
-
-    print('Processing...', end='')
-    sys.stdout.flush()
-
-
-    # soup = BeautifulSoup(req.content, 'html.parser')
-    # print('json')
-    # json_data = json.loads(req.json())
-    # print(json_data)
-
-    return req.json()
-
-
-def check_data(json_data, date_interval):
-    if json_data['status'] == 'OK':
-
-        first_date = json_data['Resultados'][0]['Valores'][0]['fecha']
-        last_date = json_data['Resultados'][0]['Valores'][-1]['fecha']
-
-        if [first_date,last_date] != date_interval:
-            print('')
-            print(f'Dates requested: {date_interval[0]} - {date_interval[1]}')
-            print(f'Dates obtained: {first_date} - {last_date}')
-
-        return True
-
-    else:
-        print()
-        print(f"Data status not 'OK': {json_data['status']}")
-        # print(json_data)
-        return False
-
-
 def missing_dates(last_date, market):
     """Returns begining date to ask info for depending on df's last date detected and type of market, also returns days of info to be asked for"""
     today = date.today()
@@ -122,8 +64,11 @@ def missing_dates(last_date, market):
 
     days = (date_needed - last_date).days # Total days needed to update
 
-    print(f'{system}-{node_type}-{market} Last date on record is {last_date}, there are {days} days missing until {date_needed}.')
+    if days > 0:
+        print(f'Last date on record is {last_date}, there are {days} days missing until {date_needed}.')
+
     return days, begining_date
+
 
 def pack_nodes(raw_node_list, node_type):
     """Returns a list of lists with nodes, this is done because depending on node type we have a maximum number of nodes per request ()PND is 10 max and PML is 20 max. PML missing"""
@@ -141,6 +86,7 @@ def pack_nodes(raw_node_list, node_type):
             break
 
     return nodes_api
+
 
 def pack_dates(days, begining_date):
     """Gets days to ask for info and start date, returns appropiate data intervals to assemble APIs url"""
@@ -163,17 +109,53 @@ def pack_dates(days, begining_date):
     return dates
 
 
+def get_urls_to_request(nodes_packed, dates, system, node_type, market):
+
+    urls_list = []
+    for node_group in nodes_packed:
+        nodes_string = ','.join(node_group)
+
+        # Select correct API base
+        url = url_frame[node_type]
+
+        # Building request url with data provided
+        url_complete = f'{url}{system}/{market}/{nodes_string}/{dates[0][:4]}/{dates[0][5:7]}/{dates[0][8:]}/{dates[1][:4]}/{dates[1][5:7]}/{dates[1][8:]}/JSON'
+
+        urls_list.append(url_complete)
+
+    return urls_list
+
+
+def check_data(json_data, date_interval):
+
+    if json_data['status'] == 'OK':
+
+        first_date = json_data['Resultados'][0]['Valores'][0]['fecha']
+        last_date = json_data['Resultados'][0]['Valores'][-1]['fecha']
+
+        if [first_date,last_date] != date_interval:
+            print(f'---Got data up to {last_date}, missing {date_interval[1]}---')
+
+        return True
+
+    else:
+        if json_data['status'] == 'ZERO RESULTS':
+            print(f'---No data availabe for dates {first_date} to {last_date}---')
+        else:
+            print(f"---Data status not 'OK': {json_data['status']}---")
+
+        return False
+
+
 def json_to_dataframe(json_file):
     """Reads json file, creates a list of nodes DataFrames and concatenates them. After that it cleans/orders the final df and returns it"""
     dfs = []
 
     for node in json_file['Resultados']:
         dfs.append(pd.DataFrame(node))
-        # print(node)
 
     df = pd.concat(dfs) # Join all data frames
 
-    # print(df)
     # Clean/order df to same format of existing csv files
     df['sistema'] = json_file['sistema']
     df['mercado'] = json_file['proceso']
@@ -196,8 +178,8 @@ def json_to_dataframe(json_file):
         df['clave_nodo'] = df['clv_nodo'].copy()
         df = df[['sistema','mercado','fecha','hora','clave_nodo','precio_e','c_energia', 'c_perdidas','c_congestion']]
 
-    # print(df)
     return df
+
 
 def pack_values(df):
 
@@ -238,10 +220,13 @@ def insert_into_table(cursor, system, node_type, market, values):
 
 conn = pg2.connect(user='postgres', password='Licuadora1234', database='cenace')
 cursor = conn.cursor()
-
+session = FuturesSession(max_workers=20)
 
 for node_type in node_types:
     for system in systems:
+
+        print(f'{system}-{node_type}')
+        print('Getting list of nodes...')
 
         # Node list to upload from sql database
         nodes = get_unique_nodes(cursor, system, node_type)
@@ -251,6 +236,7 @@ for node_type in node_types:
 
         for market in markets:
 
+            print(f'{market} - Looking for last date...')
 
             last_date = get_last_date(cursor, system, node_type, market)
             days, begining_date = missing_dates(last_date, market)
@@ -258,44 +244,47 @@ for node_type in node_types:
 
             if len(dates_packed):
 
-                total_requests = len(nodes_packed) * len(dates_packed)
-
-                i = 1
                 valid_values = True
+
                 for date_interval in dates_packed:
+
+                    urls_list = get_urls_to_request(nodes_packed, date_interval, system, node_type, market)
+
+                    print(f'{len(urls_list)} Requests', end='')
+                    sys.stdout.flush()
+
+                    futures=[session.get(u) for u in urls_list]
 
                     dfs = [] # List of missing info data frames
 
-                    for node_group in nodes_packed:
+                    for future in as_completed(futures):
 
-                        print(f'{i}/{total_requests} ', end='')
-                        sys.stdout.flush()
-
-                        json_data = resquest_data(node_group, date_interval, system, node_type, market)
-
+                        resp = future.result()
+                        json_data = resp.json()
                         valid_values = check_data(json_data, date_interval)
 
                         if not valid_values:
                             break
 
-                        print('Appending...', end='')
-                        sys.stdout.flush()
-
                         dfs.append(json_to_dataframe(json_data))
-                        print('Done.')
-
-                        i += 1
+                        print('.', end='')
+                        sys.stdout.flush()
 
                     if not valid_values:
                         break
 
+                    print('Done')
+
                     df = pd.concat(dfs) # Join downloaded info in one data frame
+                    # print(df)
+                    # print(df.fecha.unique())
 
                     values = pack_values(df)
                     # print(values)
 
-                    print(f'Uploading data from {date_interval[0]} to {date_interval[1]} into SQL database.', end='')
+                    print(f'Uploading data from {date_interval[0]} to {date_interval[1]}', end='')
                     sys.stdout.flush()
+
                     insert_into_table(cursor, system, node_type, market, values)
 
                     conn.commit()
