@@ -37,13 +37,13 @@ tables['PML'] = (
     c_congestion NUMERIC(8,2)
     );""")
 
-def create_database(cursor, db_name):
+# def create_database(cursor, db_name):
 
-    try:
-        cursor.execute(
-            "CREATE DATABASE {};".format(db_name))
-    except:
-        print("Failed creating database {}".format(db_name))
+#     try:
+#         cursor.execute(
+#             "CREATE DATABASE {};".format(db_name))
+#     except:
+#         print("Failed creating database {}".format(db_name))
 
 
 def create_table(cursor, table, system, market, node):
