@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 def make_directory():
-
+    """Modificar descargas con path completo"""
     main_folder = 'files2'
 
     os.makedirs(f'../{main_folder}/PML/MDA')
@@ -77,5 +77,37 @@ def download_by_xpath(driver, folder_path, xpath):
 
     return directory
 
+def postgres_password(file_path = 'psql_password.txt'):
+
+    with open(file_path, 'r') as file:
+        password = file.readline()
+
+    return password
+
+
+def textbox_fill(driver, xpath, date_string, attribute):
+
+    textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath)))
+    textbox.send_keys(date_string)
+    textbox.send_keys(Keys.TAB)
+    time.sleep(0.1)
+
+    return textbox.get_attribute(attribute)
+
+
+def get_folder(folder_frame, subfolder_1, subfolder_2 = None):
+    """This function returns folder,files wher folder is the folder to look for files in the selected system and data, files is a list with the name of all the files available"""
+
+    folder = f'{folder_frame}\\{subfolder_1}'
+
+    if subfolder_2:
+        folder = f'{folder_frame}\\{subfolder_1}\\{subfolder_2}'
+
+    files = os.listdir(folder)
+
+    return folder,files
+
 if __name__ == '__main__':
-    make_directory()
+    # make_directory()
+    # print(postgres_password())
+    pass

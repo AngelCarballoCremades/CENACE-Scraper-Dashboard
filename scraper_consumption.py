@@ -12,7 +12,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from datetime import date, timedelta, datetime
 import zipfile
 
-from scraper_prices_month import open_browser, wait_download
+from functions import *
 
 
 # Download folder, it should have appropiate folder structure

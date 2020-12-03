@@ -5,16 +5,18 @@ Falta agregar la API de PML (https://www.cenace.gob.mx/DocsMEM/2020-01-14%20Manu
 
 import os
 import sys
-import pdb
 import time
-from bs4 import BeautifulSoup
-import requests
 import pandas as pd
-from datetime import date, timedelta
 import json
+from datetime import date, timedelta
+
 import psycopg2 as pg2
+
+# import requests
 from requests_futures.sessions import FuturesSession
 from concurrent.futures import as_completed
+
+from functions import *
 
 # Data and system to be downloaded
 systems = ['BCA','BCS','SIN']
@@ -78,7 +80,7 @@ def pack_nodes(raw_node_list, node_type):
 
     nodes_api = []
     while True:
-        if len(node_list) >= size_limit:
+        if len(node_list) > size_limit:
             nodes_api.append(node_list[:size_limit])
             node_list = node_list[size_limit:]
         else:
@@ -217,85 +219,86 @@ def insert_into_table(cursor, system, node_type, market, values):
 
 
 
+def main():
 
-conn = pg2.connect(user='postgres', password='Licuadora1234', database='cenace')
-cursor = conn.cursor()
-session = FuturesSession(max_workers=20)
+    conn = pg2.connect(user='postgres', password=postgres_password(), database='cenace')
+    cursor = conn.cursor()
+    session = FuturesSession(max_workers=20)
 
-for node_type in node_types:
-    for system in systems:
+    for node_type in node_types:
+        for system in systems:
 
-        print(f'{system}-{node_type}')
-        print('Getting list of nodes...')
+            print(f'{system}-{node_type}')
+            print('Getting list of nodes...')
 
-        # Node list to upload from sql database
-        nodes = get_unique_nodes(cursor, system, node_type)
+            # Node list to upload from sql database
+            nodes = get_unique_nodes(cursor, system, node_type)
 
-        # Prepare nodes for API requests
-        nodes_packed = pack_nodes(nodes, node_type)
+            # Prepare nodes for API requests
+            nodes_packed = pack_nodes(nodes, node_type)
 
-        for market in markets:
+            for market in markets:
 
-            print(f'{market} - Looking for last date...')
+                print(f'{market} - Looking for last date...')
 
-            last_date = get_last_date(cursor, system, node_type, market)
-            days, begining_date = missing_dates(last_date, market)
-            dates_packed = pack_dates(days, begining_date)
+                last_date = get_last_date(cursor, system, node_type, market)
+                days, begining_date = missing_dates(last_date, market)
+                dates_packed = pack_dates(days, begining_date)
 
-            if len(dates_packed):
+                if len(dates_packed):
 
-                valid_values = True
+                    valid_values = True
 
-                for date_interval in dates_packed:
+                    for date_interval in dates_packed:
 
-                    urls_list = get_urls_to_request(nodes_packed, date_interval, system, node_type, market)
+                        urls_list = get_urls_to_request(nodes_packed, date_interval, system, node_type, market)
 
-                    print(f'{len(urls_list)} Requests', end='')
-                    sys.stdout.flush()
+                        print(f'{len(urls_list)} Requests', end='')
+                        sys.stdout.flush()
 
-                    futures=[session.get(u) for u in urls_list]
+                        futures=[session.get(u) for u in urls_list]
 
-                    dfs = [] # List of missing info data frames
+                        dfs = [] # List of missing info data frames
 
-                    for future in as_completed(futures):
+                        for future in as_completed(futures):
 
-                        resp = future.result()
-                        json_data = resp.json()
-                        valid_values = check_data(json_data, date_interval)
+                            resp = future.result()
+                            json_data = resp.json()
+                            valid_values = check_data(json_data, date_interval)
+
+                            if not valid_values:
+                                break
+
+                            dfs.append(json_to_dataframe(json_data))
+                            print('.', end='')
+                            sys.stdout.flush()
 
                         if not valid_values:
                             break
 
-                        dfs.append(json_to_dataframe(json_data))
-                        print('.', end='')
+                        print('Done')
+
+                        df = pd.concat(dfs) # Join downloaded info in one data frame
+
+                        values = pack_values(df)
+
+                        print(f'Uploading data from {date_interval[0]} to {date_interval[1]}', end='')
                         sys.stdout.flush()
 
-                    if not valid_values:
-                        break
+                        insert_into_table(cursor, system, node_type, market, values)
 
-                    print('Done')
+                        conn.commit()
 
-                    df = pd.concat(dfs) # Join downloaded info in one data frame
-                    # print(df)
-                    # print(df.fecha.unique())
+                    print(f'{system}-{node_type}-{market} up to date\n')
 
-                    values = pack_values(df)
-                    # print(values)
+                #If there are no updates to be made...
+                else:
+                    print(f'{system}-{node_type}-{market} up to date\n')
 
-                    print(f'Uploading data from {date_interval[0]} to {date_interval[1]}', end='')
-                    sys.stdout.flush()
+    print('.....................DONE.....................')
 
-                    insert_into_table(cursor, system, node_type, market, values)
+    conn.commit()
+    conn.close()
 
-                    conn.commit()
-
-                print(f'{system}-{node_type}-{market} up to date\n')
-
-            #If there are no updates to be made...
-            else:
-                print(f'{system}-{node_type}-{market} up to date\n')
-
-print('.....................DONE.....................')
-
-conn.commit()
-conn.close()
+if __name__ == '__main__':
+    main()

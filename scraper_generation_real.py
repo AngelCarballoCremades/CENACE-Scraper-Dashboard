@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from datetime import datetime
 import zipfile
 
-from scraper_prices_month import open_browser, wait_download
+from functions import *
 
 
 years = [1,2,3]
@@ -20,7 +20,6 @@ download_folder = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files\\ge
 
 main_url = r'https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx'
 
-# date_textbox_xpath = '/html/body/form/div[4]/div[1]/div[2]/div[3]/div[3]/div[2]/table/tbody/tr/td[1]/div/div[2]/div[{textbox_number}]/div/table/tbody/tr/td[1]'
 date_textbox_xpath = r'//*[@id="ctl00_ContentPlaceHolder1_Fecha{Inicial_Final}_dateInput"]'
 
 download_button_xpath = r'//*[@id="DescargaZip"]'
@@ -130,12 +129,13 @@ def check_dates(date_interval, first_date, second_date):
         return True
 
 
-def textbox_fill(driver, xpath, date):
+# def textbox_fill(driver, xpath, date):
+#     textbox_fill(driver, xpath, date_string, attribute):
 
-    textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath)))
-    textbox.send_keys(date)
-    textbox.send_keys(Keys.TAB)
-    return textbox.get_attribute("value")
+#     textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath)))
+#     textbox.send_keys(date)
+#     textbox.send_keys(Keys.TAB)
+#     return textbox.get_attribute("value")
 
 
 def zip_extract_remove(download_folder):
@@ -157,7 +157,7 @@ def filter_files(download_folder, string_to_keep):
             os.remove(file_path)
 
 
-def main(last_month = 12,last_year = 2020):
+def main(last_month = 0,last_year = 2018):
 
     print(f'\nDownloading Energy-type Generation\n')
     dates_packed = pack_dates(last_month, last_year)
@@ -176,8 +176,16 @@ def main(last_month = 12,last_year = 2020):
         for date_interval in dates_packed:
 
             print("Selecting dates...")
-            first_date = textbox_fill(driver=driver, xpath=date_textbox_xpath.format(Inicial_Final='Inicial'), date=date_interval[0])
-            second_date = textbox_fill(driver=driver, xpath=date_textbox_xpath.format(Inicial_Final='Final'), date=date_interval[1])
+
+            first_date = textbox_fill(driver = driver,
+                                      xpath = date_textbox_xpath.format(Inicial_Final='Inicial'),
+                                      date_string = date_interval[0],
+                                      attribute = 'value')
+
+            second_date = textbox_fill(driver = driver,
+                                       xpath = date_textbox_xpath.format(Inicial_Final='Final'),
+                                       date_string = date_interval[1],
+                                       attribute = 'value')
 
             if not check_dates(date_interval, first_date, second_date):
                 print(f'There is no information available for dates selected, information up to {second_date}')
