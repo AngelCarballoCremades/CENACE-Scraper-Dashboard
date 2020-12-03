@@ -7,8 +7,8 @@ from functions import get_folder
 
 folder_frame = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files'
 energy_flow = 'generation'
-data_type = 'real'
-rows_to_skip = 15
+data_type = 'forecast'
+rows_to_skip = 8
 
 
 def main():
@@ -21,31 +21,31 @@ def main():
         print(f'{energy_flow}-{data_type}', end='')
         sys.stdout.flush()
 
-        with open(out_filename, 'w') as outfile:
-            for i, file in enumerate(files):
+        dfs = []
 
-                print('.', end = '')
-                sys.stdout.flush()
+        for i,file in enumerate(files):
+            print('.', end='')
+            sys.stdout.flush()
 
-                with open(f'{folder}\\{file}', 'r') as readfile:
+            df = pd.read_csv(f'{folder}\\{file}', skiprows=rows_to_skip-1, index_col=False)
+            df['Fecha'] = file[21:31]
+            dfs.append(df)
 
-                    if i == 0:
-
-                        for _ in range(rows_to_skip - 1):
-                            readfile.readline()
-
-                    else:
-                        for _ in range(rows_to_skip):
-                            readfile.readline()
-
-                    for line in readfile.readlines():
-                        outfile.write(line)
-
-        print('Processing...', end = '')
+        print('Appending...', end='')
         sys.stdout.flush()
 
-        df = pd.read_csv(out_filename)
+        df = pd.concat(dfs)
+
+        print('Ordering...', end='')
+        sys.stdout.flush()
+
         df.columns = [column.strip(' ').replace(' ','_').lower() for column in df.columns]
+        df = df[['Sistema','Tipo de Tecnologia','Fecha','Hora','Pronostico de Generacion (MWh)']]
+        df = df.sort_values(by=['Sistema','Tipo de Tecnologia','Fecha','Hora'], ascending=True)
+
+        print('Writing File...', end='')
+        sys.stdout.flush()
+
         df.to_csv(out_filename, index=False, float_format='%.3f')
 
         print('Done')
