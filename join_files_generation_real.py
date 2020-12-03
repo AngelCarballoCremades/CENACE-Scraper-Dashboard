@@ -5,10 +5,11 @@ from functions import get_folder
 
 
 folder_frame = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files'
-out_filename = f'{folder_frame}\\{energy_flow}-{data_type}.csv'
+
 
 energy_flow = 'generation'
 data_type = 'real'
+out_filename = f'{folder_frame}\\{energy_flow}-{data_type}.csv'
 rows_to_skip = 15
 
 
@@ -18,7 +19,8 @@ def main():
 
     if len(files):
 
-        print(f'{energy_flow}-{data_type}')
+        print(f'{energy_flow}-{data_type}', end='')
+        sys.stdout.flush()
 
         with open(out_filename, 'w') as outfile:
             for i, file in enumerate(files):
