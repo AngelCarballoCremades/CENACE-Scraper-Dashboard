@@ -3,7 +3,7 @@ import os
 import sys
 import psycopg2 as pg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-
+from functions import *
 
 systems = ['BCA','BCS','SIN']
 markets = ['MTR','MDA']
@@ -105,27 +105,27 @@ def create_table(cursor, table, table_name):
         print("Failed creating table {}".format(table_name))
 
 
-def upload_file_to_database(cursor, table_name):
+# def upload_file_to_database(cursor, table_name):
 
-    files = get_files_names(table_name)
-    table = table_name
+#     files = get_files_names(table_name)
+#     table = table_name
 
-    for file in files:
-        print(f"Uploading {file} to table {table}...", end='')
-        sys.stdout.flush()
+#     for file in files:
+#         print(f"Uploading {file} to table {table}...", end='')
+#         sys.stdout.flush()
 
-        file_path = f"{folder_frame}\\{file}"
+#         file_path = f"{folder_frame}\\{file}"
 
-        with open(file_path, 'rb') as f:
-            cursor.copy_from(f, table.lower(), sep=',')
-            print('Done')
+#         with open(file_path, 'rb') as f:
+#             cursor.copy_from(f, table.lower(), sep=',')
+#             print('Done')
 
 
-def get_files_names(string):
-    """This function returns folder,files wher folder is the folder to look for files in the selected system and data, files is a list with the name of all the files available"""
-    files_list = os.listdir(folder_frame)
-    files = [file for file in files_list if string in file]
-    return files
+# def get_files_names(string):
+#     """This function returns folder,files wher folder is the folder to look for files in the selected system and data, files is a list with the name of all the files available"""
+#     files_list = os.listdir(folder_frame)
+#     files = [file for file in files_list if string in file]
+#     return files
 
 
 
@@ -173,13 +173,13 @@ def main():
     for energy_flow in energy_flows:
         for data_type in data_types:
             table_name = f'{energy_flow}_{data_type}'
-            upload_file_to_database(cursor, table_name)
+            upload_file_to_database(folder_frame, cursor, table_name)
 
     for system in systems:
         for market in markets:
             for node_type in node_types:
                 table_name = f'{system}_{node_type}_{market}'
-                upload_file_to_database(cursor, table_name)
+                upload_file_to_database(folder_frame, cursor, table_name)
 
 
     conn.commit()

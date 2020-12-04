@@ -107,6 +107,31 @@ def get_folder(folder_frame, subfolder_1, subfolder_2 = None):
 
     return folder,files
 
+
+def upload_file_to_database(folder, cursor, table_name):
+
+    files = get_files_names(folder, table_name)
+    table = table_name
+
+    for file in files:
+        print(f"Uploading {file} to table {table}...", end='')
+        sys.stdout.flush()
+
+        file_path = f"{folder}\\{file}"
+
+        with open(file_path, 'rb') as f:
+            cursor.copy_from(f, table.lower(), sep=',')
+            print('Done')
+
+
+def get_files_names(folder, string):
+    """This function returns folder,files wher folder is the folder to look for files in the selected system and data, files is a list with the name of all the files available"""
+    files_list = os.listdir(folder)
+    files = [file for file in files_list if string in file]
+    return files
+
+
+
 if __name__ == '__main__':
     # make_directory()
     # print(postgres_password())

@@ -27,7 +27,7 @@ def main():
                 print('.', end = '')
                 sys.stdout.flush()
 
-                with open(f'{folder}\\{file}', 'r') as readfile:
+                with open(f'{folder}\\{file}', 'r', encoding="utf8") as readfile:
 
                     if i == 0:
 

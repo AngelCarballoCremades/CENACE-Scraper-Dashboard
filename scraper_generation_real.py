@@ -122,20 +122,14 @@ def check_dates(date_interval, first_date, second_date):
     if first_date == first_entered and second_date == second_entered:
         return True
 
-    elif first_entered != first_date and first_entered == second_entered:
+    if first_entered > first_date:
         return False
 
-    else:
+    if first_entered == first_date and second_date >= first_date:
         return True
 
-
-# def textbox_fill(driver, xpath, date):
-#     textbox_fill(driver, xpath, date_string, attribute):
-
-#     textbox = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath)))
-#     textbox.send_keys(date)
-#     textbox.send_keys(Keys.TAB)
-#     return textbox.get_attribute("value")
+    else:
+        return False
 
 
 def zip_extract_remove(download_folder):
@@ -159,9 +153,12 @@ def filter_files(download_folder, string_to_keep):
 
 def main(last_month = 0,last_year = 2018):
 
-    print(f'\nDownloading Energy-type Generation\n')
+    print(f'\nDownloading Energy-type Real Generation')
+    print(f'Last day on record: {last_month}-{last_year}\n')
+
     dates_packed = pack_dates(last_month, last_year)
 
+    valid = True
     while True:
 
         if not dates_packed:
@@ -187,7 +184,9 @@ def main(last_month = 0,last_year = 2018):
                                        date_string = date_interval[1],
                                        attribute = 'value')
 
-            if not check_dates(date_interval, first_date, second_date):
+            valid = check_dates(date_interval, first_date, second_date)
+
+            if not valid:
                 print(f'There is no information available for dates selected, information up to {second_date}')
                 driver.quit()
                 break
@@ -198,6 +197,9 @@ def main(last_month = 0,last_year = 2018):
             directorio = os.listdir(download_folder)
             download_button.click()
             wait_download(directorio,f'{first_date} to {second_date}', download_folder)
+
+        if not valid:
+            break
 
         print('Download done.')
 
@@ -211,6 +213,8 @@ def main(last_month = 0,last_year = 2018):
         print('------------------------Done------------------------')
 
         break
+
+    return valid
 
 
 if __name__ == '__main__':

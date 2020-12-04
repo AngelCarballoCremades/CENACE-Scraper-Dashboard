@@ -1279,3 +1279,1081 @@ JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bB
 
 ###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
 
+1607031790972	geckodriver	INFO	Listening on 127.0.0.1:64959
+1607031794108	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile406TQq"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607031809949	Marionette	INFO	Listening on port 64967
+1607031810349	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607031838420	Marionette	INFO	Stopped listening on port 64967
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607031985471	geckodriver	INFO	Listening on 127.0.0.1:65024
+1607031988527	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileOwlTEx"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+console.error: Region.jsm: "Error fetching region" (new TypeError("NetworkError when attempting to fetch resource.", ""))
+console.error: Region.jsm: "Failed to fetch region" (new Error("NO_RESULT", "resource://gre/modules/Region.jsm", 376))
+console.error: "Could not load engine google@search.mozilla.org: TypeError: AddonManagerInternal._getProviderByName(...) is undefined"
+console.error: "Could not load engine ddg@search.mozilla.org: TypeError: AddonManagerInternal._getProviderByName(...) is undefined"
+console.error: "Could not load engine bing@search.mozilla.org: TypeError: AddonManagerInternal._getProviderByName(...) is undefined"
+console.error: "Could not load engine wikipedia@search.mozilla.org: TypeError: AddonManagerInternal._getProviderByName(...) is undefined"
+console.error: "Could not load engine mercadolibre@search.mozilla.org: TypeError: AddonManagerInternal._getProviderByName(...) is undefined"
+console.warn: SearchService: "_init: abandoning init due to shutting down"
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+[Parent 720, Gecko_IOThread] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:166
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607031999892	geckodriver	INFO	Listening on 127.0.0.1:65045
+1607032002960	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilelbmjAa"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607032008205	Marionette	INFO	Listening on port 65053
+1607032008279	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+1607032839031	Marionette	INFO	Stopped listening on port 65053
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607033101475	geckodriver	INFO	Listening on 127.0.0.1:65175
+1607033104488	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileBozOAi"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607033113442	Marionette	INFO	Listening on port 65188
+1607033113569	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://activity-stream/lib/ActivityStreamPrefs.jsm, line 27: NS_ERROR_ILLEGAL_VALUE: Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIPrefBranch.removeObserver]
+[Child 10504, Chrome_ChildThread] WARNING: pipe error: 232: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:545
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+console.warn: services.settings: main/nimbus-desktop-experiments sync interrupted by shutdown
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][RunMessage] Error: Channel error: cannot send/recv
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel error: cannot send/recv
+
+JavaScript error: resource://gre/modules/UrlClassifierListManager.jsm, line 691: TypeError: this.tablesData[table] is undefined
+JavaScript error: resource://gre/modules/NewTabUtils.jsm, line 686: NS_ERROR_UNEXPECTED: Component returned failure code: 0x8000ffff (NS_ERROR_UNEXPECTED) [nsINavHistoryService.asyncExecuteLegacyQuery]
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.error: "Could not load engine google@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine ddg@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine bing@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine wikipedia@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine mercadolibre@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.warn: SearchService: "_init: abandoning init due to shutting down"
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+1607033120137	Marionette	INFO	Stopped listening on port 65188
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+JavaScript error: resource:///modules/EveryWindow.jsm, line 37: NS_ERROR_UNEXPECTED: Component returned failure code: 0x8000ffff (NS_ERROR_UNEXPECTED) [nsIWindowMediator.getEnumerator]
+JavaScript error: resource://gre/modules/osfile/osfile_async_front.jsm, line 426: Error: OS.File has been shut down. Rejecting post to stat
+1607035433518	geckodriver	INFO	Listening on 127.0.0.1:65385
+1607035436575	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileVMWufO"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607035440691	Marionette	INFO	Listening on port 65393
+1607035440782	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.a1607035696085	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile9D8efI"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607035700254	Marionette	INFO	Listening on port 65464
+1607035700405	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+1607035841870	Marionette	INFO	Stopped listening on port 65464
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607035846035	geckodriver	INFO	Listening on 127.0.0.1:65521
+1607035849115	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileuuYGiB"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607035852933	Marionette	INFO	Listening on port 65529
+1607035853328	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607035869487	Marionette	INFO	Stopped listening on port 65529
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607036271120	geckodriver	INFO	Listening on 127.0.0.1:49239
+1607036274198	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileLjDmGK"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607036277942	Marionette	INFO	Listening on port 49247
+1607036278388	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607036290326	Marionette	INFO	Stopped listening on port 49247
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607036414251	geckodriver	INFO	Listening on 127.0.0.1:49306
+1607036417337	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileU5TwJF"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607036420896	Marionette	INFO	Listening on port 49314
+1607036421062	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+1607036459431	Marionette	INFO	Stopped listening on port 49314
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607036462524	geckodriver	INFO	Listening on 127.0.0.1:49371
+1607036465584	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile0uTL8t"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607036469353	Marionette	INFO	Listening on port 49379
+1607036469812	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+1607036500790	Marionette	INFO	Stopped listening on port 49379
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607036867711	geckodriver	INFO	Listening on 127.0.0.1:49456
+1607036870798	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileswUAWy"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607036874396	Marionette	INFO	Listening on port 49464
+1607036874454	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607036889595	Marionette	INFO	Stopped listening on port 49464
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607037279475	geckodriver	INFO	Listening on 127.0.0.1:49537
+1607037282554	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileEh0r6L"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607037286109	Marionette	INFO	Listening on port 49545
+1607037286277	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+Marionette threw an error: TypeError: driver.dialogObserver is null
+waitForNavigationCompleted/<@chrome://marionette/content/navigate.js:364:5
+
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+1607037307942	Marionette	INFO	Stopped listening on port 49545
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607039013289	geckodriver	INFO	Listening on 127.0.0.1:60425
+1607039016411	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileAQRBwl"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607039032092	Marionette	INFO	Listening on port 60433
+1607039035191	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+1607039093350	Marionette	INFO	Stopped listening on port 60433
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607039096213	geckodriver	INFO	Listening on 127.0.0.1:60490
+1607039099194	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileDvqrp8"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607039106041	Marionette	INFO	Listening on port 60498
+1607039106159	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://activity-stream/lib/ActivityStreamPrefs.jsm, line 27: NS_ERROR_ILLEGAL_VALUE: Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIPrefBranch.removeObserver]
+[Child 15500, Chrome_ChildThread] WARNING: pipe error: 232: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:545
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x5B000A,name=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+JavaScript error: resource://gre/modules/UrlClassifierListManager.jsm, line 691: TypeError: this.tablesData[table] is undefined
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.error: "Could not load engine google@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine ddg@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine bing@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine wikipedia@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine mercadolibre@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.warn: SearchService: "_init: abandoning init due to shutting down"
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 554: uncaught exception: 2147500036
+*** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: rs-experiment-loader-timer
+1607039114858	Marionette	INFO	Stopped listening on port 60498
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+JavaScript error: resource://gre/modules/osfile/osfile_async_front.jsm, line 426: Error: OS.File has been shut down. Rejecting post to stat
+1607040907235	geckodriver	INFO	Listening on 127.0.0.1:60577
+1607040910266	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileaMuQny"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607040921624	Marionette	INFO	Listening on port 60585
+1607040921958	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+1607040969651	Marionette	INFO	Stopped listening on port 60585
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607041073572	geckodriver	INFO	Listening on 127.0.0.1:60648
+1607041076611	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilexsj4An"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607041080670	Marionette	INFO	Listening on port 60658
+1607041080817	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+1607041131895	Marionette	INFO	Stopped listening on port 60658
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607041259502	geckodriver	INFO	Listening on 127.0.0.1:60711
+1607041262528	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileRgvdjl"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607041269297	Marionette	INFO	Listening on port 60719
+1607041269529	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+1607041314813	Marionette	INFO	Stopped listening on port 60719
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607041878980	geckodriver	INFO	Listening on 127.0.0.1:60790
+1607041882021	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileetfLlj"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607041885794	Marionette	INFO	Listening on port 60798
+1607041886264	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607041914085	Marionette	INFO	Stopped listening on port 60798
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607042034566	geckodriver	INFO	Listening on 127.0.0.1:60852
+1607042037592	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile62QBeM"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607042041355	Marionette	INFO	Listening on port 60860
+1607042041803	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607042068356	Marionette	INFO	Stopped listening on port 60860
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607042329013	geckodriver	INFO	Listening on 127.0.0.1:60923
+1607042332032	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilexUj0n8"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607042335532	Marionette	INFO	Listening on port 60931
+1607042335746	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607042352022	Marionette	INFO	Stopped listening on port 60931
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607042378024	geckodriver	INFO	Listening on 127.0.0.1:60983
+1607042381092	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilepRoAyl"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607042384702	Marionette	INFO	Listening on port 60991
+1607042384796	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607042399985	Marionette	INFO	Stopped listening on port 60991
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607042520210	geckodriver	INFO	Listening on 127.0.0.1:61048
+1607042523270	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile5X8xkW"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607042526715	Marionette	INFO	Listening on port 61056
+1607042526979	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+1607042558815	Marionette	INFO	Stopped listening on port 61056
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607042688023	geckodriver	INFO	Listening on 127.0.0.1:61111
+1607042691092	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileeNz7h1"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607042694768	Marionette	INFO	Listening on port 61119
+1607042694814	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+1607042741374	Marionette	INFO	Stopped listening on port 61119
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607042743145	geckodriver	INFO	Listening on 127.0.0.1:61167
+1607042746213	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileddKUgL"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607042749714	Marionette	INFO	Listening on port 61175
+1607042749922	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607042766017	Marionette	INFO	Stopped listening on port 61175
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607042769065	geckodriver	INFO	Listening on 127.0.0.1:61229
+1607042772137	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileyEuFDA"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607042776198	Marionette	INFO	Listening on port 61237
+1607042776374	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607042790035	Marionette	INFO	Stopped listening on port 61237
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607042791844	geckodriver	INFO	Listening on 127.0.0.1:61287
+1607042794899	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileSEIssN"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607042798670	Marionette	INFO	Listening on port 61295
+1607042799109	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607042826422	Marionette	INFO	Stopped listening on port 61295
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043000171	geckodriver	INFO	Listening on 127.0.0.1:61356
+1607043003242	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileEV4GK0"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043006904	Marionette	INFO	Listening on port 61364
+console.warn: SearchService: "_init: abandoning init due to shutting down"
+JavaScript error: , line 0: uncaught exception: 2147500036
+JavaScript error: , line 0: uncaught exception: 2147500036
+JavaScript error: , line 0: uncaught exception: 2147500036
+JavaScript error: , line 0: uncaught exception: 2147500036
+JavaScript error: , line 0: uncaught exception: 2147500036
+[Parent 14552, Gecko_IOThread] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:166
+1607043011106	Marionette	INFO	Stopped listening on port 61364
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+JavaScript error: resource:///modules/EveryWindow.jsm, line 37: NS_ERROR_UNEXPECTED: Component returned failure code: 0x8000ffff (NS_ERROR_UNEXPECTED) [nsIWindowMediator.getEnumerator]
+JavaScript error: resource://gre/modules/osfile/osfile_async_front.jsm, line 426: Error: OS.File has been shut down. Rejecting post to stat
+1607043076474	geckodriver	INFO	Listening on 127.0.0.1:61390
+1607043079537	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile2DRRhD"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043082916	Marionette	INFO	Listening on port 61398
+1607043083237	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+1607043130131	Marionette	INFO	Stopped listening on port 61398
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043132124	geckodriver	INFO	Listening on 127.0.0.1:61450
+1607043135187	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilexIDwQl"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043138690	Marionette	INFO	Listening on port 61458
+1607043138888	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607043154109	Marionette	INFO	Stopped listening on port 61458
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043156001	geckodriver	INFO	Listening on 127.0.0.1:61510
+1607043159049	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilet2d1cC"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043162702	Marionette	INFO	Listening on port 61518
+1607043162766	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607043176478	Marionette	INFO	Stopped listening on port 61518
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+[Parent 9904, Gecko_IOThread] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:166
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043559837	geckodriver	INFO	Listening on 127.0.0.1:61588
+1607043562919	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileDgHNFH"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043566476	Marionette	INFO	Listening on port 61596
+1607043566617	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+1607043613594	Marionette	INFO	Stopped listening on port 61596
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043615647	geckodriver	INFO	Listening on 127.0.0.1:57781
+1607043618686	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileYTtT2b"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043622520	Marionette	INFO	Listening on port 57790
+1607043622892	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607043638258	Marionette	INFO	Stopped listening on port 57790
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043640128	geckodriver	INFO	Listening on 127.0.0.1:57844
+1607043643178	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile0Sg65n"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043647546	Marionette	INFO	Listening on port 57852
+1607043648056	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607043666961	Marionette	INFO	Stopped listening on port 57852
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043668954	geckodriver	INFO	Listening on 127.0.0.1:59202
+1607043672004	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilebSek8e"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043675712	Marionette	INFO	Listening on port 59210
+1607043676214	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607043705032	Marionette	INFO	Stopped listening on port 59210
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043749191	geckodriver	INFO	Listening on 127.0.0.1:59268
+1607043752268	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileLIfXcu"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043755752	Marionette	INFO	Listening on port 59276
+1607043755975	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+1607043782260	Marionette	INFO	Stopped listening on port 59276
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043784052	geckodriver	INFO	Listening on 127.0.0.1:59324
+1607043787108	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileee3Ev7"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043790805	Marionette	INFO	Listening on port 59332
+1607043791309	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607043799065	Marionette	INFO	Stopped listening on port 59332
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043801280	geckodriver	INFO	Listening on 127.0.0.1:59389
+1607043804355	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile4yNUEr"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043807993	Marionette	INFO	Listening on port 59397
+1607043808057	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607043814315	Marionette	INFO	Stopped listening on port 59397
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: resource://gre/modules/UrlClassifierListManager.jsm, line 691: TypeError: this.tablesData[table] is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607043817038	geckodriver	INFO	Listening on 127.0.0.1:59448
+1607043820108	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile8cq9NQ"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607043823330	Marionette	INFO	Listening on port 59456
+1607043823798	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607043838978	Marionette	INFO	Stopped listening on port 59456
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607044286369	geckodriver	INFO	Listening on 127.0.0.1:59874
+1607044289414	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilehEHIBN"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607044294319	Marionette	INFO	Listening on port 59882
+JavaScript error: resource://activity-stream/lib/ActivityStreamPrefs.jsm, line 27: NS_ERROR_ILLEGAL_VALUE: Component returned failure code: 0x80070057 (NS_ERROR_ILLEGAL_VALUE) [nsIPrefBranch.removeObserver]
+JavaScript error: resource://activity-stream/lib/PlacesFeed.jsm, line 198: NS_ERROR_UNEXPECTED: Component returned failure code: 0x8000ffff (NS_ERROR_UNEXPECTED) [nsINavHistoryService.addObserver]
+JavaScript error: resource://gre/modules/ExtensionSettingsStore.jsm, line 123: Error: The ExtensionSettingsStore was accessed before the initialize promise resolved.
+*** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: rs-experiment-loader-timer
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.log: "RemoteSettingsWorker error: Error: Can't import when we've started shutting down."
+console.error: "Could not load engine google@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine ddg@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine bing@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine wikipedia@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.error: "Could not load engine mercadolibre@search.mozilla.org: [Exception... \"AddonManager is not initialized\"  nsresult: \"0xc1f30001 (NS_ERROR_NOT_INITIALIZED)\"  location: \"JS frame :: resource://gre/modules/AddonManager.jsm :: installBuiltinAddon :: line 2550\"  data: no]"
+console.warn: SearchService: "_init: abandoning init due to shutting down"
+JavaScript error: , line 0: uncaught exception: 2147500036
+JavaScript error: , line 0: uncaught exception: 2147500036
+JavaScript error: , line 0: uncaught exception: 2147500036
+JavaScript error: , line 0: uncaught exception: 2147500036
+JavaScript error: , line 0: uncaught exception: 2147500036
+1607044298985	Marionette	INFO	Stopped listening on port 59882
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+JavaScript error: resource://gre/modules/osfile/osfile_async_front.jsm, line 426: Error: OS.File has been shut down. Rejecting post to stat
+1607045451082	geckodriver	INFO	Listening on 127.0.0.1:59995
+1607045454350	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileRI2yr1"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607045467088	Marionette	INFO	Listening on port 60005
+1607045467377	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+JavaScript error: resource://pdf.js/PdfStreamConverter.jsm, line 1086: NS_ERROR_FAILURE: Ignore PDF.js for this download.
+1607045614578	Marionette	INFO	Stopped listening on port 60005
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607045617398	geckodriver	INFO	Listening on 127.0.0.1:60113
+1607045620372	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileaHxKy0"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607045624631	Marionette	INFO	Listening on port 60122
+1607045624700	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607045638511	Marionette	INFO	Stopped listening on port 60122
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607045641231	geckodriver	INFO	Listening on 127.0.0.1:60175
+1607045644286	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile6AIU4E"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607045648202	Marionette	INFO	Listening on port 60183
+1607045648474	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607045664546	Marionette	INFO	Stopped listening on port 60183
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607045669485	geckodriver	INFO	Listening on 127.0.0.1:60232
+1607045672549	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileLd8Igh"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607045676876	Marionette	INFO	Listening on port 60241
+1607045677380	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607045700970	Marionette	INFO	Stopped listening on port 60241
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607046212589	geckodriver	INFO	Listening on 127.0.0.1:60355
+1607046215701	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile1NZ56N"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1607046239168	Marionette	INFO	Listening on port 60363
+1607046239359	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=, line 232: TypeError: firstRow is undefined
+1607046273986	Marionette	INFO	Stopped listening on port 60363
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607046277372	geckodriver	INFO	Listening on 127.0.0.1:60424
+1607046280272	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofileGbtq6k"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607046284601	Marionette	INFO	Listening on port 60432
+1607046285059	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx, line 268: SyntaxError: expected expression, got '}'
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607046291885	Marionette	INFO	Stopped listening on port 60432
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607046295433	geckodriver	INFO	Listening on 127.0.0.1:60486
+1607046298394	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofile2qmod2"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607046302386	Marionette	INFO	Listening on port 60494
+1607046302611	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607046311077	Marionette	INFO	Stopped listening on port 60494
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1607046314827	geckodriver	INFO	Listening on 127.0.0.1:60544
+1607046317805	mozrunner::runner	INFO	Running command: "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\Angel\\AppData\\Local\\Temp\\rust_mozprofilewnsfSo"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1607046321899	Marionette	INFO	Listening on port 60552
+1607046322039	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: resource://gre/actors/AutoCompleteChild.jsm, line 235: Error: Invalid autocomplete selectedIndex
+1607046343417	Marionette	INFO	Stopped listening on port 60552
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+JavaScript error: https://www.cenace.gob.mx/ScriptResource.axd?d=jLmy3jXxeSyq9bBy74ikyrxInu74H87cDcSph7pNm2JDT6rAkclnkCeoFNnbL5WCtee3s8bdeiPv1o92ngQ2RpXlCNIGi42idVMUX2TE3BH3KaEleZV_hGRbiHts25jH0&t=51e37521, line 2: TypeError: t is undefined
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+

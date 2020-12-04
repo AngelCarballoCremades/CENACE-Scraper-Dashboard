@@ -36,7 +36,7 @@ def get_date_interval(last_date):
 
     today = date.today()
 
-    last_date = datetime.strptime(last_date, '%d-%m-%Y').date()
+    last_date = datetime.strptime(last_date, '%Y-%m-%d').date()
     first_date = last_date + timedelta(days = 1) # Date to start asking for (last_date plus 1 day)
     second_date = today + timedelta(days = 1)
 
@@ -84,20 +84,21 @@ def main(last_date = None, data_type = None):
     if not last_date:
 
         if data_type == 'forecast':
-            last_date = '09-01-2019'
+            last_date = '2019-01-09'
 
         elif data_type == 'real':
-            last_date = '31-12-2017'
+            last_date = '2017-12-31'
 
         else:
             raise
 
     download_folder = f'{download_folder_frame}\\{data_type}'
 
-    print(f'\nDownloading Energy Consumption {data_type.upper()}\n')
+    print(f'\nDownloading Energy Consumption {data_type.upper()}')
+    print(f'Last date on database: {last_date}\n')
 
     date_interval = get_date_interval(last_date)
-    print(date_interval[0], date_interval[1])
+
     while True:
 
         if not date_interval:
@@ -140,7 +141,7 @@ def main(last_date = None, data_type = None):
             break
 
         if not download:
-            # driver.quit()
+            driver.quit()
             break
 
         print('Waiting for download to begin...')
@@ -163,6 +164,8 @@ def main(last_date = None, data_type = None):
         print('------------------------Done------------------------')
 
         break
+
+    return download
 
 
 if __name__ == '__main__':

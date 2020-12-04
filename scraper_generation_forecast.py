@@ -52,20 +52,22 @@ def get_days_of_month(month):
     return days
 
 
-def check_date(date, file_date):
+def check_date(last_date, file_date):
 
-    year = date[:4] == file_date[:4]
-    month = date[5:7] == file_date[5:7]
-    day = date[8:] == file_date[8:]
+    year = last_date[:4] == file_date[:4]
+    month = last_date[5:7] == file_date[5:7]
+    day = last_date[8:] == file_date[8:]
+
     return not all([year, month, day])
 
 
-def main(date='0000-00-00'):
+def main(last_date='0000-00-00'):
 
     download = True
 
     for year_selected in years:
-        print(f'\nDownloading Intermitent Energy Generation Forecast from {2021 - year_selected}\n')
+        print(f'\nDownloading Intermitent Energy Generation Forecast from {2021 - year_selected}')
+        print(f'Last day on record: {last_date}\n')
 
         driver = open_browser(download_folder)
 
@@ -78,7 +80,7 @@ def main(date='0000-00-00'):
         print("Waiting for file's table.")
         dummy = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, month_xpath_frame.format(month=1))))
 
-        months = get_months(html_code=driver.page_source)
+        months = get_months(html_code = driver.page_source)
 
         for month in range(1,len(months)+1):
 
@@ -93,10 +95,10 @@ def main(date='0000-00-00'):
                 file_date_xpath = file_date_xpath_frame.format(month=month*2, day = day) # File date xpath
                 file_date = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, file_date_xpath))).text # File date
 
-                download = check_date(date, file_date)
+                download = check_date(last_date, file_date)
 
                 if not download:
-                    print(date, file_date)
+                    print(last_date, file_date)
                     break
 
                 file_button_xpath = file_button_xpath_frame.format(month=month*2, day = day)
@@ -109,14 +111,22 @@ def main(date='0000-00-00'):
             if not download:
                 break
 
-
         print(f'\n{len(os.listdir(download_folder))} FILES DOWNLOADED.\n')
 
         # Close browser for next year or system to be downloaded
         driver.quit()
 
+        if not download:
+            break
+
         print('YEAR DONE')
+
+    if len(os.listdir(download_folder)) > 0:
+        return True
+
+    else:
+        return False
 
 
 if __name__ == '__main__':
-    main(date = '2020-11-23')
+    main(last_date = '2020-11-23')
