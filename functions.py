@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 def make_directory():
     """Modificar descargas con path completo"""
-    main_folder = 'files2'
+    main_folder = 'files'
 
     os.makedirs(f'../{main_folder}/PML/MDA')
     os.makedirs(f'../{main_folder}/PML/MTR')
@@ -130,6 +130,14 @@ def get_files_names(folder, string):
     files = [file for file in files_list if string in file]
     return files
 
+
+def delete_files(folder, subfolder):
+
+    folder = f'{folder}\\{subfolder}'
+    print(f'Deleting {folder}')
+    files = files_list = os.listdir(folder)
+    for file in files:
+        os.remove(f'{folder}\\{file}')
 
 
 if __name__ == '__main__':

@@ -105,33 +105,11 @@ def create_table(cursor, table, table_name):
         print("Failed creating table {}".format(table_name))
 
 
-# def upload_file_to_database(cursor, table_name):
-
-#     files = get_files_names(table_name)
-#     table = table_name
-
-#     for file in files:
-#         print(f"Uploading {file} to table {table}...", end='')
-#         sys.stdout.flush()
-
-#         file_path = f"{folder_frame}\\{file}"
-
-#         with open(file_path, 'rb') as f:
-#             cursor.copy_from(f, table.lower(), sep=',')
-#             print('Done')
-
-
-# def get_files_names(string):
-#     """This function returns folder,files wher folder is the folder to look for files in the selected system and data, files is a list with the name of all the files available"""
-#     files_list = os.listdir(folder_frame)
-#     files = [file for file in files_list if string in file]
-#     return files
-
-
-
 def main():
 
-    conn = pg2.connect(user='postgres', password='Licuadora1234')
+    conn = pg2.connect(user='postgres', password=postgres_password())
+
+    print('Making database.')
 
     # This is to allow creation of databases
     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
@@ -152,7 +130,7 @@ def main():
 
     print(f'Connecting to {db_name}...')
 
-    conn = pg2.connect(user='postgres', password='Licuadora1234', database=db_name)
+    conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
     cursor = conn.cursor()
 
     for energy_flow in energy_flows:
@@ -184,6 +162,11 @@ def main():
 
     conn.commit()
     conn.close()
+
+    for energy_flow in energy_flows:
+        for data_type in data_types:
+            subfolder = f'{energy_flow}\\{data_type}'
+            delete_files(folder_frame, subfolder)
 
 
 if __name__ == '__main__':

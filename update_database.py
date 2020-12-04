@@ -24,16 +24,6 @@ def get_last_date(cursor, table_name):
     cursor.execute("SELECT MAX(fecha) FROM {};".format(table_name))
     return cursor.fetchall()
 
-def delete_files(folder, energy_flow, data_type):
-
-
-    folder = f'{folder}\\{energy_flow}\\{data_type}'
-    print(f'Deleting {folder}')
-    files = files_list = os.listdir(folder)
-    for file in files:
-        # print(f'{folder}\\{file}')
-        os.remove(f'{folder}\\{file}')
-
 def main():
 
     scraper_prices_daily.main()
@@ -78,7 +68,7 @@ def main():
             upload_file_to_database(folder, cursor, table_name)
             conn.commit()
 
-            delete_files(folder, energy_flow, data_type)
+            delete_files(folder, subfolder = f'{energy_flow}\\{data_type}')
 
     conn.close()
 

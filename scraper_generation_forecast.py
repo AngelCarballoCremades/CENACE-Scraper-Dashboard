@@ -13,7 +13,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from scraper_prices_month import open_browser, wait_download
+from functions import *
 
 
 # 1 = current year, 2 = last year, 3 = lastlast year.... data exists from 2017
