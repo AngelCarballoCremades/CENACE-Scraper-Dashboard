@@ -1,45 +1,41 @@
 import dash
-import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
-# import plotly.graph_objects as go
-import plotly.express as px
-import plotly.io as pio
-import numpy as np
+import dash_core_components as dcc
+import time
 
-# np.random.seed(42)
+from dash.dependencies import Input, Output, State
 
-# x1 = np.random.randint(1,101,100)
-# y1 = np.random.randint(1,101,100)
+app = dash.Dash(__name__)
 
-# fig = px.scatter(x=x1, y=y1)
-# fig.show()
+app.layout = html.Div(
+    children=[
+        html.H3("Edit text input to see loading state"),
+        dcc.Input(id="input-1", value='Input triggers local spinner'),
+        dcc.Loading(id="loading-1", children=[html.Div(id="loading-output-1")], type="default"),
+        html.Div(
+            [
+                dcc.Input(id="input-2", value='Input triggers nested spinner'),
+                dcc.Loading(
+                    id="loading-2",
+                    children=[html.Div([html.Div(id="loading-output-2")])],
+                    type="circle",
+                )
+            ]
+        ),
+    ],
+)
 
-# data = [go.Scatter(x=x1,
-#                    y=y1,
-#                    mode='markers',
-#                    marker=dict(
-#                         size=12,
-#                         color='rgb(51,204,153)',
-#                         symbol='pentagon',
-#                         line={'width':2}
-#                     ))]
-# layout = go.Layout(title='Gráfica1',
-#                    xaxis={'title':'Eje x'},
-#                    yaxis=dict(title='Eje y'),
-#                    hovermode = 'closest')
-# fig = go.Figure(data=data, layout = layout)
-# pyo.plot(fig, filename='scatter.html')
-
-
+@app.callback(Output("loading-output-1", "children"), Input("input-1", "value"))
+def input_triggers_spinner(value):
+    time.sleep(1)
+    return value
 
 
-df = px.data.gapminder()
-df_2007 = df.query("year==2007")
+@app.callback(Output("loading-output-2", "children"), Input("input-2", "value"))
+def input_triggers_nested(value):
+    time.sleep(1)
+    return value
 
-for template in ["plotly", "plotly_white", "plotly_dark", "ggplot2", "seaborn", "simple_white", "none"]:
-    fig = px.scatter(df_2007,
-                     x="gdpPercap", y="lifeExp", size="pop", color="continent",
-                     log_x=True, size_max=60,
-                     template=template, title="Gapminder 2007: '%s' theme" % template)
-    fig.show()
+
+if __name__ == "__main__":
+    app.run_server(debug=False)

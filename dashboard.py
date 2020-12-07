@@ -110,26 +110,29 @@ app.layout = html.Div([
                     figure = zone_hourly_prices(cursor)),
                 style = {'width': '50%', 'display': 'inline-block'}),
             html.Div(
-                dcc.RadioItems(
-                    id = 'graph_type2',
-                    options=[
-                        {'label': 'Normal Graph', 'value': False},
-                        {'label': 'Hourly Average Per Month', 'value': True}
-                        ],
-                    value='False'
-                    )),
+                dcc.Dropdown(
+                    id = 'price_component_dropdown',
+                    options = [
+                        {'label': 'Total energy price', 'value': 'precio_e'},
+                        {'label': 'Energy Component', 'value': 'c_energia'},
+                        {'label': 'Losses Component', 'value': 'c_perdidas'},
+                        {'label': 'Congestion Component', 'value': 'c_congestion'}],
+                    multi = False,
+                    value = 'precio_e'),
+                style = {'width': '50%', 'display': 'inline-block'}),
             html.Div(
                 dcc.Dropdown(
-                    id = 'zona_de_carga_dopdown2',
-                    options = [{'label': zona, 'value': zona} for zona in zonas_de_carga],
-                    multi = True,
-                    placeholder = "Selecciona una zona de carga",
-                    value = ['OAXACA','CAMPECHE','ACAPULCO','PUEBLA'])
-                ),
+                    id = 'price_component_graph_type_dropdown',
+                    options = [
+                        {'label': 'Real Value', 'value': 'real'},
+                        {'label': 'Percentage Difference', 'value': 'percent'}],
+                    multi = False,
+                    value = 'real'),
+                style = {'width': '50%', 'display': 'inline-block'}),
             html.Div(
                 dcc.Graph(
-                    id = 'daily_consumption_graph2',
-                    figure = consumption_daily(cursor)
+                    id = 'marginal_prices_graph',
+                    figure = marginal_prices(cursor)
                     ),
                 )
             ])
@@ -171,7 +174,7 @@ def hourly_generation_graph_function(clickData):
 @app.callback(
     Output("zona_de_carga_prices_dopdown", "options"),
     [Input("system_dropdown", "value"),
-    Input('market_dropdown','value')])
+    State('market_dropdown','value')])
 def zone_options_pnd(system, market):
 
     zone_list = zones_list[system]
@@ -180,12 +183,12 @@ def zone_options_pnd(system, market):
 
 @app.callback(
     Output('zone_daily_price_graph', 'figure'),
-    [Input("system_dropdown", "value"),
-    Input('market_dropdown','value'),
-    Input('zona_de_carga_prices_dopdown','value')])
-def daily_zone_prices_graph_function(system, market, zone):
+    [Input('zona_de_carga_prices_dopdown','value'),
+    State("system_dropdown", "value"),
+    State('market_dropdown','value')])
+def daily_zone_prices_graph_function(zone,system, market):
     print('\n\n\n')
-    print(system, market, zone)
+    print(zone, system, market)
     if not zone:
         return 0
     fig = zone_daily_prices(cursor,system, market, zone)
@@ -195,9 +198,9 @@ def daily_zone_prices_graph_function(system, market, zone):
 @app.callback(
     Output('zone_hourly_price_graph', 'figure'),[
     Input('zone_daily_price_graph', 'clickData'),
-    Input("system_dropdown", "value"),
-    Input('market_dropdown','value'),
-    Input('zona_de_carga_prices_dopdown','value')])
+    State("system_dropdown", "value"),
+    State('market_dropdown','value'),
+    State('zona_de_carga_prices_dopdown','value')])
 def hourly_zone_prices_graph_function(clickData, system, market, zone):
     print(clickData, '\n\n\n\n\n\n\n\n\n\n')
     days, date = 10 , []
@@ -209,6 +212,21 @@ def hourly_zone_prices_graph_function(clickData, system, market, zone):
         fig = zone_hourly_prices(cursor)
 
     return fig
+
+
+@app.callback(
+    Output('marginal_prices_graph', 'figure'),[
+    Input('price_component_graph_type_dropdown','value'),
+    Input('price_component_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State("system_dropdown", "value"),
+    State('market_dropdown','value')])
+def marginal_prices_graph_function(graph_type, data, zona_de_carga, system, market):
+
+    fig = marginal_prices(cursor, zona_de_carga, system, market, data, graph_type)
+    return fig
+
+
 
 
 

@@ -401,11 +401,11 @@ def zone_daily_prices(cursor, system='sin', market='mda', zone='OAXACA'):
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-    print(df)
+    # print(df)
     df['fecha'] = pd.to_datetime(df['fecha'])
     df.drop(columns=['hora','sistema','mercado','zona_de_carga'], inplace=True)
 
-    print(df.T)
+    # print(df.T)
 
     for col in ['c_energia','c_perdidas','c_congestion','precio_e']:
         df[col] = df[col].astype('float')
@@ -418,8 +418,8 @@ def zone_daily_prices(cursor, system='sin', market='mda', zone='OAXACA'):
     # print(df)
     df = df.groupby(['fecha','price_component']).mean()
     df.reset_index(inplace=True)
-    print(df)
-    print('\n\n\n\n\n\n')
+    # print(df)
+    # print('\n\n\n\n\n\n')
 
     fig = px.area(
         data_frame=df,
@@ -456,7 +456,7 @@ def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates 
             ;""".format(system,market, zone, system, market))
 
     elif type(dates) == type([]):
-        print(dates)
+        # print(dates)
         cursor.execute("""
             SELECT * FROM {}_pnd_{}
             WHERE
@@ -469,12 +469,12 @@ def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates 
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-    print(df)
+    # print(df)
     df['fecha'] = pd.to_datetime(df['fecha'])
     df['fecha'] +=  pd.to_timedelta(df.hora, unit='h')
     df.drop(columns=['hora'], inplace=True)
 
-    print(df)
+    # print(df)
 
     for col in ['c_energia','c_perdidas','c_congestion','precio_e']:
         df[col] = df[col].astype('float')
@@ -485,7 +485,7 @@ def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates 
     df = df.stack().to_frame()
     df.reset_index(inplace=True)
     df.columns = ['fecha','precio_e','price_component','$/MWh']
-    print(df)
+    # print(df)
 
     # df = df.groupby(['fecha']).sum()
     # df = df.stack().to_frame()
@@ -505,9 +505,221 @@ def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates 
                 'c_congestion'
                 ])
         )
+    fig.update_layout(title_text=f'{zone} Hourly Prices', title_x=0.5)
     # fig.update_traces(legendgroup='group')
 
     return fig
 
 
+
+
+
+
+def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = 'mda', data = 'precio_e', graph_type = 'real'):
+
+    # zona_de_carga = 'OAXACA'
+    # system = 'sin'
+    # market = 'mda'
+    # data = 'precio_e'
+
+    print('requesting marginal prices...')
+    cursor.execute("""
+        SELECT
+            fecha,
+            main.clave_nodo AS clave_nodo,
+            AVG({}) AS {}
+        FROM {}_pml_{} AS main
+        INNER JOIN nodes_info AS inf
+            ON main.clave_nodo = inf.clave_nodo
+        WHERE zona_de_carga = '{}'
+        GROUP BY
+            fecha,
+            main.clave_nodo
+        ORDER BY
+            fecha ASC,
+            clave_nodo ASC
+        ;""".format(data, data, system, market, zona_de_carga))
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    df['fecha'] = pd.to_datetime(df['fecha'])
+    df[data] = df[data].astype('float')
+
+    print(df.T)
+    print(df.dtypes)
+
+    cursor.execute("""
+        SELECT
+            fecha,
+            zona_de_carga AS clave_nodo,
+            AVG({}) AS {}
+        FROM {}_pnd_{}
+        WHERE zona_de_carga = '{}'
+        GROUP BY
+            fecha,
+            zona_de_carga
+        ORDER BY
+            fecha ASC
+        ;""".format(data, data, system,market, zona_de_carga))
+
+    colnames = [desc[0] for desc in cursor.description]
+    df2 = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    df2['fecha'] = pd.to_datetime(df2['fecha'])
+    # print(df2.T)
+    # print(df2.dtypes)
+
+    if graph_type == 'percent':
+        df2[data] = df2[data].astype('float')
+        df = pd.merge(left=df, right=df2, on='fecha', how='left')
+        df['Difference (%)'] = ((df[f'{data}_x'] - df[f'{data}_y'])/df[f'{data}_y'])*100
+        df.columns = ['fecha','clave_nodo',f'{data}_node','zona_de_carga',f'{data}_zona_de_carga','Difference %']
+        df.drop(columns = 'zona_de_carga', inplace=True)
+
+    elif graph_type == 'real':
+        df = pd.concat([df2, df])
+
+    print('Requesting info...')
+    cursor.execute("""
+        SELECT
+            clave_nodo,
+            nombre_nodo,
+            zona_de_carga,
+            nodop_nivel_de_tensión_kv AS tension_kv,
+            ubicación_entidad_federativa AS entidad_federativa,
+            ubicación_municipio AS municipio
+        FROM nodes_info
+        WHERE zona_de_carga = '{}'
+        ;""".format(zona_de_carga))
+
+    colnames = [desc[0] for desc in cursor.description]
+    df_info = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    # print(df_info.T)
+
+    df = pd.merge(left=df, right=df_info, on='clave_nodo', how='left')
+    df.fillna('---')
+    # print(df.T)
+
+    if graph_type == 'percent':
+        fig = px.line(
+        data_frame=df,
+        x="fecha",
+        y="Difference %",
+        color="clave_nodo",
+        hover_data=colnames
+        )
+
+    elif graph_type == 'real':
+        fig = px.line(
+            data_frame=df,
+            x="fecha",
+            y=f"{data}",
+            color="clave_nodo",
+            hover_data=colnames
+            )
+
+    fig.update_layout(clickmode='event+select')
+    # fig.update_traces(legendgroup='group')
+    return fig
+    # fig.show()
+
+
+
+
+
+# zona_de_carga = 'OAXACA'
+# system = 'sin'
+# market = 'mda'
+# data = 'precio_e'
+
+
+# print('requesting marginal prices...')
+# cursor.execute("""
+#     SELECT
+#         fecha,
+#         main.clave_nodo AS clave_nodo,
+#         AVG({}) AS {}
+#     FROM {}_pml_{} AS main
+#     INNER JOIN nodes_info AS inf
+#         ON main.clave_nodo = inf.clave_nodo
+#     WHERE zona_de_carga = '{}'
+#     GROUP BY
+#         fecha,
+#         main.clave_nodo
+#     ORDER BY
+#         fecha ASC,
+#         clave_nodo ASC
+#     ;""".format(data, data, system, market, zona_de_carga))
+
+# colnames = [desc[0] for desc in cursor.description]
+# df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+# df['fecha'] = pd.to_datetime(df['fecha'])
+# df[data] = df[data].astype('float')
+
+# # print(df)
+
+# cursor.execute("""
+#     SELECT
+#         fecha,
+#         zona_de_carga AS clave_nodo,
+#         AVG({}) AS {}
+#     FROM {}_pnd_{}
+#     WHERE zona_de_carga = '{}'
+#     GROUP BY
+#         fecha,
+#         zona_de_carga
+#     ORDER BY
+#         fecha ASC
+#     ;""".format(data, data, system,market, zona_de_carga))
+
+# colnames = [desc[0] for desc in cursor.description]
+# df2 = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+# df2['fecha'] = pd.to_datetime(df2['fecha'])
+# df2[data] = df2[data].astype('float')
+# # print(df2)
+# # print(df2.dtypes)
+
+# df = pd.merge(left=df, right=df2, on='fecha', how='left')
+# # print(df)
+
+# df['Difference (%)'] = ((df[f'{data}_x'] - df[f'{data}_y'])/df[f'{data}_y'])*100
+# df.columns = ['fecha','clave_nodo',f'{data}_node','zona_de_carga',f'{data}_zona_de_carga','Difference %']
+# df.drop(columns = 'zona_de_carga', inplace=True)
+# # print(df)
+
+# print('Requesting info...')
+# cursor.execute("""
+#     SELECT
+#         clave_nodo,
+#         nombre_nodo,
+#         zona_de_carga,
+#         nodop_nivel_de_tensión_kv AS tension_kv,
+#         ubicación_entidad_federativa AS entidad_federativa,
+#         ubicación_municipio AS municipio
+#     FROM nodes_info
+#     WHERE zona_de_carga = '{}'
+#     ;""".format(zona_de_carga))
+
+# colnames = [desc[0] for desc in cursor.description]
+# df_info = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+# # print(df_info.T)
+
+# df = pd.merge(left=df, right=df_info, on='clave_nodo', how='left')
+# df.fillna('---')
+# # print(df.T)
+
+# fig = px.line(
+#     data_frame=df,
+#     x="fecha",
+#     y="Difference %",
+#     color="clave_nodo",
+#     hover_data=colnames
+#     )
+
+# fig.update_layout(clickmode='event+select')
+# # fig.update_traces(legendgroup='group')
+# # return fig
+# fig.show()
+
+
 conn.close()
+

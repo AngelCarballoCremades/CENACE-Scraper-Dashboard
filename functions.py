@@ -108,7 +108,7 @@ def get_folder(folder_frame, subfolder_1, subfolder_2 = None):
     return folder,files
 
 
-def upload_file_to_database(folder, cursor, table_name):
+def upload_file_to_database(folder, cursor, table_name, sep = ','):
 
     files = get_files_names(folder, table_name)
     table = table_name
@@ -118,9 +118,9 @@ def upload_file_to_database(folder, cursor, table_name):
         sys.stdout.flush()
 
         file_path = f"{folder}\\{file}"
-
+        # print(file_path)
         with open(file_path, 'rb') as f:
-            cursor.copy_from(f, table.lower(), sep=',')
+            cursor.copy_from(f, table.lower(), sep=sep)
             print('Done')
 
 
