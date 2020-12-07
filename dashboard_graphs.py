@@ -21,9 +21,17 @@ cursor = conn.cursor()
 # colnames = [desc[0] for desc in cursor.description]
 # print(colnames)
 
+def get_zones_list(cursor, system='sin', market='mda'):
+
+    cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM {}_pnd_{};""".format(system, market))
+    zone_list = cursor.fetchall()
+    # print(zone_list)
+    return [zone[0] for zone in zone_list]
+
+
 def generation_daily(cursor):
 
-    print('requesting...\n')
+    print('requesting daily generation...\n')
     cursor.execute("""
         SELECT * FROM generation_real
         ORDER BY
@@ -243,7 +251,7 @@ def generation_hourly(cursor, dates = 0):
             ;""")
 
     elif type(dates) == type([]):
-        print(dates)
+        # print(dates)
         cursor.execute("""
             SELECT * FROM generation_real
             WHERE
@@ -309,11 +317,9 @@ def generation_hourly(cursor, dates = 0):
 def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','PUEBLA']):
 
     total = False
-    print(zonas_de_carga)
+    # print(zonas_de_carga)
     if zonas_de_carga == ['MEXICO (PAIS)']:
         total = True
-
-
 
     if total:
         print('requesting zonas...')
@@ -341,7 +347,7 @@ def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','
     df['fecha'] = pd.to_datetime(df['fecha'])
     df['energia'] = df['energia'].astype('float')
 
-    print(df)
+    # print(df)
 
 
     if total:
@@ -361,10 +367,10 @@ def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','
         df_filtered = df.groupby(['fecha','zona_de_carga']).sum()
         df_filtered.drop(columns=['hora'], inplace=True)
         df_filtered.reset_index(inplace=True)
-        print(df_filtered)
+        # print(df_filtered)
         df_filtered.columns = ['fecha','zona_de_carga','energia']
 
-        print(df_filtered)
+        # print(df_filtered)
 
         fig = px.line(
             data_frame=df_filtered,
@@ -378,3 +384,130 @@ def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','
         # fig.update_traces(legendgroup='group')
         return fig
 
+
+
+
+
+def zone_daily_prices(cursor, system='sin', market='mda', zone='OAXACA'):
+
+    print('requesting prices...', zone)
+    cursor.execute("""
+        SELECT * FROM {}_pnd_{}
+        WHERE zona_de_carga = '{}'
+        ORDER BY
+            fecha ASC,
+            hora ASC
+        ;""".format(system,market, zone))
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    print(df)
+    df['fecha'] = pd.to_datetime(df['fecha'])
+    df.drop(columns=['hora','sistema','mercado','zona_de_carga'], inplace=True)
+
+    print(df.T)
+
+    for col in ['c_energia','c_perdidas','c_congestion','precio_e']:
+        df[col] = df[col].astype('float')
+
+
+    df = df.groupby(['fecha', 'precio_e']).mean()
+    df = df.stack().to_frame()
+    df.reset_index(inplace=True)
+    df.columns = ['fecha','precio_e','price_component','$/MWh']
+    # print(df)
+    df = df.groupby(['fecha','price_component']).mean()
+    df.reset_index(inplace=True)
+    print(df)
+    print('\n\n\n\n\n\n')
+
+    fig = px.area(
+        data_frame=df,
+        x='fecha',
+        y="$/MWh",
+        color="price_component",
+        hover_data=['price_component','$/MWh','precio_e'],
+        category_orders=dict(
+            price_component = [
+                'c_energia',
+                'c_perdidas',
+                'c_congestion'
+                ])
+        )
+    # fig.show()
+    fig.update_layout(title_text=f'{zone} Daily Prices', title_x=0.5)
+    return fig
+
+
+def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates = 0):
+
+    print('requesting:')
+
+    if not dates:
+        print('max date...')
+        cursor.execute("""
+            SELECT * FROM {}_pnd_{}
+            WHERE
+                zona_de_carga = '{}' AND
+                fecha = (SELECT MAX(fecha) from {}_pnd_{})
+            ORDER BY
+                fecha ASC,
+                hora ASC
+            ;""".format(system,market, zone, system, market))
+
+    elif type(dates) == type([]):
+        print(dates)
+        cursor.execute("""
+            SELECT * FROM {}_pnd_{}
+            WHERE
+                zona_de_carga = '{}' AND
+                fecha BETWEEN '{}' AND '{}'
+            ORDER BY
+                fecha ASC,
+                hora ASC
+            ;""".format(system,market, zone, dates[0], dates[1]))
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    print(df)
+    df['fecha'] = pd.to_datetime(df['fecha'])
+    df['fecha'] +=  pd.to_timedelta(df.hora, unit='h')
+    df.drop(columns=['hora'], inplace=True)
+
+    print(df)
+
+    for col in ['c_energia','c_perdidas','c_congestion','precio_e']:
+        df[col] = df[col].astype('float')
+
+
+
+    df = df.groupby(['fecha', 'precio_e']).mean()
+    df = df.stack().to_frame()
+    df.reset_index(inplace=True)
+    df.columns = ['fecha','precio_e','price_component','$/MWh']
+    print(df)
+
+    # df = df.groupby(['fecha']).sum()
+    # df = df.stack().to_frame()
+    # df.reset_index(inplace=True)
+    # df.columns = ['fecha','gen_type','generation_mwh']
+
+    fig = px.area(
+        data_frame=df,
+        x='fecha',
+        y="$/MWh",
+        color="price_component",
+        hover_data=['price_component','$/MWh','precio_e'],
+        category_orders=dict(
+            price_component = [
+                'c_energia',
+                'c_perdidas',
+                'c_congestion'
+                ])
+        )
+    # fig.update_traces(legendgroup='group')
+
+    return fig
+
+
+conn.close()
