@@ -10,10 +10,12 @@ import datetime
 from scipy.signal import savgol_filter
 
 
-db_name = 'cenace'
+# db_name = 'cenace'
 
-conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
-cursor = conn.cursor()
+# conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+# cursor = conn.cursor()
+
+
 
 
 # cursor.execute("Select * FROM generation_real LIMIT 0")
@@ -76,7 +78,18 @@ def generation_daily(cursor):
                 'fotovoltaica'
                 ]))
     fig.update_layout(clickmode='event+select')
-    # fig.update_traces(legendgroup='group')
+    fig.update_layout(
+        title= dict(
+            text = "Generación Real Por Día",
+            x = 0.5),
+        xaxis_title=None,
+        yaxis_title="Generación [MWh]",
+        xaxis_ticks = 'outside',
+        yaxis_ticks = 'outside',
+        legend_title=None,
+        font=dict(
+            family="Arial",
+            size=12.5))
     return fig
 # fig.show()
 
@@ -125,6 +138,7 @@ def generation_month_hourly_average(cursor):
         hover_data=['total_gen','month','hora'],
         )
     fig.update_layout(clickmode='event+select')
+    fig.update_layout(template="plotly_white")
     fig.update_xaxes(tickformat="%b")# %b\n%Y
     return fig
     # fig.show()
@@ -237,10 +251,9 @@ def generation_month_hourly_average(cursor):
 
 def generation_hourly(cursor, dates = 0):
 
-    print('requesting:')
+    print('requesting hourly generation...')
 
     if not dates:
-        print('max date...')
         cursor.execute("""
             SELECT * FROM generation_real
             WHERE
@@ -251,7 +264,6 @@ def generation_hourly(cursor, dates = 0):
             ;""")
 
     elif type(dates) == type([]):
-        # print(dates)
         cursor.execute("""
             SELECT * FROM generation_real
             WHERE
@@ -300,7 +312,19 @@ def generation_hourly(cursor, dates = 0):
                 'fotovoltaica'
                 ]),
         )
-    # fig.update_traces(legendgroup='group')
+    # fig.update_traces(legendgroup='generation')
+    fig.update_layout(
+        title= dict(
+            text = "Generación Real Por Hora",
+            x = 0.5),
+        xaxis_title=None,
+        yaxis_title="Generación [MWh]",
+        xaxis_ticks = 'outside',
+        yaxis_ticks = 'outside',
+        legend_title=None,
+        font=dict(
+            family="Arial",
+            size=12.5))
 
     return fig
 
@@ -316,13 +340,12 @@ def generation_hourly(cursor, dates = 0):
 
 def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','PUEBLA']):
 
+    print('requesting zonas...')
     total = False
-    # print(zonas_de_carga)
     if zonas_de_carga == ['MEXICO (PAIS)']:
         total = True
 
     if total:
-        print('requesting zonas...')
         cursor.execute("""
             SELECT fecha, SUM(energia) AS energia FROM consumption_real
             GROUP BY fecha
@@ -333,7 +356,6 @@ def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','
     else:
         zonas_string = "','".join([zona for zona in zonas_de_carga])
 
-        print('requesting zonas...')
         cursor.execute("""
             SELECT * FROM consumption_real
             WHERE zona_de_carga in ('{}')
@@ -360,6 +382,7 @@ def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','
             )
 
         fig.update_layout(clickmode='event+select')
+        fig.update_layout(template="plotly_white")
         # fig.update_traces(legendgroup='group')
         return fig
 
@@ -381,6 +404,18 @@ def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','
             )
 
         fig.update_layout(clickmode='event+select')
+        fig.update_layout(
+            title= dict(
+                text = "Consumo Real En Zonas De Carga Por Día",
+                x = 0.5),
+            xaxis_title=None,
+            yaxis_title="Consumo [MWh]",
+            xaxis_ticks = 'outside',
+            yaxis_ticks = 'outside',
+            legend_title=None,
+            font=dict(
+                family="Arial",
+                size=12.5))
         # fig.update_traces(legendgroup='group')
         return fig
 
@@ -435,16 +470,27 @@ def zone_daily_prices(cursor, system='sin', market='mda', zone='OAXACA'):
                 ])
         )
     # fig.show()
-    fig.update_layout(title_text=f'{zone} Daily Prices', title_x=0.5)
+    fig.update_layout(template="plotly_white")
+    fig.update_layout(
+        title= dict(
+            text = f'Precio (PND) Promedio Por Día - {zone} - {market.upper()}',
+            x = 0.5),
+        xaxis_title=None,
+        yaxis_title="Precio [$/MWh]",
+        xaxis_ticks = 'outside',
+        yaxis_ticks = 'outside',
+        legend_title=None,
+        font=dict(
+            family="Arial",
+            size=12.5))
     return fig
 
 
 def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates = 0):
 
-    print('requesting:')
+    print('requesting zone hourly prices...')
 
     if not dates:
-        print('max date...')
         cursor.execute("""
             SELECT * FROM {}_pnd_{}
             WHERE
@@ -456,7 +502,6 @@ def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates 
             ;""".format(system,market, zone, system, market))
 
     elif type(dates) == type([]):
-        # print(dates)
         cursor.execute("""
             SELECT * FROM {}_pnd_{}
             WHERE
@@ -505,9 +550,18 @@ def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates 
                 'c_congestion'
                 ])
         )
-    fig.update_layout(title_text=f'{zone} Hourly Prices', title_x=0.5)
-    # fig.update_traces(legendgroup='group')
-
+    fig.update_layout(
+        title= dict(
+            text = f'Precio (PND) Promedio Por Hora - {zone} - {market.upper()}',
+            x = 0.5),
+        xaxis_title=None,
+        yaxis_title="Precio [$/MWh]",
+        xaxis_ticks = 'outside',
+        yaxis_ticks = 'outside',
+        legend_title=None,
+        font=dict(
+            family="Arial",
+            size=12.5))
     return fig
 
 
@@ -545,8 +599,8 @@ def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = '
     df['fecha'] = pd.to_datetime(df['fecha'])
     df[data] = df[data].astype('float')
 
-    print(df.T)
-    print(df.dtypes)
+    # print(df.T)
+    # print(df.dtypes)
 
     cursor.execute("""
         SELECT
@@ -599,14 +653,24 @@ def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = '
     df.fillna('---')
     # print(df.T)
 
+    titulos = {
+        'precio_e':'Precio Total  De Energía',
+        'c_energia':'Componente de Energía',
+        'c_perdidas':'Componente de Pérdidas',
+        'c_congestion':'Componente de Congestión',}
+
     if graph_type == 'percent':
         fig = px.line(
-        data_frame=df,
-        x="fecha",
-        y="Difference %",
-        color="clave_nodo",
-        hover_data=colnames
-        )
+            data_frame=df,
+            x="fecha",
+            y="Difference %",
+            color="clave_nodo",
+            hover_data=colnames
+            )
+        fig.update_layout(
+            title_text = f'Diferencia De Precio de Nodo Distribuido ({zona_de_carga}) y Precios Marginales Locales - {titulos[data]} - {market.upper()}',
+            yaxis_title="Diferencia [%]")
+
 
     elif graph_type == 'real':
         fig = px.line(
@@ -616,9 +680,21 @@ def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = '
             color="clave_nodo",
             hover_data=colnames
             )
+        fig.update_layout(
+            title_text = f'Histórico De Precio de Nodo Distribuido ({zona_de_carga}) y Precios Marginales Locales - {titulos[data]} - {market.upper()}',
+            yaxis_title="Precio [$/MWh]")
 
     fig.update_layout(clickmode='event+select')
-    # fig.update_traces(legendgroup='group')
+    fig.update_layout(
+        title_x = 0.5,
+        xaxis_title=None,
+        xaxis_ticks = 'outside',
+        yaxis_ticks = 'outside',
+        legend_title=None,
+        font=dict(
+            family="Arial",
+            size=12.5))
+
     return fig
     # fig.show()
 
@@ -721,5 +797,5 @@ def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = '
 # fig.show()
 
 
-conn.close()
+# conn.close()
 
