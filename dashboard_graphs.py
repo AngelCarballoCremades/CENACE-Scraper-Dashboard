@@ -7,13 +7,10 @@ import sys
 import psycopg2 as pg2
 from functions import *
 import datetime
-from scipy.signal import savgol_filter
+import geopandas as gpd
+from shapely.geometry import Point
 
 
-# db_name = 'cenace'
-
-# conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
-# cursor = conn.cursor()
 
 
 
@@ -33,7 +30,7 @@ def get_zones_list(cursor, system='sin', market='mda'):
 
 def generation_daily(cursor):
 
-    print('requesting daily generation...\n')
+    print('requesting daily generation...')
     cursor.execute("""
         SELECT * FROM generation_real
         ORDER BY
@@ -142,106 +139,6 @@ def generation_month_hourly_average(cursor):
     fig.update_xaxes(tickformat="%b")# %b\n%Y
     return fig
     # fig.show()
-
-
-
-
-# # Year VS Year GRAPH-------------------------------------------------
-
-# cursor.execute("""
-#     SELECT * FROM generation_real
-#     ORDER BY
-#         fecha ASC,
-#         hora ASC
-#     ;""")
-
-# colnames = [desc[0] for desc in cursor.description]
-# df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-# df['fecha'] = pd.to_datetime(df['fecha'])
-
-# print(df)
-
-# df_total = df.groupby(['fecha']).sum()
-# df_total.reset_index(inplace=True)
-# print(df_total)
-# df_total.drop(columns=['hora'], inplace=True)
-# df_total['year'] = df_total['fecha'].apply(lambda x: x.year)
-# print(df_total)
-# df_total['total_gen'] = sum([df_total[col] for col in df_total.columns if col not in ['fecha', 'year']])
-
-# # for col in df_total.columns:
-# #     if col not in ['fecha','year','gen_type']:
-# #         df_total[col+'_s'] = savgol_filter(df_total[col].values.tolist(), 51,5)
-
-# print(df_total)
-# df_total = df_total.stack().to_frame()
-# print(df_total)
-# df_total.reset_index(inplace=True)
-# df_total.columns = ['fecha','gen_type','generation_mwh']
-# # print(df_total.head(30))
-
-# df_total['year'] = df_total['fecha'].apply(lambda x: str(x.year))
-# df_total['fecha'] = df_total['fecha'].apply(lambda x: datetime.datetime(year=2016, month=x.month, day=x.day))
-# # print(df_total)
-# # df_total = df_total.pivot_table(index = ['fecha_xaxis','year','gen_type'], columns = ['generation_mwh','fecha'])
-# df_total.reset_index(inplace=True)
-# print(df_total)
-
-
-# fig = px.line(
-#     data_frame=df_total,
-#     x="fecha",
-#     y='generation_mwh',
-#     color='gen_type',
-#     line_dash='year',
-#     line_dash_sequence = ['dot', 'dash','solid'],
-#     # line_shape='spline',
-#     # render_mode='svg',
-#     hover_data=['fecha','gen_type', 'generation_mwh'],
-#     category_orders=dict(
-#         gen_type = [
-#             'total_gen',
-#             'nucleoelectrica',
-#             'carboelectrica',
-#             'combustion_interna',
-#             'ciclo_combinado',
-#             'geotermoelectrica',
-#             'termica_convencional',
-#             'turbo_gas',
-#             'hidroelectrica',
-#             'biomasa',
-#             'eolica',
-#             'fotovoltaica'
-#             ]))
-# fig.update_xaxes(
-#     tickformat="%b")# %b\n%Y
-
-# fig.show()
-
-
-
-
-# # df_total.drop(columns=[col for col in df_total.columns if col != 'total_gen'], inplace=True)
-# # for col in ['total_gen']:
-# #     df_total[col+'_soft'] = savgol_filter(df_total[col].values.tolist(), 21,5)
-
-# # df_total.reset_index(inplace=True)
-# # df_total['year'] = df_total['fecha'].apply(lambda x: x.year)
-# # print(df_total)
-
-
-# # print(pd.concat([df_total_2018, df_total_2019, df_total_2020], axis=1, ignore_index = True))
-
-
-
-
-
-# # df_weekly = df_filtered.copy()
-# # df_weekly['year'] = df_weekly['fecha'].apply(lambda x: x.year)
-# # df_weekly['week'] = df_weekly.fecha.apply(lambda x: x.isocalendar()[1])
-# # print(df_weekly)
-
-
 
 
 
@@ -700,102 +597,122 @@ def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = '
 
 
 
+def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=5, mapbox_style="open-street-map", zoom = 7):
+
+    if not (latitud and longitud):
+
+        latitud = '23.769457'
+        longitud = '-102.507216'
+        zoom = 4
+
+        fig = px.scatter_mapbox(
+            # df_final,
+            lat=[0],
+            lon=[0],
+            zoom=zoom,
+            height=500,
+            center = dict(
+                lat = float(latitud),
+                lon = float(longitud))
+            )
+
+        fig.update_layout(mapbox_style=mapbox_style)
+        fig.update_layout(coloraxis_showscale=False)
+        fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+        return fig
 
 
-# zona_de_carga = 'OAXACA'
-# system = 'sin'
-# market = 'mda'
-# data = 'precio_e'
+    cursor.execute("""SELECT * FROM nodes_info""")
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+
+    lats = [float(row[-2]) if row[-2] != '' else 0 for row in df.values]
+    lons = [float(row[-1]) if row[-1] != '' else 0 for row in df.values]
+
+    df['Points'] = [Point(lat,lon) for lat, lon in zip(lats,lons)]
+
+    selected_point = Point(float(latitud), float(longitud))
+
+    distances = [p.distance(selected_point) for p in df.Points.values]
+
+    df['distance'] = distances
+
+    df.sort_values(by='distance', axis = 0, ascending=True, inplace=True)
+
+    distances_ordered = sorted(list(set(distances)))
+
+    df_final = pd.DataFrame(columns = df.columns)
+    # print(df.T)
+
+    while df_final.shape[0] < number_of_nodes and df_final.shape[0] < df.shape[0]:
+        df_final = df_final.append(df[df.distance == distances_ordered.pop(0)].iloc[0])
+
+    # print(df_final)
+    edo_mun = df_final['ubicación_entidad_federativa'] + '___' + df_final['ubicación_municipio']
+    # print((edo_mun).unique())
+
+    lista_nodos = []
+
+    for e_m in edo_mun.unique():
+        estado = e_m.split('___')[0]
+        municipio = e_m.split('___')[1]
+
+        cursor.execute("""SELECT clave_nodo, nombre_nodo FROM nodes_info
+            WHERE
+                ubicación_entidad_federativa = '{}' AND
+                ubicación_municipio = '{}';""".format(estado, municipio))
+        lista_nodos.append([f'<br>{node[0]}/{node[1]}' for node in cursor.fetchall()])
+
+    # print(lista_nodos)
+
+    df_final['nodes'] = lista_nodos
+
+    # print(df_final.T)
+
+    df_final['color'] = 1
+    selected_point_df = pd.DataFrame.from_dict(data = {'lat':[latitud], 'lon':[longitud], 'color': [500]}, orient = 'columns')
+    df_final = df_final.append(selected_point_df)
+    df_final['marker_size'] = 12
+
+    # print(df_final.T)
 
 
-# print('requesting marginal prices...')
-# cursor.execute("""
-#     SELECT
-#         fecha,
-#         main.clave_nodo AS clave_nodo,
-#         AVG({}) AS {}
-#     FROM {}_pml_{} AS main
-#     INNER JOIN nodes_info AS inf
-#         ON main.clave_nodo = inf.clave_nodo
-#     WHERE zona_de_carga = '{}'
-#     GROUP BY
-#         fecha,
-#         main.clave_nodo
-#     ORDER BY
-#         fecha ASC,
-#         clave_nodo ASC
-#     ;""".format(data, data, system, market, zona_de_carga))
+    fig = px.scatter_mapbox(df_final,
+        lat=df_final['lat'].astype('float'),
+        lon=df_final['lon'].astype('float'),
+        size = 'marker_size',
+        color = 'color',
+        color_discrete_sequence=["identity"],
+        zoom=zoom,
+        height=500,
+        center = dict(
+            lat = float(latitud),
+            lon = float(longitud)),
+        hover_data = {
+            'ubicación_entidad_federativa':True,
+            'ubicación_municipio':True,
+            'color':False,
+            'marker_size':False,
+            'nodes':True
+            # 'lat':True,
+            # 'lon':True
+            }
+        )
 
-# colnames = [desc[0] for desc in cursor.description]
-# df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-# df['fecha'] = pd.to_datetime(df['fecha'])
-# df[data] = df[data].astype('float')
+    fig.update_layout(mapbox_style=mapbox_style)
+    fig.update_layout(coloraxis_showscale=False)
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    return fig
 
-# # print(df)
+if __name__ == '__main__':
 
-# cursor.execute("""
-#     SELECT
-#         fecha,
-#         zona_de_carga AS clave_nodo,
-#         AVG({}) AS {}
-#     FROM {}_pnd_{}
-#     WHERE zona_de_carga = '{}'
-#     GROUP BY
-#         fecha,
-#         zona_de_carga
-#     ORDER BY
-#         fecha ASC
-#     ;""".format(data, data, system,market, zona_de_carga))
+    db_name = 'cenace'
 
-# colnames = [desc[0] for desc in cursor.description]
-# df2 = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-# df2['fecha'] = pd.to_datetime(df2['fecha'])
-# df2[data] = df2[data].astype('float')
-# # print(df2)
-# # print(df2.dtypes)
+    conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+    cursor = conn.cursor()
 
-# df = pd.merge(left=df, right=df2, on='fecha', how='left')
-# # print(df)
+    fig = locate_close_nodes(cursor, latitud = '23.769457', longitud = '-102.507216')
+    fig.show()
 
-# df['Difference (%)'] = ((df[f'{data}_x'] - df[f'{data}_y'])/df[f'{data}_y'])*100
-# df.columns = ['fecha','clave_nodo',f'{data}_node','zona_de_carga',f'{data}_zona_de_carga','Difference %']
-# df.drop(columns = 'zona_de_carga', inplace=True)
-# # print(df)
-
-# print('Requesting info...')
-# cursor.execute("""
-#     SELECT
-#         clave_nodo,
-#         nombre_nodo,
-#         zona_de_carga,
-#         nodop_nivel_de_tensión_kv AS tension_kv,
-#         ubicación_entidad_federativa AS entidad_federativa,
-#         ubicación_municipio AS municipio
-#     FROM nodes_info
-#     WHERE zona_de_carga = '{}'
-#     ;""".format(zona_de_carga))
-
-# colnames = [desc[0] for desc in cursor.description]
-# df_info = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-# # print(df_info.T)
-
-# df = pd.merge(left=df, right=df_info, on='clave_nodo', how='left')
-# df.fillna('---')
-# # print(df.T)
-
-# fig = px.line(
-#     data_frame=df,
-#     x="fecha",
-#     y="Difference %",
-#     color="clave_nodo",
-#     hover_data=colnames
-#     )
-
-# fig.update_layout(clickmode='event+select')
-# # fig.update_traces(legendgroup='group')
-# # return fig
-# fig.show()
-
-
-# conn.close()
-
+    conn.close()

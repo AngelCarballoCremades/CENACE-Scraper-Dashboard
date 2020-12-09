@@ -10,10 +10,10 @@ from functions import *
 import datetime
 from dashboard_graphs import *
 import plotly.io as pio
+import dash_bootstrap_components as dbc
+
 
 pio.templates.default = "plotly_white"
-
-
 db_name = 'cenace'
 
 
@@ -31,9 +31,10 @@ zones_list = {'sin':get_zones_list(cursor, system='sin', market='mda'),
 
 style1 = {'font-family': 'Arial', 'font-size': '150%'}
 style0 = {'text-align':'center','font-family': 'Arial', 'font-size': '100%'}
-dropdown_style = {'width': '28%', 'display': 'inline-block', 'font-family': 'Arial'}
+dropdown_style = {'width': '28%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+dropdown_style_2 = {'width': '28%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
 
-app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...')
+app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...', external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 
 app.layout = html.Div(html.Center(html.Div([
@@ -138,7 +139,22 @@ app.layout = html.Div(html.Center(html.Div([
                         id = 'zone_hourly_price_graph',
                         figure = zone_hourly_prices(cursor)),
                     style = {'width': '50%', 'display': 'inline-block'}),
-                html.Div([], style = {'width': '14%', 'display': 'inline-block'}),
+                # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                # html.Div(
+                #     dcc.Dropdown(
+                #         id = 'price_graph_comparisson_dropdown',
+                #         options = [
+                #             {'label': 'Precio Total de Energía', 'value': 'precio_e'},
+                #             {'label': 'Componente de Energía', 'value': 'c_energia'},
+                #             {'label': 'Componente de Pérdidas', 'value': 'c_perdidas'},
+                #             {'label': 'Componente de Congestión', 'value': 'c_congestion'}],
+                #         multi = False,
+                #         value = 'precio_e',
+                #         clearable=False,
+                #         style = {'text-align':'center'}),
+                #     style = dropdown_style
+                #     ),
+                html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                 html.Div(
                     dcc.Dropdown(
                         id = 'price_component_dropdown',
@@ -153,7 +169,7 @@ app.layout = html.Div(html.Center(html.Div([
                         style = {'text-align':'center'}),
                     style = dropdown_style
                     ),
-                html.Div([], style = {'width': '15%', 'display': 'inline-block'}),
+                html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                 html.Div(
                     dcc.Dropdown(
                         id = 'price_component_graph_type_dropdown',
@@ -166,7 +182,7 @@ app.layout = html.Div(html.Center(html.Div([
                         style = {'text-align':'center'}),
                     style = dropdown_style
                     ),
-                html.Div([], style = {'width': '14%', 'display': 'inline-block'}),
+                html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                 html.Div(html.P()),
                 dcc.Loading(
                         id="loading_element_prices",
@@ -175,6 +191,72 @@ app.layout = html.Div(html.Center(html.Div([
                             dcc.Graph(
                                 id = 'marginal_prices_graph',
                                 figure = marginal_prices(cursor)
+                                ),
+                        )]
+                    )
+                ]
+            ),
+        dcc.Tab(label='Localización de Nodos',
+            style = style1,
+            selected_style = style1,
+            children=[
+                html.Div(html.P()),
+                html.Div(
+                    dbc.Input(
+                        id="latitud_input",
+                        placeholder="Latitud",
+                        type="number",
+                        debounce = True
+                        ),
+                    style = {'width': '20%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+                    ),
+                html.Div([], style = {'width': '2%', 'display': 'inline-block'}),
+                html.Div(
+                    dbc.Input(
+                        id="longitud_input",
+                        placeholder="Longitud",
+                        type="number",
+                        debounce = True
+                        ),
+                    style = {'width': '20%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+                    ),
+                html.Div([], style = {'width': '2%', 'display': 'inline-block'}),
+                html.Div('Número de nodos a buscar:', style = {'display': 'inline-block'}),
+                html.Div([], style = {'width': '0.5%', 'display': 'inline-block'}),
+                html.Div(
+                    dcc.Dropdown(
+                        id = 'number_of_nodes_dropdown',
+                        options = [{'label':i, 'value':i} for i in range(1,2001)],
+                        value = 5,
+                        clearable=False,
+                        style = {'text-align':'left'}),
+                    style = {'width': '5%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+                    ),
+                html.Div([], style = {'width': '2%', 'display': 'inline-block'}),
+                html.Div(
+                    dbc.Button("Buscar",id = 'map_button', color="primary", className="mr-1"),
+                    style = {'width': '6%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+                    ),
+                html.Div([], style = {'width': '5%', 'display': 'inline-block'}),
+                html.Div(
+                    dcc.Dropdown(
+                        id = 'mapbox_style_dropdown',
+                        options = [
+                            {'label': 'Mapa', 'value': 'open-street-map'},
+                            {'label': 'Satélite', 'value':'stamen-terrain'}],
+                        value = 'open-street-map',
+                        clearable=False,
+                        style = {'text-align':'left'}),
+                    style = {'width': '10%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+                    ),
+                html.Div(html.P()),
+                dcc.Loading(
+                        id="loading_element_map",
+                        type="circle",
+                        children=[html.Div(
+                            dcc.Graph(
+                                id = 'map_graph',
+                                figure = locate_close_nodes(cursor)
                                 ),
                         )]
                     )
@@ -263,7 +345,17 @@ def marginal_prices_graph_function(graph_type, data, zona_de_carga, system, mark
     fig = marginal_prices(cursor, zona_de_carga, system, market, data, graph_type)
     return fig
 
-
+@app.callback(
+    Output('map_graph', 'figure'),[
+    Input('map_button','n_clicks')],[
+    Input('mapbox_style_dropdown', 'value'),
+    State('latitud_input', 'value'),
+    State("longitud_input", "value"),
+    State('number_of_nodes_dropdown','value')])
+def update_map(button, mapbox_style, latitud, longitud, number_of_nodes):
+    print(button, mapbox_style, latitud, longitud, number_of_nodes)
+    fig = locate_close_nodes(cursor, latitud, longitud, number_of_nodes, mapbox_style)
+    return fig
 
 
 
