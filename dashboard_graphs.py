@@ -597,6 +597,75 @@ def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = '
 
 
 
+def zones_prices(cursor, zones = [], zone = 'OAXACA', system='sin', market='mda', data = 'precio_e'):
+
+    if not zones:
+        zones = [zone]
+
+    if zone in zones:
+        pass
+    else:
+        zones.append(zone)
+
+    zones = "','".join(zones)
+
+    print('requesting prices...', zones)
+    cursor.execute("""
+        SELECT
+            fecha,
+            zona_de_carga,
+            AVG({}) AS {}
+        FROM {}_pnd_{}
+        WHERE zona_de_carga in ('{}')
+        GROUP BY
+            fecha,
+            zona_de_carga
+        ORDER BY
+            fecha ASC
+        ;""".format(data, data, system,market, zones))
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    print(df.T)
+    print(df.zona_de_carga.unique())
+    df['fecha'] = pd.to_datetime(df['fecha'])
+    df[data] = df[data].astype('float')
+
+    titulos = {
+        'precio_e':'Precio Total  De Energía',
+        'c_energia':'Componente de Energía',
+        'c_perdidas':'Componente de Pérdidas',
+        'c_congestion':'Componente de Congestión',}
+
+
+    fig = px.line(
+        data_frame=df,
+        x='fecha',
+        y=f"{data}",
+        color="zona_de_carga",
+        hover_data=['fecha','zona_de_carga',f'{data}']
+        )
+    # fig.show()
+    fig.update_layout(template="plotly_white")
+    fig.update_layout(
+        title= dict(
+            text = f'Comparación de Precio {titulos[data]} Promedio Por Día - {market.upper()}',
+            x = 0.5),
+        xaxis_title=None,
+        yaxis_title="Precio [$/MWh]",
+        xaxis_ticks = 'outside',
+        yaxis_ticks = 'outside',
+        legend_title=None,
+        font=dict(
+            family="Arial",
+            size=12.5))
+    return fig
+
+
+
+
+
+
 def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=5, mapbox_style="open-street-map", zoom = 7):
 
     if not (latitud and longitud):
@@ -712,7 +781,7 @@ if __name__ == '__main__':
     conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
     cursor = conn.cursor()
 
-    fig = locate_close_nodes(cursor, latitud = '23.769457', longitud = '-102.507216')
+    fig = zones_prices(cursor, zones = ['OAXACA','PUEBLA','ORIZABA'])
     fig.show()
 
     conn.close()

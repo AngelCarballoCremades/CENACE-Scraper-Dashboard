@@ -22,6 +22,7 @@ cursor = conn.cursor()
 
 cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM consumption_real;""")
 zonas_de_carga = [zona[0] for zona in cursor.fetchall()]
+zonas_de_carga_alone = zonas_de_carga.copy()
 zonas_de_carga.append('MEXICO (PAIS)')
 
 zones_list = {'sin':get_zones_list(cursor, system='sin', market='mda'),
@@ -32,7 +33,7 @@ zones_list = {'sin':get_zones_list(cursor, system='sin', market='mda'),
 style1 = {'font-family': 'Arial', 'font-size': '150%'}
 style0 = {'text-align':'center','font-family': 'Arial', 'font-size': '100%'}
 dropdown_style = {'width': '28%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
-dropdown_style_2 = {'width': '28%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+dropdown_style_2 = {'width': '90%', 'font-family': 'Arial', 'vertical-align': 'middle'}
 
 app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...', external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -139,61 +140,79 @@ app.layout = html.Div(html.Center(html.Div([
                         id = 'zone_hourly_price_graph',
                         figure = zone_hourly_prices(cursor)),
                     style = {'width': '50%', 'display': 'inline-block'}),
-                # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                # html.Div(
-                #     dcc.Dropdown(
-                #         id = 'price_graph_comparisson_dropdown',
-                #         options = [
-                #             {'label': 'Precio Total de Energía', 'value': 'precio_e'},
-                #             {'label': 'Componente de Energía', 'value': 'c_energia'},
-                #             {'label': 'Componente de Pérdidas', 'value': 'c_perdidas'},
-                #             {'label': 'Componente de Congestión', 'value': 'c_congestion'}],
-                #         multi = False,
-                #         value = 'precio_e',
-                #         clearable=False,
-                #         style = {'text-align':'center'}),
-                #     style = dropdown_style
-                #     ),
-                html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                html.Div(
-                    dcc.Dropdown(
-                        id = 'price_component_dropdown',
-                        options = [
-                            {'label': 'Precio Total de Energía', 'value': 'precio_e'},
-                            {'label': 'Componente de Energía', 'value': 'c_energia'},
-                            {'label': 'Componente de Pérdidas', 'value': 'c_perdidas'},
-                            {'label': 'Componente de Congestión', 'value': 'c_congestion'}],
-                        multi = False,
-                        value = 'precio_e',
-                        clearable=False,
-                        style = {'text-align':'center'}),
-                    style = dropdown_style
+                html.P([]),
+                html.Div(children=[
+                    # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                    html.Div(
+                        dcc.Dropdown(
+                            id = 'price_graph_comparisson_dropdown',
+                            options = [
+                                {'label': 'OAXACA vs Nodos Locales', 'value': 'nodos'},
+                                {'label': 'OAXACA vs Zonas de Carga', 'value': 'zonas'}],
+                            multi = False,
+                            value = 'nodos',
+                            clearable=False,
+                            style = {'text-align':'center'}),
+                        style = dropdown_style_2
+                        ),
+                    html.Div(html.P()),
+                    # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                    html.Div(
+                        dcc.Dropdown(
+                            id = 'price_component_dropdown',
+                            options = [
+                                {'label': 'Precio Total de Energía', 'value': 'precio_e'},
+                                {'label': 'Componente de Energía', 'value': 'c_energia'},
+                                {'label': 'Componente de Pérdidas', 'value': 'c_perdidas'},
+                                {'label': 'Componente de Congestión', 'value': 'c_congestion'}],
+                            multi = False,
+                            value = 'precio_e',
+                            clearable=False,
+                            style = {'text-align':'center'}),
+                        style = dropdown_style_2
+                        ),
+                    html.Div(html.P()),
+                    # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                    html.Div(
+                        dcc.Dropdown(
+                            id = 'price_component_graph_type_dropdown',
+                            options = [
+                                {'label': 'Valor Real', 'value': 'real'},
+                                {'label': 'Diferencia vs Zona de Carga', 'value': 'percent'}],
+                            multi = False,
+                            value = 'real',
+                            clearable=False,
+                            style = {'text-align':'center'}),
+                        style = dropdown_style_2
+                        ),
+                    html.Div(html.P()),
+                    # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                    html.Div(
+                        dcc.Dropdown(
+                            id = 'zona_de_carga_prices_comparison_dopdown',
+                            options = [{'label': zona, 'value': zona} for zona in zones_list['sin']],
+                            multi = True,
+                            placeholder = "Selecciona una Zona de Carga",
+                            style = {'text-align':'center'}),
+                        style = dropdown_style_2
+                        ),
+                    ],
+                    style = {'width': '30%', 'display': 'inline-block', 'vertical-align': 'top'}
                     ),
-                html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                html.Div(
-                    dcc.Dropdown(
-                        id = 'price_component_graph_type_dropdown',
-                        options = [
-                            {'label': 'Valor Real', 'value': 'real'},
-                            {'label': 'Diferencia vs Zona de Carga', 'value': 'percent'}],
-                        multi = False,
-                        value = 'real',
-                        clearable=False,
-                        style = {'text-align':'center'}),
-                    style = dropdown_style
-                    ),
-                html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                html.Div(html.P()),
-                dcc.Loading(
-                        id="loading_element_prices",
-                        type="circle",
-                        children=[html.Div(
-                            dcc.Graph(
-                                id = 'marginal_prices_graph',
-                                figure = marginal_prices(cursor)
-                                ),
-                        )]
-                    )
+                    html.Div(
+                        dcc.Loading(
+                                id="loading_element_prices",
+                                type="circle",
+                                children=[html.Div(
+                                    dcc.Graph(
+                                        id = 'marginal_zones_prices_graph',
+                                        figure = marginal_prices(cursor)
+                                        )
+                                )]
+                            ),
+                        style = {'width': '70%', 'display': 'inline-block'}
+                        )
+
                 ]
             ),
         dcc.Tab(label='Localización de Nodos',
@@ -334,16 +353,50 @@ def hourly_zone_prices_graph_function(clickData, system, market, zone):
 
 
 @app.callback(
-    Output('marginal_prices_graph', 'figure'),[
+    Output('marginal_zones_prices_graph', 'figure'),[
     Input('price_component_graph_type_dropdown','value'),
     Input('price_component_dropdown', 'value'),
+    Input('price_graph_comparisson_dropdown','value'),
+    Input('zona_de_carga_prices_comparison_dopdown', 'value'),
     State('zona_de_carga_prices_dopdown', 'value'),
     State("system_dropdown", "value"),
     State('market_dropdown','value')])
-def marginal_prices_graph_function(graph_type, data, zona_de_carga, system, market):
-
-    fig = marginal_prices(cursor, zona_de_carga, system, market, data, graph_type)
+def marginal_prices_graph_function(graph_type, data, zonas_nodos, zones, zona_de_carga, system, market):
+    if zonas_nodos == 'zonas':
+        fig = zones_prices(cursor, zones, zona_de_carga, system, market, data)
+    elif zonas_nodos == 'nodos':
+        fig = marginal_prices(cursor, zona_de_carga, system, market, data, graph_type)
     return fig
+
+@app.callback(
+    Output("price_graph_comparisson_dropdown", 'options'),
+    Input('zona_de_carga_prices_dopdown','value'))
+def update_price_dropdown_options(zona_de_carga):
+    options = [
+        {'label': f'{zona_de_carga} vs Nodos Locales', 'value': 'nodos'},
+        {'label': f'{zona_de_carga} vs Zonas de Carga', 'value': 'zonas'}]
+    return options
+
+@app.callback(
+    Output("zona_de_carga_prices_comparison_dopdown", "options"),
+    [Input("system_dropdown", "value")])
+def zone_options_prices_comparisson(system):
+
+    zone_list = zones_list[system]
+    return [{'label': zone, 'value': zone} for zone in zone_list]
+
+
+@app.callback([
+    Output('zona_de_carga_prices_comparison_dopdown','disabled'),
+    Output('price_component_graph_type_dropdown', 'disabled')],
+    Input('price_graph_comparisson_dropdown','value'))
+def disable_prices_dropdowns(zonas_nodos):
+
+    if zonas_nodos == 'zonas':
+        return False, True
+    else:
+        return True, False
+
 
 @app.callback(
     Output('map_graph', 'figure'),[
@@ -356,6 +409,11 @@ def update_map(button, mapbox_style, latitud, longitud, number_of_nodes):
     print(button, mapbox_style, latitud, longitud, number_of_nodes)
     fig = locate_close_nodes(cursor, latitud, longitud, number_of_nodes, mapbox_style)
     return fig
+
+
+
+
+
 
 
 
