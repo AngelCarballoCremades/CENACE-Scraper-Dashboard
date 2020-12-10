@@ -42,7 +42,7 @@ zones_list = {'sin':get_zones_list(cursor, system='sin', market='mda'),
 
 
 style1 = {'font-family': 'Arial', 'font-size': '150%'}
-style0 = {'text-align':'center','font-family': 'Arial', 'font-size': '100%'}
+style0 = {'text-align':'center','font-family': 'Arial', 'font-size': '100%', 'width': '50%', 'display': 'inline-block', 'vertical-align': 'middle'}
 dropdown_style = {'width': '28%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
 dropdown_style_2 = {'width': '90%', 'font-family': 'Arial', 'vertical-align': 'middle'}
 
@@ -50,9 +50,38 @@ app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...
 
 
 app.layout = html.Div(html.Center(html.Div([
-    html.Div(dcc.Markdown('# **Dashboard de Energía en México**'),
-        style = style0
+    html.Div(html.P()),
+    html.Div([
+        html.Div([],
+            style = {'width': '20%', 'display': 'inline-block', 'align-items': 'left','vertical-align': 'middle'}
+            ),
+        html.Div(dcc.Markdown('# **Dashboard de Energía en México**'),
+            style = style0
+            ),
+        html.Div([
+            html.Div(
+                dbc.Button("Actualizar BD",
+                    id = 'update_database',
+                    color="primary",
+                    className="mr-1"
+                    ),
+                style = {'marginBottom': 1, 'float':'right'}
+                ),
+            html.Div(
+                dbc.Button("Conectar de nuevo con SQL",
+                    id = 'SQL_reconnect_button',
+                    color="warning",
+                    className="mr-1"
+                    ),
+                style = {'marginTop': 1, 'float':'right'}
+                )
+            ],
+            style = {'width': '20%','align-items': 'right', 'display':'inline-block', 'vertical-align': 'middle'}
+            )
+        ],
+        style = {'vertical-align': 'middle'}
         ),
+    html.Div(html.P()),
     dcc.Tabs([
         dcc.Tab(label='Generación y Demanda',
             style = style1,
@@ -650,6 +679,15 @@ app.layout = html.Div(html.Center(html.Div([
     ],
     style = {'width': '95%'}
     )))
+
+@app.callback(
+    Output('SQL_reconnect_button','cildren'),
+    Input('SQL_reconnect_button', 'n_clicks'))
+def reconnect_sql_function(n_clicks):
+    cursor.execute("ROLLBACK")
+    conn.commit()
+    return 'Conectar de nuevo con SQL'
+
 
 @app.callback(
     Output('daily_consumption_graph', 'figure'),
