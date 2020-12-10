@@ -9,6 +9,7 @@ import psycopg2 as pg2
 from functions import *
 import datetime
 from dashboard_graphs import *
+from dashboards_tables import *
 import plotly.io as pio
 import dash_bootstrap_components as dbc
 
@@ -141,62 +142,72 @@ app.layout = html.Div(html.Center(html.Div([
                         figure = zone_hourly_prices(cursor)),
                     style = {'width': '50%', 'display': 'inline-block'}),
                 html.P([]),
-                html.Div(children=[
-                    # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                    html.Div(
-                        dcc.Dropdown(
-                            id = 'price_graph_comparisson_dropdown',
-                            options = [
-                                {'label': 'OAXACA vs Nodos Locales', 'value': 'nodos'},
-                                {'label': 'OAXACA vs Zonas de Carga', 'value': 'zonas'}],
-                            multi = False,
-                            value = 'nodos',
-                            clearable=False,
-                            style = {'text-align':'center'}),
-                        style = dropdown_style_2
-                        ),
-                    html.Div(html.P()),
-                    # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                    html.Div(
-                        dcc.Dropdown(
-                            id = 'price_component_dropdown',
-                            options = [
-                                {'label': 'Precio Total de Energía', 'value': 'precio_e'},
-                                {'label': 'Componente de Energía', 'value': 'c_energia'},
-                                {'label': 'Componente de Pérdidas', 'value': 'c_perdidas'},
-                                {'label': 'Componente de Congestión', 'value': 'c_congestion'}],
-                            multi = False,
-                            value = 'precio_e',
-                            clearable=False,
-                            style = {'text-align':'center'}),
-                        style = dropdown_style_2
-                        ),
-                    html.Div(html.P()),
-                    # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                    html.Div(
-                        dcc.Dropdown(
-                            id = 'price_component_graph_type_dropdown',
-                            options = [
-                                {'label': 'Valor Real', 'value': 'real'},
-                                {'label': 'Diferencia vs Zona de Carga', 'value': 'percent'}],
-                            multi = False,
-                            value = 'real',
-                            clearable=False,
-                            style = {'text-align':'center'}),
-                        style = dropdown_style_2
-                        ),
-                    html.Div(html.P()),
-                    # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                    html.Div(
-                        dcc.Dropdown(
-                            id = 'zona_de_carga_prices_comparison_dopdown',
-                            options = [{'label': zona, 'value': zona} for zona in zones_list['sin']],
-                            multi = True,
-                            placeholder = "Selecciona una Zona de Carga",
-                            style = {'text-align':'center'}),
-                        style = dropdown_style_2
-                        ),
-                    ],
+                html.Div(
+                    children=[
+                        # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                        html.Div(
+                            dcc.Dropdown(
+                                id = 'price_graph_comparisson_dropdown',
+                                options = [
+                                    {'label': 'OAXACA vs Nodos Locales', 'value': 'nodos'},
+                                    {'label': 'OAXACA vs Zonas de Carga', 'value': 'zonas'}],
+                                multi = False,
+                                value = 'nodos',
+                                clearable=False,
+                                style = {'text-align':'center'}),
+                            style = dropdown_style_2
+                            ),
+                        html.Div(html.P()),
+                        # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                        html.Div(
+                            dcc.Dropdown(
+                                id = 'price_component_dropdown',
+                                options = [
+                                    {'label': 'Precio Total de Energía', 'value': 'precio_e'},
+                                    {'label': 'Componente de Energía', 'value': 'c_energia'},
+                                    {'label': 'Componente de Pérdidas', 'value': 'c_perdidas'},
+                                    {'label': 'Componente de Congestión', 'value': 'c_congestion'}],
+                                multi = False,
+                                value = 'precio_e',
+                                clearable=False,
+                                style = {'text-align':'center'}),
+                            style = dropdown_style_2
+                            ),
+                        html.Div(html.P()),
+                        # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                        html.Div(
+                            dcc.Dropdown(
+                                id = 'price_component_graph_type_dropdown',
+                                options = [
+                                    {'label': 'Valor Real', 'value': 'real'},
+                                    {'label': 'Diferencia vs Zona de Carga', 'value': 'percent'}],
+                                multi = False,
+                                value = 'real',
+                                clearable=False,
+                                style = {'text-align':'center'}),
+                            style = dropdown_style_2
+                            ),
+                        html.Div(html.P()),
+                        # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
+                        html.Div(
+                            dcc.Dropdown(
+                                id = 'zona_de_carga_prices_comparison_dopdown',
+                                options = [{'label': zona, 'value': zona} for zona in zones_list['sin']],
+                                multi = True,
+                                placeholder = "Selecciona una Zona de Carga",
+                                style = {'text-align':'center'}),
+                            style = dropdown_style_2
+                            ),
+                        html.Div(html.P()),
+                        html.Div(
+                            dbc.Button(
+                                id = 'show_table_prices',
+                                children = "Obtener más información",
+                                color="primary",
+                                className="mr-1"),
+                            style = dropdown_style_2
+                            )
+                        ],
                     style = {'width': '30%', 'display': 'inline-block', 'vertical-align': 'top'}
                     ),
                     html.Div(
@@ -211,7 +222,26 @@ app.layout = html.Div(html.Center(html.Div([
                                 )]
                             ),
                         style = {'width': '70%', 'display': 'inline-block'}
-                        )
+                        ),
+                    html.Div(html.P()),
+                    html.H3([f"Información de {datetime.datetime.now().year}"]),
+                    dcc.Loading(
+                        id = 'loading_element_table_prices',
+                        type = 'circle',
+                        children = [
+                            html.Div(
+                                id = 'prices_table_div',
+                                children = [html.P(),html.P()]),
+                            ]
+                        ),
+                    html.Div(html.P()),
+                    dcc.Loading(
+                        id = 'loading_element_download_table_prices',
+                        children =[
+                            dbc.Button("Descargar",id = 'download_table_prices_button', color="primary", className="mr-1"),
+                            ]
+                        ),
+                    html.Div(html.P())
 
                 ]
             ),
@@ -270,15 +300,36 @@ app.layout = html.Div(html.Center(html.Div([
                     ),
                 html.Div(html.P()),
                 dcc.Loading(
-                        id="loading_element_map",
-                        type="circle",
-                        children=[html.Div(
-                            dcc.Graph(
-                                id = 'map_graph',
-                                figure = locate_close_nodes(cursor)
-                                ),
+                    id="loading_element_map",
+                    type="circle",
+                    children=[html.Div(
+                        dcc.Graph(
+                            id = 'map_graph',
+                            figure = locate_close_nodes(cursor)
+                            ),
                         )]
-                    )
+                    ),
+                html.Div(html.P()),
+                html.H3([f"Información de nodos seleccionados - {datetime.datetime.now().year}"]),
+                dcc.Loading(
+                    id = 'loading_element_table_map',
+                    type = 'circle',
+                    children = [
+                        html.Div(
+                            id = 'map_table_div',
+                            children = [html.P(),html.P()]
+                            ),
+                        ]
+                    ),
+                html.Div(html.P()),
+                dcc.Loading(
+                    id = 'loading_element_download_table_map',
+                    children =[
+                        dbc.Button("Descargar",id = 'download_table_map_button', color="primary", className="mr-1"),
+                        ]
+                    ),
+                html.Div(html.P())
+
                 ]
             )
         ]
@@ -410,11 +461,93 @@ def update_map(button, mapbox_style, latitud, longitud, number_of_nodes):
     fig = locate_close_nodes(cursor, latitud, longitud, number_of_nodes, mapbox_style)
     return fig
 
+@app.callback(
+    Output('map_table_div', 'children'),[
+    Input('map_graph', 'clickData')])
+def map_clickdata_table_function(clickData):
+    # print(clickData)
+    # print()
+
+    if clickData['points'][0]['customdata'][:2] != ['-','-']:
+
+        estado = clickData['points'][0]['customdata'][0]
+        municipio =clickData['points'][0]['customdata'][1]
+        df = map_click_table(cursor, estado, municipio)
+
+    else:
+        df = map_click_table(cursor, clickData['points'][0]['customdata'][4])
+
+    # print()
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'table_map',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
+
+@app.callback(
+    Output('download_table_map_button', 'children'),[
+    Input('download_table_map_button', 'n_clicks'),
+    State('map_graph','clickData')])
+def download_map_table_function(n_clicks, clickData):
+
+    if clickData['points'][0]['customdata'][:2] != ['-','-']:
+        estado = clickData['points'][0]['customdata'][0]
+        municipio =clickData['points'][0]['customdata'][1]
+        df = map_click_table(cursor, estado, municipio)
+
+    else:
+        df = map_click_table(cursor, clickData['points'][0]['customdata'][4])
+
+    file_name = get_download_file_name('nodos_de_mapa')
+    df.to_csv(f"..\\files\\descargas\\{file_name}", index = False)
+
+    return 'Descargar'
 
 
+@app.callback(
+    Output('prices_table_div', 'children'),[
+    Input('show_table_prices', 'n_clicks'),
+    State('system_dropdown', 'value'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def prices_create_table_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
 
+    if zonas_nodos == 'zonas':
+        df = prices_zones_table(cursor, system, market, zone, zones, price_component)
+    if zonas_nodos == 'nodos':
+        df = prices_nodes_table(cursor, system, market, zone, price_component)
 
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'table_prices',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
 
+@app.callback(
+    Output('download_table_prices_button', 'children'),[
+    Input('download_table_prices_button', 'n_clicks'),
+    State('system_dropdown', 'value'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def download_map_table_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
+
+    if zonas_nodos == 'zonas':
+        df = prices_zones_table(cursor, system, market, zone, zones, price_component)
+    if zonas_nodos == 'nodos':
+        df = prices_nodes_table(cursor, system, market, zone, price_component)
+
+    file_name = get_download_file_name('precios_de_energia')
+    df.to_csv(f"..\\files\\descargas\\{file_name}", index = False)
+
+    return 'Descargar'
 
 
 

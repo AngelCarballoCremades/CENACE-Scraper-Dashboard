@@ -139,8 +139,27 @@ def delete_files(folder, subfolder):
     for file in files:
         os.remove(f'{folder}\\{file}')
 
+def get_download_file_name(file_name = 'dashboard_energia_mexico_datos'):
+
+    files = os.listdir("..\\files\\descargas")
+    i = 1
+    keep = True
+
+    while keep:
+        keep = False
+        for file in files:
+            if file_name in file:
+                if f'({i-1})' in file_name:
+                    file_name = file_name.replace(f"({i-1})", '')
+                file_name += f'({i})'
+                i += 1
+                keep = True
+                break
+
+    return file_name + '.csv'
 
 if __name__ == '__main__':
     # make_directory()
     # print(postgres_password())
+    print(get_download_file_name('nodos_de_mapa'))
     pass

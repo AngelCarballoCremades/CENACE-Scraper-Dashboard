@@ -4,7 +4,6 @@ import numpy as np
 import psycopg2 as pg2
 import os
 import sys
-import psycopg2 as pg2
 from functions import *
 import datetime
 import geopandas as gpd
@@ -662,11 +661,8 @@ def zones_prices(cursor, zones = [], zone = 'OAXACA', system='sin', market='mda'
     return fig
 
 
-
-
-
-
 def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=5, mapbox_style="open-street-map", zoom = 7):
+
 
     if not (latitud and longitud):
 
@@ -714,18 +710,26 @@ def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=
     df_final = pd.DataFrame(columns = df.columns)
     # print(df.T)
 
-    while df_final.shape[0] < number_of_nodes and df_final.shape[0] < df.shape[0]:
+
+    largo = df_final.copy()
+    while largo.shape[0] < number_of_nodes and largo.shape[0] < df.shape[0]:
+        largo = pd.concat([largo,df[df.distance == distances_ordered[0]]])
         df_final = df_final.append(df[df.distance == distances_ordered.pop(0)].iloc[0])
+
 
     # print(df_final)
     edo_mun = df_final['ubicación_entidad_federativa'] + '___' + df_final['ubicación_municipio']
     # print((edo_mun).unique())
 
     lista_nodos = []
+    estados = []
+    municipios = []
 
     for e_m in edo_mun.unique():
         estado = e_m.split('___')[0]
         municipio = e_m.split('___')[1]
+        estados.append(estado)
+        municipios.append(municipio)
 
         cursor.execute("""SELECT clave_nodo, nombre_nodo FROM nodes_info
             WHERE
@@ -734,13 +738,20 @@ def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=
         lista_nodos.append([f'<br>{node[0]}/{node[1]}' for node in cursor.fetchall()])
 
     # print(lista_nodos)
-
-    df_final['nodes'] = lista_nodos
+    edos_muns = '-<span style="display: none">'+('___').join([ ('_').join(couple) for couple in list(zip(estados, municipios)) ])+'</span>'
+    # print(edos_muns)
+    df_final['nodos'] = lista_nodos
 
     # print(df_final.T)
 
     df_final['color'] = 1
-    selected_point_df = pd.DataFrame.from_dict(data = {'lat':[latitud], 'lon':[longitud], 'color': [500]}, orient = 'columns')
+    selected_point_df = pd.DataFrame.from_dict(data = {
+                                                    'lat':[latitud],
+                                                    'lon':[longitud],
+                                                    'color': [500],
+                                                    'nodos':[edos_muns],
+                                                    'ubicación_entidad_federativa':'-',
+                                                    'ubicación_municipio':'-'}, orient = 'columns')
     df_final = df_final.append(selected_point_df)
     df_final['marker_size'] = 12
 
@@ -763,9 +774,7 @@ def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=
             'ubicación_municipio':True,
             'color':False,
             'marker_size':False,
-            'nodes':True
-            # 'lat':True,
-            # 'lon':True
+            'nodos':True
             }
         )
 
@@ -781,7 +790,8 @@ if __name__ == '__main__':
     conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
     cursor = conn.cursor()
 
-    fig = zones_prices(cursor, zones = ['OAXACA','PUEBLA','ORIZABA'])
+    # fig = zones_prices(cursor, zones = ['OAXACA','PUEBLA','ORIZABA'])
+    fig = locate_close_nodes(cursor, latitud = '22', longitud = '-98', number_of_nodes=20, mapbox_style="open-street-map", zoom = 7)
     fig.show()
 
     conn.close()
