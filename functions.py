@@ -20,6 +20,7 @@ def make_directory():
     os.makedirs(f'../{main_folder}/generation/forecast')
     os.makedirs(f'../{main_folder}/consumption/real')
     os.makedirs(f'../{main_folder}/consumption/forecast')
+    os.makedirs(f'../{main_folder}/descargas')
 
 
 def wait_download(directorio,file_number, download_folder):

@@ -905,6 +905,21 @@ def data_generation_preview_function(n_clicks, start_date, end_date, data):
                             bordered=True,
                             hover=True)
 
+
+@app.callback(
+    Output('data_generation_download_button','children'),[
+    Input('data_generation_download_button','n_clicks'),
+    State('data_generation_date_picker', 'start_date'),
+    State('data_generation_date_picker', 'end_date'),
+    State('data_generation_real_forecast_select_dropdown','value')
+    ])
+def data_generation_download_function(n_clicks, start_date, end_date, data):
+
+    data_generation_download(cursor,start_date, end_date, data)
+
+    return 'Descargar'
+
+
 @app.callback(
     Output('data_consumption_table_div','children'),[
     Input('data_consumption_preview_button','n_clicks'),
@@ -923,6 +938,60 @@ def data_consumption_preview_function(n_clicks, start_date, end_date, data, zone
                             striped=True,
                             bordered=True,
                             hover=True)
+
+@app.callback(
+    Output('data_consumption_download_button','children'),[
+    Input('data_consumption_download_button','n_clicks'),
+    State('data_consumption_date_picker', 'start_date'),
+    State('data_consumption_date_picker', 'end_date'),
+    State('data_consumption_real_forecast_select_dropdown','value'),
+    State('data_consumption_zona_de_carga_dopdown','value')
+    ])
+def data_consumption_download_function(n_clicks, start_date, end_date, data, zones):
+
+    data_consumption_download(cursor,start_date, end_date, data, zones)
+
+    return 'Descargar'
+
+
+@app.callback(
+    Output('data_prices_table_div','children'),[
+    Input('data_prices_preview_button','n_clicks'),
+    State('data_prices_date_picker','start_date'),
+    State('data_prices_date_picker','end_date'),
+    State('data_prices_market_select_dropdown', 'value'),
+    State('data_prices_zone_or_node_dopdown','value'),
+    State('data_prices_zona_de_carga_dopdown','value'),
+    State('data_prices_nodes_dopdown','value')
+    ])
+def data_prices_preview_function(n_clicks, start_date, end_date, market, zonas_nodos, zones, nodes):
+
+    df = data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
+
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'data_prices_table',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
+
+
+@app.callback(
+    Output('data_prices_download_button','children'),[
+    Input('data_prices_download_button','n_clicks'),
+    State('data_prices_date_picker','start_date'),
+    State('data_prices_date_picker','end_date'),
+    State('data_prices_market_select_dropdown', 'value'),
+    State('data_prices_zone_or_node_dopdown','value'),
+    State('data_prices_zona_de_carga_dopdown','value'),
+    State('data_prices_nodes_dopdown','value')
+    ])
+def data_prices_download_function(n_clicks, start_date, end_date, market, zonas_nodos, zones, nodes):
+
+    data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
+
+    return 'Descargar'
+
 
 @app.callback(
     Output('data_prices_nodes_dopdown','options'),
@@ -950,26 +1019,7 @@ def disable_data_nodes_dropdown(zonas_nodos):
     else:
         return False
 
-@app.callback(
-    Output('data_prices_table_div','children'),[
-    Input('data_prices_preview_button','n_clicks'),
-    State('data_prices_date_picker','start_date'),
-    State('data_prices_date_picker','end_date'),
-    State('data_prices_market_select_dropdown', 'value'),
-    State('data_prices_zone_or_node_dopdown','value'),
-    State('data_prices_zona_de_carga_dopdown','value'),
-    State('data_prices_nodes_dopdown','value')
-    ])
-def get_data_prices_table(n_clicks, start_date, end_date, market, zonas_nodos, zones, nodes):
 
-    df = data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
-
-    return dbc.Table.from_dataframe(
-                            df,
-                            id = 'data_prices_table',
-                            striped=True,
-                            bordered=True,
-                            hover=True)
 
 
 

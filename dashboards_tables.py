@@ -215,7 +215,7 @@ def data_consumption_preview(cursor,start_date, end_date, data, zones):
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-    print(df)
+    # print(df)
 
     df['energia'] = df['energia'].astype('float')
 
@@ -250,7 +250,7 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
             dfs.append(df)
 
         df = pd.concat(dfs)
-        print(df)
+        # print(df)
         return df
 
     else:
@@ -271,8 +271,85 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
             dfs.append(df)
 
         df = pd.concat(dfs)
-        print(df)
+        # print(df)
         return df
+
+
+def data_generation_download(cursor,start_date, end_date, data):
+
+    print('downloading generation data...')
+
+    query_string = """SELECT * FROM generation_{} WHERE fecha >= '{}' AND fecha <= '{}'""".format(data, start_date, end_date)
+
+    SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
+
+    file_name = get_download_file_name(f'generacion_{data}_{start_date[:10]}_{end_date[:10]}')
+
+    file_path = f"..\\files\\descargas\\{file_name}"
+
+    with open(file_path, 'w') as f:
+        cursor.copy_expert(SQL_for_file_output, f)
+
+
+def data_consumption_download(cursor,start_date, end_date, data, zones):
+
+    print('downloading generation data...')
+
+    if zones == ['MEXICO (PAIS)']:
+        query_string = """SELECT * FROM consumption_{} WHERE fecha >= '{}' AND fecha <= '{}'""".format(data, start_date, end_date)
+
+    else:
+        zones = ("','").join(zones)
+
+        query_string = """SELECT * FROM consumption_{} WHERE fecha >= '{}' AND fecha <= '{}' AND zona_de_carga in ('{}')""".format(data, start_date, end_date, zones)
+
+
+    SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
+
+    file_name = get_download_file_name(f'consumption_{data}_{start_date[:10]}_{end_date[:10]}')
+
+    file_path = f"..\\files\\descargas\\{file_name}"
+
+    with open(file_path, 'w') as f:
+        cursor.copy_expert(SQL_for_file_output, f)
+
+
+def data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones, nodes):
+
+    print('downloading prices data...')
+
+    if not zones:
+        return None
+
+    queries = []
+    if zonas_nodos == 'zones':
+
+        zones = ("','").join(zones)
+        for system in ['sin','bca','bcs']:
+
+            queries.append("""SELECT * FROM {}_pnd_{} WHERE fecha >= '{}' AND fecha <= '{}' AND zona_de_carga in ('{}')""".format(system, market, start_date, end_date, zones))
+
+    else:
+        nodes = ("','").join(nodes)
+        for system in ['sin','bca','bcs']:
+
+            queries.append("""SELECT * FROM {}_pml_{} WHERE fecha >= '{}' AND fecha <= '{}' AND clave_nodo in ('{}')""".format(system, market, start_date, end_date, nodes))
+
+    file_name = get_download_file_name(f'precios_{zonas_nodos}_{market}_{start_date[:10]}_{end_date[:10]}')
+    file_path = f"..\\files\\descargas\\{file_name}"
+
+    for i,query_string in enumerate(queries):
+        if i == 0:
+            SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
+
+        else:
+            SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV".format(query_string)
+
+        with open(file_path, 'a') as f:
+            cursor.copy_expert(SQL_for_file_output, f)
+
+
+
 
 
 
@@ -287,6 +364,8 @@ if __name__ == '__main__':
     # fig.show()
     # print(prices_zones_table(cursor, system = 'sin', market = 'mda', zone = 'OAXACA', zones = [], price_component = 'precio_e'))
     # print(prices_nodes_table(cursor, system = 'sin', market = 'mtr', zona_de_carga='OAXACA', price_component='c_congestion'))
+
+
 
 
     conn.close()
