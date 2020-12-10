@@ -26,9 +26,19 @@ zonas_de_carga = [zona[0] for zona in cursor.fetchall()]
 zonas_de_carga_alone = zonas_de_carga.copy()
 zonas_de_carga.append('MEXICO (PAIS)')
 
+cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM nodes_info;""")
+zonas_de_carga_precios = [zona[0] for zona in cursor.fetchall()]
+
+cursor.execute("""SELECT clave_nodo FROM nodes_info WHERE zona_de_carga = 'OAXACA';""")
+nodos_oaxaca = [nodo[0] for nodo in cursor.fetchall()]
+
+
+
 zones_list = {'sin':get_zones_list(cursor, system='sin', market='mda'),
             'bca':get_zones_list(cursor, system='bca', market='mda'),
             'bcs':get_zones_list(cursor, system='bcs', market='mda')}
+
+
 
 
 style1 = {'font-family': 'Arial', 'font-size': '150%'}
@@ -66,7 +76,7 @@ app.layout = html.Div(html.Center(html.Div([
                             options = [{'label': zona, 'value': zona} for zona in zonas_de_carga],
                             multi = True,
                             placeholder = "Selecciona una Zona de Carga",
-                            value = ['OAXACA','CAMPECHE','ACAPULCO','PUEBLA'],
+                            value = ['OAXACA'],
                             style = {'text-align':'center'}),
                         style = {'width': '20%', 'display': 'inline-block','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial'},
                         ),
@@ -82,7 +92,7 @@ app.layout = html.Div(html.Center(html.Div([
                             ),
                         style = {'width': '80%', 'display': 'inline-block'}
                         )
-                    ])
+                    ]),
                 ]
             ),
         dcc.Tab(label='Precios de Energía',
@@ -210,39 +220,39 @@ app.layout = html.Div(html.Center(html.Div([
                         ],
                     style = {'width': '30%', 'display': 'inline-block', 'vertical-align': 'top'}
                     ),
-                    html.Div(
-                        dcc.Loading(
-                                id="loading_element_prices",
-                                type="circle",
-                                children=[html.Div(
-                                    dcc.Graph(
-                                        id = 'marginal_zones_prices_graph',
-                                        figure = marginal_prices(cursor)
-                                        )
-                                )]
-                            ),
-                        style = {'width': '70%', 'display': 'inline-block'}
-                        ),
-                    html.Div(html.P()),
-                    html.H3([f"Información de {datetime.datetime.now().year}"]),
+                html.Div(
                     dcc.Loading(
-                        id = 'loading_element_table_prices',
-                        type = 'circle',
-                        children = [
-                            html.Div(
-                                id = 'prices_table_div',
-                                children = [html.P(),html.P()]),
-                            ]
+                            id="loading_element_prices",
+                            type="circle",
+                            children=[html.Div(
+                                dcc.Graph(
+                                    id = 'marginal_zones_prices_graph',
+                                    figure = marginal_prices(cursor)
+                                    )
+                            )]
                         ),
-                    html.Div(html.P()),
-                    dcc.Loading(
-                        id = 'loading_element_download_table_prices',
-                        children =[
-                            dbc.Button("Descargar",id = 'download_table_prices_button', color="primary", className="mr-1"),
-                            ]
-                        ),
-                    html.Div(html.P())
-
+                    style = {'width': '70%', 'display': 'inline-block'}
+                    ),
+                html.Div(html.P()),
+                html.H3([f"Información de {datetime.datetime.now().year}"], id = 'prices_table_header'),
+                dcc.Loading(
+                    id = 'loading_element_table_prices',
+                    type = 'circle',
+                    children = [
+                        html.Div(
+                            id = 'prices_table_div',
+                            children = [' \n ']
+                            )
+                        ]
+                    ),
+                html.Div(html.P()),
+                dcc.Loading(
+                    id = 'loading_element_download_table_prices',
+                    children =[
+                        dbc.Button("Descargar",id = 'download_table_prices_button', color="primary", className="mr-1"),
+                        ]
+                    ),
+                html.Div(html.P())
                 ]
             ),
         dcc.Tab(label='Localización de Nodos',
@@ -317,7 +327,7 @@ app.layout = html.Div(html.Center(html.Div([
                     children = [
                         html.Div(
                             id = 'map_table_div',
-                            children = [html.P(),html.P()]
+                            # children = [html.P(),html.P()]
                             ),
                         ]
                     ),
@@ -330,6 +340,309 @@ app.layout = html.Div(html.Center(html.Div([
                     ),
                 html.Div(html.P())
 
+                ]
+            ),
+        dcc.Tab(label='Descarga de Datos',
+            style = style1,
+            selected_style = style1,
+            children=[
+                html.P(),
+                dcc.Tabs(children = [
+                    dcc.Tab(label='Generación',
+                        style = style1,
+                        selected_style = style1,
+                        children=[
+                            html.P(),
+                            html.P(),
+                            html.Div([
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.DatePickerRange(
+                                        id='data_generation_date_picker',
+                                        min_date_allowed=datetime.date(2018, 1, 1),
+                                        max_date_allowed=datetime.datetime.now(),
+                                        initial_visible_month=datetime.date(2018, 1, 1),
+                                        end_date=datetime.datetime.now()
+                                        ),
+                                    ],
+                                    style = {'width': '20%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle', 'align-items':'left'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_generation_real_forecast_select_dropdown',
+                                        options = [
+                                            {'label': 'Generación REAL', 'value': 'real'},
+                                            {'label': 'Generación PRONÓSTICO', 'value': 'forecast'}],
+                                        value = 'real',
+                                        clearable=False,
+                                        style = {'text-align':'left'}),
+                                    style = {'width': '18%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_generation_preview',
+                                        children =[
+                                            dbc.Button("Vista Previa",
+                                                id = 'data_generation_preview_button',
+                                                color="primary",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_generation_download',
+                                        children =[
+                                            dbc.Button("Descargar",
+                                                id = 'data_generation_download_button',
+                                                color="success",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                ],
+                                style = {'align-items':'center'}
+                                ),
+                            html.Div(html.P()),
+                            dcc.Loading(
+                                id = 'loading_element_table_data_generation',
+                                type = 'circle',
+                                children = [
+                                    html.Div(
+                                        id = 'data_generation_table_div',
+                                        children=[]
+                                        ),
+                                    ]
+                                )
+                            ]
+                        ),
+                    dcc.Tab(label='Demanda',
+                        style = style1,
+                        selected_style = style1,
+                        children=[
+                            html.P(),
+                            html.P(),
+                            html.Div([
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.DatePickerRange(
+                                        id='data_consumption_date_picker',
+                                        min_date_allowed=datetime.date(2018, 1, 1),
+                                        max_date_allowed=datetime.datetime.now(),
+                                        initial_visible_month=datetime.date(2018, 1, 1),
+                                        end_date=datetime.datetime.now()
+                                        ),
+                                    ],
+                                    style = {'width': '20%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle', 'align-items':'left'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_consumption_real_forecast_select_dropdown',
+                                        options = [
+                                            {'label': 'Consumo REAL', 'value': 'real'},
+                                            {'label': 'Consumo PRONÓSTICO', 'value': 'forecast'}],
+                                        value = 'real',
+                                        clearable=False,
+                                        style = {'text-align':'left'}),
+                                    style = {'width': '18%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_consumption_preview',
+                                        children =[
+                                            dbc.Button("Vista Previa",
+                                                id = 'data_consumption_preview_button',
+                                                color="primary",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_consumption_download',
+                                        children =[
+                                            dbc.Button("Descargar",
+                                                id = 'data_consumption_download_button',
+                                                color="success",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                ],
+                                style = {'align-items':'center'}
+                                ),
+                            html.Div(html.P()),
+                            html.Div(
+                                dcc.Dropdown(
+                                    id = 'data_consumption_zona_de_carga_dopdown',
+                                    options = [{'label': zona, 'value': zona} for zona in zonas_de_carga],
+                                    multi = True,
+                                    placeholder = "Selecciona una Zona de Carga, para información de todas selecciona MEXICO (PAIS)",
+                                    value = ['MEXICO (PAIS)'],
+                                    style = {'text-align':'center'}),
+                                style = {'width': '70%','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial'},
+                                ),
+                            html.Div(html.P()),
+                            dcc.Loading(
+                                id = 'loading_element_table_data_consumption',
+                                type = 'circle',
+                                children = [
+                                    html.Div(
+                                        id = 'data_consumption_table_div',
+                                        children=[]
+                                        ),
+                                    ]
+                                )
+                            ]
+                        ),
+                    dcc.Tab(label='Precios',
+                        style = style1,
+                        selected_style = style1,
+                        children=[
+                            html.P(),
+                            html.P(),
+                            html.Div([
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.DatePickerRange(
+                                        id='data_prices_date_picker',
+                                        min_date_allowed=datetime.date(2018, 1, 1),
+                                        max_date_allowed=datetime.datetime.now(),
+                                        initial_visible_month=datetime.date(2018, 1, 1),
+                                        end_date=datetime.datetime.now()
+                                        ),
+                                    ],
+                                    style = {'width': '20%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle', 'align-items':'left'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_prices_market_select_dropdown',
+                                        options = [
+                                            {'label': 'Mercado de Tiempo Real (MTR)', 'value': 'mtr'},
+                                            {'label': 'Mercado del Día en Adelanto (MDA)', 'value': 'mda'}],
+                                        value = 'mtr',
+                                        clearable=False,
+                                        style = {'text-align':'left'}),
+                                    style = {'width': '25%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_prices_preview',
+                                        children =[
+                                            dbc.Button("Vista Previa",
+                                                id = 'data_prices_preview_button',
+                                                color="primary",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_prices_download',
+                                        children =[
+                                            dbc.Button("Descargar",
+                                                id = 'data_prices_download_button',
+                                                color="success",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                ],
+                                style = {'align-items':'center'}
+                                ),
+                            html.Div(html.P()),
+                            html.Div([
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_prices_zone_or_node_dopdown',
+                                        options = [
+                                            {'label': 'Descargar precios de Zonas de Carga', 'value': 'zones'},
+                                            {'label': 'Descargar precios de Nodos', 'value': 'nodes'}
+                                            ],
+                                        multi = False,
+                                        clearable = False,
+                                        value = 'nodes',
+                                        style = {'text-align':'center'}
+                                        ),
+                                    style = {'width': '25%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_prices_zona_de_carga_dopdown',
+                                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_precios],
+                                        multi = True,
+                                        placeholder = "Selecciona una Zona de Carga",
+                                        value = ['OAXACA'],
+                                        style = {'text-align':'center'}
+                                        ),
+                                    style = {'width': '33%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_prices_nodes_dopdown',
+                                        options = [{'label': nodo, 'value': nodo} for nodo in nodos_oaxaca],
+                                        multi = True,
+                                        placeholder = "Selecciona un Nodo",
+                                        style = {'text-align':'center'}
+                                        ),
+                                    style = {'width': '33%', 'display': 'inline-block'}
+                                    )
+
+                                ],
+                                style = {'width': '100%','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial'},
+                                ),
+                            html.Div(html.P()),
+                            dcc.Loading(
+                                id = 'loading_element_table_data_prices',
+                                type = 'circle',
+                                children = [
+                                    html.Div(
+                                        id = 'data_prices_table_div',
+                                        children=[]
+                                        ),
+                                    ]
+                                )
+                            ]
+                        ),
+                    dcc.Tab(label='SQL - Query',
+                        style = style1,
+                        selected_style = style1,
+                        children=[]
+                        )
+                    ]
+                    )
                 ]
             )
         ]
@@ -518,8 +831,10 @@ def prices_create_table_function(n_clicks, system, market, zone, zonas_nodos, pr
 
     if zonas_nodos == 'zonas':
         df = prices_zones_table(cursor, system, market, zone, zones, price_component)
-    if zonas_nodos == 'nodos':
+    elif zonas_nodos == 'nodos':
         df = prices_nodes_table(cursor, system, market, zone, price_component)
+    else:
+        df = pd.DataFrame()
 
     return dbc.Table.from_dataframe(
                             df,
@@ -537,7 +852,7 @@ def prices_create_table_function(n_clicks, system, market, zone, zonas_nodos, pr
     State('price_graph_comparisson_dropdown', 'value'),
     State('price_component_dropdown','value'),
     State('zona_de_carga_prices_comparison_dopdown','value')])
-def download_map_table_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
+def download_prices_table_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
 
     if zonas_nodos == 'zonas':
         df = prices_zones_table(cursor, system, market, zone, zones, price_component)
@@ -548,6 +863,113 @@ def download_map_table_function(n_clicks, system, market, zone, zonas_nodos, pri
     df.to_csv(f"..\\files\\descargas\\{file_name}", index = False)
 
     return 'Descargar'
+
+
+@app.callback(
+    Output('prices_table_header', 'children'),[
+    Input('download_table_prices_button', 'n_clicks'),
+    State('system_dropdown', 'value'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def update_prices_table_header_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
+
+    titulos = {
+        'precio_e':'Precio Total  De Energía',
+        'c_energia':'Componente de Energía',
+        'c_perdidas':'Componente de Pérdidas',
+        'c_congestion':'Componente de Congestión',}
+
+    if zonas_nodos == 'zonas':
+        return f'Información de Zonas de Carga de {datetime.datetime.now().year} - {system.upper()} - {market.upper()} - {titulos[price_component]}'
+    if zonas_nodos == 'nodos':
+        return f'Información de {zone} y Precios Marginales de {datetime.datetime.now().year} - {system.upper()} - {market.upper()} - {titulos[price_component]}'
+
+@app.callback(
+    Output('data_generation_table_div','children'),[
+    Input('data_generation_preview_button','n_clicks'),
+    State('data_generation_date_picker', 'start_date'),
+    State('data_generation_date_picker', 'end_date'),
+    State('data_generation_real_forecast_select_dropdown','value')
+    ])
+def data_generation_preview_function(n_clicks, start_date, end_date, data):
+
+    df = data_generation_preview(cursor,start_date, end_date, data)
+
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'data_generation_table',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
+
+@app.callback(
+    Output('data_consumption_table_div','children'),[
+    Input('data_consumption_preview_button','n_clicks'),
+    State('data_consumption_date_picker', 'start_date'),
+    State('data_consumption_date_picker', 'end_date'),
+    State('data_consumption_real_forecast_select_dropdown','value'),
+    State('data_consumption_zona_de_carga_dopdown','value')
+    ])
+def data_consumption_preview_function(n_clicks, start_date, end_date, data, zones):
+
+    df = data_consumption_preview(cursor,start_date, end_date, data, zones)
+
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'data_consumption_table',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
+
+@app.callback(
+    Output('data_prices_nodes_dopdown','options'),
+    Input('data_prices_zona_de_carga_dopdown','value')
+    )
+def get_nodes_from_zones(zones):
+
+    zones = ("','").join(zones)
+    cursor.execute("""SELECT clave_nodo FROM nodes_info WHERE zona_de_carga in ('{}');""".format(zones))
+    nodos = [nodo[0] for nodo in cursor.fetchall()]
+    print(len(nodos))
+
+    options = [{'label': nodo, 'value': nodo} for nodo in nodos]
+
+    return options
+
+@app.callback(
+    Output('data_prices_nodes_dopdown','disabled'),
+    Input('data_prices_zone_or_node_dopdown','value')
+    )
+def disable_data_nodes_dropdown(zonas_nodos):
+
+    if zonas_nodos == 'zones':
+        return True
+    else:
+        return False
+
+@app.callback(
+    Output('data_prices_table_div','children'),[
+    Input('data_prices_preview_button','n_clicks'),
+    State('data_prices_date_picker','start_date'),
+    State('data_prices_date_picker','end_date'),
+    State('data_prices_market_select_dropdown', 'value'),
+    State('data_prices_zone_or_node_dopdown','value'),
+    State('data_prices_zona_de_carga_dopdown','value'),
+    State('data_prices_nodes_dopdown','value')
+    ])
+def get_data_prices_table(n_clicks, start_date, end_date, market, zonas_nodos, zones, nodes):
+
+    df = data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
+
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'data_prices_table',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
 
 
 

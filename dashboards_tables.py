@@ -168,8 +168,111 @@ def prices_nodes_table(cursor, system, market, zona_de_carga, price_component):
     return df
 
 
+def data_generation_preview(cursor,start_date, end_date, data):
+
+    print('requesting generation data...')
+
+    cursor.execute("""
+        SELECT * FROM generation_{}
+        WHERE
+            fecha >= '{}' AND
+            fecha <= '{}'
+        LIMIT 50;""".format(data, start_date, end_date))
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+
+    for col in df.columns:
+        if col not in ['sistema','fecha','hora']:
+            df[col] = df[col].astype('float').round(2)
+
+    return df
 
 
+def data_consumption_preview(cursor,start_date, end_date, data, zones):
+
+    print('requesting consumption data...')
+
+    if zones == ['MEXICO (PAIS)']:
+        cursor.execute("""
+            SELECT * FROM consumption_{}
+            WHERE
+                fecha >= '{}' AND
+                fecha <= '{}'
+            LIMIT 50;""".format(data, start_date, end_date))
+
+    else:
+        zones = ("','").join(zones)
+
+        cursor.execute("""
+            SELECT * FROM consumption_{}
+            WHERE
+                fecha >= '{}' AND
+                fecha <= '{}' AND
+                zona_de_carga in ('{}')
+            LIMIT 50;""".format(data, start_date, end_date, zones))
+
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    print(df)
+
+    df['energia'] = df['energia'].astype('float')
+
+    return df
+
+
+
+def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones, nodes):
+
+    print('requesting prices data...')
+    if not zones:
+        return pd.DataFrame()
+
+    dfs = []
+
+    if zonas_nodos == 'zones':
+
+        zones = ("','").join(zones)
+
+        for system in ['sin','bca','bcs']:
+
+            cursor.execute("""
+                SELECT * FROM {}_pnd_{}
+                WHERE
+                    fecha >= '{}' AND
+                    fecha <= '{}' AND
+                    zona_de_carga in ('{}')
+                LIMIT 30;""".format(system, market, start_date, end_date, zones))
+
+            colnames = [desc[0] for desc in cursor.description]
+            df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+            dfs.append(df)
+
+        df = pd.concat(dfs)
+        print(df)
+        return df
+
+    else:
+        nodes = ("','").join(nodes)
+
+        for system in ['sin','bca','bcs']:
+            cursor.execute("""
+                SELECT * FROM {}_pml_{}
+                WHERE
+                    fecha >= '{}' AND
+                    fecha <= '{}' AND
+                    clave_nodo in ('{}')
+                LIMIT 30;""".format(system, market, start_date, end_date, nodes))
+
+
+            colnames = [desc[0] for desc in cursor.description]
+            df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+            dfs.append(df)
+
+        df = pd.concat(dfs)
+        print(df)
+        return df
 
 
 
@@ -183,5 +286,7 @@ if __name__ == '__main__':
     # fig = zones_prices(cursor, zones = ['OAXACA','PUEBLA','ORIZABA'])
     # fig.show()
     # print(prices_zones_table(cursor, system = 'sin', market = 'mda', zone = 'OAXACA', zones = [], price_component = 'precio_e'))
-    print(prices_nodes_table(cursor, system = 'sin', market = 'mtr', zona_de_carga='OAXACA', price_component='c_congestion'))
+    # print(prices_nodes_table(cursor, system = 'sin', market = 'mtr', zona_de_carga='OAXACA', price_component='c_congestion'))
+
+
     conn.close()

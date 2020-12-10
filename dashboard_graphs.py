@@ -234,7 +234,7 @@ def generation_hourly(cursor, dates = 0):
 # cursor = conn.cursor()
 
 
-def consumption_daily(cursor, zonas_de_carga = ['OAXACA','CAMPECHE','ACAPULCO','PUEBLA']):
+def consumption_daily(cursor, zonas_de_carga = ['OAXACA']):
 
     print('requesting zonas...')
     total = False
