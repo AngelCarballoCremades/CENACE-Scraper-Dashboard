@@ -275,6 +275,18 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
         return df
 
 
+def data_SQL_preview(cursor,query_string):
+
+    print('requesting SQL data...')
+
+    cursor.execute(query_string)
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+
+    return df
+
+
 def data_generation_download(cursor,start_date, end_date, data):
 
     print('downloading generation data...')
@@ -349,7 +361,18 @@ def data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones
             cursor.copy_expert(SQL_for_file_output, f)
 
 
+def data_SQL_download(cursor,query_string):
 
+    print('requesting SQL data...')
+
+    SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
+
+    file_name = get_download_file_name('SQL_query')
+
+    file_path = f"..\\files\\descargas\\{file_name}"
+
+    with open(file_path, 'w') as f:
+        cursor.copy_expert(SQL_for_file_output, f)
 
 
 

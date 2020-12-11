@@ -107,6 +107,7 @@ def create_table(cursor, table, table_name):
 
 def main():
 
+    # make_directory('files2')
     conn = pg2.connect(user='postgres', password=postgres_password())
 
     print('Making database.')

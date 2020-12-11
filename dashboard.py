@@ -2,17 +2,17 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
+import dash_bootstrap_components as dbc
 import plotly.express as px
+import plotly.io as pio
 import pandas as pd
 import numpy as np
+import datetime
 import psycopg2 as pg2
 from functions import *
-import datetime
 from dashboard_graphs import *
 from dashboards_tables import *
-import plotly.io as pio
-import dash_bootstrap_components as dbc
-
+import update_database
 
 pio.templates.default = "plotly_white"
 db_name = 'cenace'
@@ -59,21 +59,31 @@ app.layout = html.Div(html.Center(html.Div([
             style = style0
             ),
         html.Div([
-            html.Div(
-                dbc.Button("Actualizar BD",
-                    id = 'update_database',
-                    color="primary",
-                    className="mr-1"
-                    ),
+            html.Div(dcc.Loading(
+                            id="loading_element_update_database",
+                            type="circle",
+                            children=[
+                                dbc.Button("Actualizar BD",
+                                    id = 'update_database_button',
+                                    color="primary",
+                                    className="mr-1"
+                                    ),
+                                ]
+                            ),
                 style = {'marginBottom': 1, 'float':'right'}
                 ),
-            html.Div(
-                dbc.Button("Conectar de nuevo con SQL",
-                    id = 'SQL_reconnect_button',
-                    color="warning",
-                    className="mr-1"
-                    ),
-                style = {'marginTop': 1, 'float':'right'}
+            html.Div(dcc.Loading(
+                id="loading_element_SQL_reconnect_button",
+                type="circle",
+                children=[
+                    dbc.Button("Conectar de nuevo con SQL",
+                        id = 'SQL_reconnect_button',
+                        color="warning",
+                        className="mr-1"
+                        )
+                    ]
+                ),
+                style = {'marginBottom': 1, 'float':'right'}
                 )
             ],
             style = {'width': '20%','align-items': 'right', 'display':'inline-block', 'vertical-align': 'middle'}
@@ -668,14 +678,74 @@ app.layout = html.Div(html.Center(html.Div([
                     dcc.Tab(label='SQL - Query',
                         style = style1,
                         selected_style = style1,
-                        children=[]
+                        children=[
+                            html.P(),
+                            html.P(),
+                            html.Div([
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dbc.Input(id="SQL_input", placeholder="Escribe una query de SQL...", type="text")
+                                    ],
+                                    style = {'width': '50%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_SQL_preview',
+                                        children =[
+                                            dbc.Button("Ejecutar",
+                                                id = 'data_SQL_preview_button',
+                                                color="success",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                # html.Div([
+                                #     dcc.Loading(
+                                #         id = 'loading_element_data_SQL_download',
+                                #         children =[
+                                #             dbc.Button("Descargar",
+                                #                 id = 'data_SQL_download_button',
+                                #                 color="success",
+                                #                 className="mr-1"
+                                #                 )
+                                #             ]
+                                #         )
+                                #     ],
+                                #     style = {'width': '10%', 'display': 'inline-block'}
+                                #     ),
+                                # html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                ],
+                                style = {'align-items':'center'}
+                                ),
+                            html.Div(html.P()),
+                            dcc.Loading(
+                                id = 'loading_element_table_data_SQL',
+                                type = 'circle',
+                                children = [
+                                    html.Div(
+                                        id = 'data_SQL_table_div',
+                                        children=[' ']
+                                        ),
+                                    ]
+                                )
+                            ]
                         )
                     ]
                     )
                 ]
             )
         ]
-        )
+        ),
+    dcc.ConfirmDialog(
+        id='update_database_popup',
+        message='Actualizar la base de datos puede tardar unos minutos, ¿Estás seguro?',
+        displayed = False
+    )
     ],
     style = {'width': '95%'}
     )))
@@ -688,6 +758,19 @@ def reconnect_sql_function(n_clicks):
     conn.commit()
     return 'Conectar de nuevo con SQL'
 
+
+@app.callback(Output('update_database_popup', 'displayed'),
+              Input('update_database_button', 'n_clicks'))
+def display_confirm(n_clicks):
+    if n_clicks:
+        return True
+
+@app.callback(Output('update_database_button','cildren'),
+              Input('update_database_popup', 'submit_n_clicks'))
+def update_output(submit_n_clicks):
+    if submit_n_clicks:
+        update_database.main()
+        return 'Actualizar BD'
 
 @app.callback(
     Output('daily_consumption_graph', 'figure'),
@@ -1029,6 +1112,47 @@ def data_prices_download_function(n_clicks, start_date, end_date, market, zonas_
     data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
 
     return 'Descargar'
+
+@app.callback(
+    Output('data_SQL_table_div','children'),[
+    Input('data_SQL_preview_button','n_clicks'),
+    State('SQL_input','value')
+    ])
+def data_SQL_preview_function(n_clicks, query_string):
+
+    if n_clicks:
+        try:
+            df = data_SQL_preview(cursor, query_string)
+        except Exception as error:
+            cursor.execute("ROLLBACK")
+            conn.commit()
+            return f'ERROR: {error}'
+
+        return dbc.Table.from_dataframe(
+                            df,
+                            id = 'data_SQL_table',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
+
+# @app.callback([
+#     Output('data_SQL_download_button','children'),
+#     Output('data_SQL_table_div','children')],[
+#     Input('data_SQL_download_button','n_clicks'),
+#     State('SQL_input','value')
+#     ])
+# def data_SQL_download_function(n_clicks, query_string):
+
+#     # print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+#     if n_clicks:
+#         try:
+#             data_SQL_download(cursor, query_string)
+#         except Exception as error:
+#             cursor.execute("ROLLBACK")
+#             conn.commit()
+#             return 'Descargar', f'ERROR: {error}'
+
+#         return 'Descargar', 'Archivo descargado'
 
 
 @app.callback(

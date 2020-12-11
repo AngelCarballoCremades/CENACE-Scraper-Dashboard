@@ -8,9 +8,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def make_directory():
+def make_directory(main_folder = 'files'):
     """Modificar descargas con path completo"""
-    main_folder = 'files'
 
     os.makedirs(f'../{main_folder}/PML/MDA')
     os.makedirs(f'../{main_folder}/PML/MTR')

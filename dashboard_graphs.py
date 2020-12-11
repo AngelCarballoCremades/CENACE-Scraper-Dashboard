@@ -425,6 +425,7 @@ def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates 
     df = df.groupby(['fecha', 'precio_e']).mean()
     df = df.stack().to_frame()
     df.reset_index(inplace=True)
+    # print(df)
     df.columns = ['fecha','precio_e','price_component','$/MWh']
     # print(df)
 
