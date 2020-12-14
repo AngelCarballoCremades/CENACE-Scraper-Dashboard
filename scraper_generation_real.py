@@ -16,7 +16,7 @@ from functions import *
 years = [1,2,3]
 
 # Download folder, it should have appropiate folder structure
-download_folder = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files\\generation\\real'
+download_folder = '..\\files\\generation\\real'
 
 main_url = r'https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx'
 

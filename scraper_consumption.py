@@ -16,7 +16,7 @@ from functions import *
 
 
 # Download folder, it should have appropiate folder structure
-download_folder_frame = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files\\consumption'
+download_folder_frame = '..\\files\\consumption'
 
 urls = {'forecast':'https://www.cenace.gob.mx/Paginas/SIM/Reportes/PronosticosDemanda.aspx',
         'real':'https://www.cenace.gob.mx/Paginas/SIM/Reportes/EstimacionDemandaReal.aspx'}

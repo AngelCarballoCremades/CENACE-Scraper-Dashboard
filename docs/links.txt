@@ -1,0 +1,20 @@
+Estimación de la demanda real:
+https://www.cenace.gob.mx/Paginas/SIM/Reportes/EstimacionDemandaReal.aspx
+
+Pronóstico de demanda:
+https://www.cenace.gob.mx/Paginas/SIM/Reportes/PronosticosDemanda.aspx
+
+Pronóstico de generación intermitente:
+https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop=
+
+Energía generada por tipo de tecnología
+https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx
+
+Lista de nodosP
+https://www.cenace.gob.mx/Paginas/SIM/NodosP.aspx
+
+GeoJSON Municipios:
+https://albertoserdan.carto.com/tables/mapa_municipios_de_mexico/public/map
+
+https://github.com/angelnmara/geojson/blob/master/MunicipiosMexico.json
+

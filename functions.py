@@ -159,7 +159,4 @@ def get_download_file_name(file_name = 'dashboard_energia_mexico_datos'):
     return file_name + '.csv'
 
 if __name__ == '__main__':
-    # make_directory()
-    # print(postgres_password())
-    print(get_download_file_name('nodos_de_mapa'))
     pass

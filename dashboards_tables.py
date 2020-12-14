@@ -160,9 +160,9 @@ def prices_nodes_table(cursor, system, market, zona_de_carga, price_component):
         if col != 'clave_nodo':
             df[col] = df[col].astype('float').round(2)
 
-    print(df_nodes.T)
-    print(df_zone.T)
-    print(df.T)
+    # print(df_nodes.T)
+    # print(df_zone.T)
+    # print(df.T)
 
 
     return df

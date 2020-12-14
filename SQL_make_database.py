@@ -11,7 +11,7 @@ node_types = ['PND','PML']
 energy_flows = ['generation','consumption']
 data_types = ['forecast','real']
 db_name = 'cenace'
-folder_frame = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files'
+folder_frame = '..\\files'
 
 tables={}
 tables['PND'] = (

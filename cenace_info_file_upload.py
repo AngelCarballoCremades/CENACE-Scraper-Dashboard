@@ -4,7 +4,7 @@ import psycopg2 as pg2
 import os
 from functions import *
 
-folder_frame = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files'
+folder_frame = '..\\files'
 db_name = 'cenace'
 
 
@@ -55,14 +55,9 @@ def main():
 
     df = pd.read_excel(f'..\\docs\\{file}', header=[0,1])
     df.columns = [' '.join(col) if 'Unnamed' not in col[0] else col[1] for col in df.columns.values]
-    # for col in df.columns:
-    #     print(col.lower().replace(' ','_'))#, 'VARCHAR(200),')
-    # print(df.columns)
+
     df['UBICACIÓN CLAVE DE ENTIDAD FEDERATIVA (INEGI)'] = df['UBICACIÓN CLAVE DE ENTIDAD FEDERATIVA (INEGI)'].apply(lambda x: x if type(x) == type(1) else 0)
     df['UBICACIÓN CLAVE DE MUNICIPIO (INEGI)'] = df['UBICACIÓN CLAVE DE MUNICIPIO (INEGI)'].apply(lambda x: x if type(x) == type(1) else 0)
-    # print(df.T)
-    # print(df.dtypes)
-
 
     gdf = geopandas.read_file('..\\inegi\\00mun.shp')
     gdf2 = gdf[['CVE_ENT','CVE_MUN']].astype('int')
@@ -70,11 +65,8 @@ def main():
     gdf2['LAT'] = gdf.centroid.to_crs(epsg = 4326).y.astype('str')
     gdf2['LON'] = gdf.centroid.to_crs(epsg = 4326).x.astype('str')
 
-    # print(gdf2.columns)
 
     df_final = pd.merge(left = df, right=gdf2, on = ['UBICACIÓN CLAVE DE ENTIDAD FEDERATIVA (INEGI)', 'UBICACIÓN CLAVE DE MUNICIPIO (INEGI)'], how = 'left')
-
-    # print(df_final.columns)
 
     df_final.to_csv(f'{folder_frame}\\nodes_info.csv', index = False, header = False, sep='\t')
 
@@ -92,15 +84,6 @@ def main():
     upload_file_to_database(folder_frame, cursor, table_name, sep = '\t')
 
     conn.commit()
-
-    # cursor.execute("""SELECT * FROM nodes_info limit 10;""")
-
-    # print(cursor.fetchall())
-
-
-
-
-
     conn.close()
 
 if __name__ == '__main__':

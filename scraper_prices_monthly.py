@@ -23,7 +23,7 @@ markets = ['MDA','MTR']
 years = [1,2,3]
 
 # Download Folder, it should have appropiate folder structure
-download_folder_frame = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files\\{node_type}\\{market}'
+download_folder_frame = '..\\files\\{node_type}\\{market}'
 
 # urls to all data
 urls = {'PML-MDA':'https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PreciosEnergiaSisMEM.aspx?N=6&opc=divCssPreEnergia&site=Precios%20de%20la%20energ%C3%ADa/Precios%20Marginales%20Locales/MDA/Mensuales&tipoArch=C&tipoUni=SIN&tipo=Mensuales&nombrenodop=Precios%20Marginales%20Locales',

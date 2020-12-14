@@ -10,15 +10,6 @@ import geopandas as gpd
 from shapely.geometry import Point
 
 
-
-
-
-
-# cursor.execute("Select * FROM generation_real LIMIT 0")
-# print(cursor.description)
-# colnames = [desc[0] for desc in cursor.description]
-# print(colnames)
-
 def get_zones_list(cursor, system='sin', market='mda'):
 
     cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM {}_pnd_{};""".format(system, market))

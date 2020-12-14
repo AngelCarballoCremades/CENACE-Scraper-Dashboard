@@ -11,7 +11,7 @@ import pandas as pd
 from functions import get_folder
 
 
-folder_frame = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files'
+folder_frame = '..\\files'
 energy_flow = 'consumption'
 data_type = 'real'
 rows_to_skip = 9

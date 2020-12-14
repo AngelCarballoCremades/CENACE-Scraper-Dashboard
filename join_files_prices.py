@@ -11,7 +11,7 @@ import shutil
 systems = ['BCA','BCS','SIN']
 markets = ['MTR','MDA']
 node_types = ['PND','PML']
-folder_frame = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files'
+folder_frame = '..\\files'
 
 
 def get_folder(system, node_type, market):

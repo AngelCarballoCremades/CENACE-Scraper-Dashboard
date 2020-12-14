@@ -16,7 +16,7 @@ import join_files_consumption_forecast
 energy_flows = ['generation','consumption']
 data_types = ['forecast','real']
 db_name = 'cenace'
-folder = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files'
+folder = '..\\files'
 
 
 def get_last_date(cursor, table_name):

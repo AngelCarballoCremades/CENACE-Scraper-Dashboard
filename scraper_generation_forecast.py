@@ -20,7 +20,7 @@ from functions import *
 years = [1,2,3]
 
 # Download folder, it should have appropiate folder structure
-download_folder = 'C:\\Users\\Angel\\Documents\\Ironhack\\web_project\\files\\generation\\forecast'
+download_folder = '..\\files\\generation\\forecast'
 
 main_url = r'https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PronosticosGeneracion.aspx?N=245&opc=divCssPronosticosGen&site=Pron%C3%B3sticos%20de%20Generaci%C3%B3n%20Intermitente&tipoArch=C&tipoUni=ALL&tipo=All&nombrenodop='
 
