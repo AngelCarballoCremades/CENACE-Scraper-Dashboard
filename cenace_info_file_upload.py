@@ -51,15 +51,15 @@ def main():
 
 
 
-    file = [file for file in os.listdir('..\\docs') if file[-4:] == 'xlsx'][0]
+    file = [file for file in os.listdir('docs') if file[-4:] == 'xlsx'][0]
 
-    df = pd.read_excel(f'..\\docs\\{file}', header=[0,1])
+    df = pd.read_excel(f'docs\\{file}', header=[0,1])
     df.columns = [' '.join(col) if 'Unnamed' not in col[0] else col[1] for col in df.columns.values]
 
     df['UBICACIÓN CLAVE DE ENTIDAD FEDERATIVA (INEGI)'] = df['UBICACIÓN CLAVE DE ENTIDAD FEDERATIVA (INEGI)'].apply(lambda x: x if type(x) == type(1) else 0)
     df['UBICACIÓN CLAVE DE MUNICIPIO (INEGI)'] = df['UBICACIÓN CLAVE DE MUNICIPIO (INEGI)'].apply(lambda x: x if type(x) == type(1) else 0)
 
-    gdf = geopandas.read_file('..\\inegi\\00mun.shp')
+    gdf = geopandas.read_file('docs\\00mun.shp')
     gdf2 = gdf[['CVE_ENT','CVE_MUN']].astype('int')
     gdf2.columns =['UBICACIÓN CLAVE DE ENTIDAD FEDERATIVA (INEGI)', 'UBICACIÓN CLAVE DE MUNICIPIO (INEGI)']
     gdf2['LAT'] = gdf.centroid.to_crs(epsg = 4326).y.astype('str')
