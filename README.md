@@ -83,8 +83,8 @@ En esta pestaña se puede analizar el precio de la energía de distintas maneras
     * Selecciona las Zonas de Carga contra las que quieres comparar la Zona de Carga seleccionada.
   * **Obtener más información** Genera una tabla con información extra de la zona y nodos/zonas analizadas, esta tabla es descargable.
 * Abajo-derecha: Gráfica resultado de lo seleccionado en los dropdowns.
-![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab2_top.png)
-![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab2_bottom.png)
+![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab2_top.PNG)
+![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab2_bottom.PNG)
 
 ### Localización de Nodos
 Esta pestaña te permite localizar los nodos más cercanos a una coordenada deseada.
@@ -92,12 +92,12 @@ Por seguridad nacional, la ubicación exacta de los nodos locales no está dispo
 Las coordenadas de los municipios se calculan en el archivo *cenace_info_file_upload.py*, es a partir de un archivo .shp del INEGI con las geometrías de todos los municipios del país.
 
 En el mapa se deben ingresar las coordenadas deseadas y el número de nodos que se buscar mínimo alrededor. (También se puede cambiar el tipo de mapa mostrado).
-![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab3_top.png)
+![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab3_top.PNG)
 
 Una vez que se realiza la búsqueda, se puede seleccionar uno de los círculos azules para obtener información detallada de los nodos de ese municipio (o se selecciona el círculo amarillo para información de todos los municipios mostrados).
 
 La tabla resultante se puede descargar.
-![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab3_bottom.png)
+![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab3_bottom.PNG)
 
 ### Descarga de Datos
 Esta pestaña está diseñada para personas que no tienen conocimiento de SQL, aquí puedes seleccionar y descargar información de la base de datos fácilmente, antes de descargar presiona el botón *Vista Previa* para asegurarte que seleccionaste la información deseada y luego presiona *Descargar* para generar el archivo *.csv*.
@@ -109,8 +109,8 @@ Descargas disponibles:
 * **Demanda** Permite descargar información de demanda REAL y PRONÓSTIVO de cada Zona de Carga (si se quiere la suma de todas las zonas se puede seleccionar *MEXICO (PAIS)*)
 * **Precios** Permite descargar información de precios de energía MTR y MDA. Ya sea de una o varias Zonas de Carga o uno o varios Nodos Locales de alguna Zona de Carga.
 * **SQL** Permite hacer comandos en lenguaje SQL a la base de datos sin necesidad de salir del Dashboard, se debe tener cuidado de no pedir tablas muy grandes, para no llenar la memoria del explorador y la computadora, no está limitado el número de filas.
-![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab4_tab1.png)
-![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab4_tab4.png)
+![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab4_tab1.PNG)
+![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab4_tab4.PNG)
 
 ### Botones superiores
 * **Actualizar BD** Ejecuta el script *update_database.py*
