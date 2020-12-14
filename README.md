@@ -60,7 +60,7 @@ En esta pestaña se muestran 3 gráficas distintas:
 * Arriba-izquierda: Histórico de generación por día de cada tecnología en el país (se debe dar click en un punto de la gráfica para ver el detalle en horas en la gráfica de la derecha).
 * Arriba-derecha: Generación por hora de 20 días (el centro es el punto seleccionado en le gráfica de la izquierda), detalle por tipo de energía.
 * Abajo: Histórico de demanda de energía por Zona de Carga, selecciona las zonas de tu interés en el recuadro de la izquierda (Para ver la suma de las zonas, selecciona *MEXICO (PAIS)* únicamente).
-![](./images/tab1_top.png)
+![](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/blob/master/images/tab1_top.PNG)
 
 ### Precios de Energía
 En esta pestaña se puede analizar el precio de la energía de distintas maneras en las gráficas:
