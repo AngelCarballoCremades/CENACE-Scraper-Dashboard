@@ -16,7 +16,7 @@ import join_files_consumption_forecast
 energy_flows = ['generation','consumption']
 data_types = ['forecast','real']
 db_name = 'cenace'
-folder = '..\\files'
+# folder = '..\\files'
 
 
 def get_last_date(cursor, table_name):
@@ -65,10 +65,10 @@ def main():
             if table_name == 'consumption_forecast':
                 join_files_consumption_forecast.main()
 
-            upload_file_to_database(folder, cursor, table_name)
+            upload_file_to_database(get_path(), cursor, table_name)
             conn.commit()
 
-            delete_files(folder, subfolder = f'{energy_flow}\\{data_type}')
+            delete_files(get_path(a = energy_flow, b = data_type))
 
     conn.close()
 

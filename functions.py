@@ -8,18 +8,22 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+def get_path(main_folder = 'files', a = '', b = ''):
+    return os.path.abspath(os.path.join(os.path.dirname(__file__), '..', main_folder, a, b))
+
+
 def make_directory(main_folder = 'files'):
     """Modificar descargas con path completo"""
 
-    os.makedirs(f'../{main_folder}/PML/MDA')
-    os.makedirs(f'../{main_folder}/PML/MTR')
-    os.makedirs(f'../{main_folder}/PND/MDA')
-    os.makedirs(f'../{main_folder}/PND/MTR')
-    os.makedirs(f'../{main_folder}/generation/real')
-    os.makedirs(f'../{main_folder}/generation/forecast')
-    os.makedirs(f'../{main_folder}/consumption/real')
-    os.makedirs(f'../{main_folder}/consumption/forecast')
-    os.makedirs(f'../{main_folder}/descargas')
+    os.makedirs(get_path(main_folder = main_folder, a = 'PML', b='MDA'))
+    os.makedirs(get_path(main_folder = main_folder, a = 'PML', b = 'MTR'))
+    os.makedirs(get_path(main_folder = main_folder, a = 'PND', b = 'MDA'))
+    os.makedirs(get_path(main_folder = main_folder, a = 'PND', b = 'MTR'))
+    os.makedirs(get_path(main_folder = main_folder, a = 'generation', b = 'real'))
+    os.makedirs(get_path(main_folder = main_folder, a = 'generation', b = 'forecast'))
+    os.makedirs(get_path(main_folder = main_folder, a = 'consumption', b = 'real'))
+    os.makedirs(get_path(main_folder = main_folder, a = 'consumption', b = 'forecast'))
+    os.makedirs(get_path(main_folder = main_folder, a = 'descargas'))
 
 
 def wait_download(directorio,file_number, download_folder):
@@ -95,13 +99,14 @@ def textbox_fill(driver, xpath, date_string, attribute):
     return textbox.get_attribute(attribute)
 
 
-def get_folder(folder_frame, subfolder_1, subfolder_2 = None):
+def get_folder(subfolder_1 = '', subfolder_2 = ''):
     """This function returns folder,files wher folder is the folder to look for files in the selected system and data, files is a list with the name of all the files available"""
 
-    folder = f'{folder_frame}\\{subfolder_1}'
+    folder = get_path(a = subfolder_1, b = subfolder_2)
+    # folder = f'{folder_frame}\\{subfolder_1}'
 
-    if subfolder_2:
-        folder = f'{folder_frame}\\{subfolder_1}\\{subfolder_2}'
+    # if subfolder_2:
+    #     folder = f'{folder_frame}\\{subfolder_1}\\{subfolder_2}'
 
     files = os.listdir(folder)
 
@@ -131,9 +136,9 @@ def get_files_names(folder, string):
     return files
 
 
-def delete_files(folder, subfolder):
+def delete_files(folder, subfolder=''):
 
-    folder = f'{folder}\\{subfolder}'
+    # folder = f'{folder}\\{subfolder}'
     print(f'Deleting {folder}')
     files = files_list = os.listdir(folder)
     for file in files:
@@ -141,7 +146,8 @@ def delete_files(folder, subfolder):
 
 def get_download_file_name(file_name = 'dashboard_energia_mexico_datos'):
 
-    files = os.listdir("..\\files\\descargas")
+    folder = get_path(a = 'descargas')
+    files = os.listdir(folder)
     i = 1
     keep = True
 
@@ -159,4 +165,6 @@ def get_download_file_name(file_name = 'dashboard_energia_mexico_datos'):
     return file_name + '.csv'
 
 if __name__ == '__main__':
+    # make_directory(main_folder='testfiles')
+    # print(get_path(a = 'file.csv'))
     pass

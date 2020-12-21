@@ -11,7 +11,7 @@ node_types = ['PND','PML']
 energy_flows = ['generation','consumption']
 data_types = ['forecast','real']
 db_name = 'cenace'
-folder_frame = '..\\files'
+folder_frame = get_path()
 
 tables={}
 tables['PND'] = (
@@ -166,8 +166,10 @@ def main():
 
     for energy_flow in energy_flows:
         for data_type in data_types:
-            subfolder = f'{energy_flow}\\{data_type}'
-            delete_files(folder_frame, subfolder)
+            # subfolder = f'{energy_flow}\\{data_type}'
+            folder = get_path(a = energy_flow, b = data_type)
+            delete_files(folder)
+            # delete_files(folder_frame, subfolder)
 
 
 if __name__ == '__main__':

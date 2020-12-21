@@ -16,7 +16,7 @@ from functions import *
 years = [1,2,3]
 
 # Download folder, it should have appropiate folder structure
-download_folder = '..\\files\\generation\\real'
+download_folder = get_path(a = 'generation', b = 'real')
 
 main_url = r'https://www.cenace.gob.mx/SIM/VISTA/REPORTES/EnergiaGenLiqAgregada.aspx'
 

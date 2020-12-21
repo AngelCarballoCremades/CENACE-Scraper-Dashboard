@@ -7,16 +7,18 @@ import pandas as pd
 import os
 import sys
 import shutil
+from functions import *
+
 
 systems = ['BCA','BCS','SIN']
 markets = ['MTR','MDA']
 node_types = ['PND','PML']
-folder_frame = '..\\files'
+folder_frame = get_path()
 
 
-def get_folder(system, node_type, market):
+def get_folder_files(system, node_type, market):
     """This function returns folder,files wher folder is the folder to look for files in the selected system and data, files is a list with the name of all the files available"""
-    folder = f'{folder_frame}\\{node_type}\\{market}'
+    folder = get_path(a = node_type, b = market)
     files_list = os.listdir(folder)
     files = [file for file in files_list if system in file] # Select files of indicated system by name
 
@@ -36,7 +38,7 @@ def join_small_csvs(folder, files, system, node_type, market):
     files_read = 0
 
     while not complete:
-        out_filename = f'{folder_frame}\\{system}_{node_type}_{market}_{file_number}.csv'
+        out_filename = get_path(a = f'{system}_{node_type}_{market}_{file_number}.csv')
 
         with open(out_filename, 'wb') as outfile:
             for i, file in enumerate(files[files_read:]):
@@ -74,7 +76,7 @@ def main():
         for node_type in node_types:
             for market in markets:
 
-                folder,files = get_folder(system, node_type, market) # Get folder with files to be joined
+                folder,files = get_folder_files(system, node_type, market) # Get folder with files to be joined
 
                 if len(files):
 

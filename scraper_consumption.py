@@ -92,7 +92,7 @@ def main(last_date = None, data_type = None):
         else:
             raise
 
-    download_folder = f'{download_folder_frame}\\{data_type}'
+    download_folder = get_path(a = 'consumption', b = data_type)
 
     print(f'\nDownloading Energy Consumption {data_type.upper()}')
     print(f'Last date on database: {last_date}\n')

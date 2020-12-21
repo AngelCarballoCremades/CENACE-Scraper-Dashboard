@@ -2,10 +2,10 @@ import os
 import sys
 import shutil
 import pandas as pd
-from functions import get_folder
+from functions import *
 
 
-folder_frame = '..\\files'
+# folder_frame = '..\\files'
 energy_flow = 'consumption'
 data_type = 'forecast'
 rows_to_skip = 8
@@ -13,8 +13,8 @@ rows_to_skip = 8
 
 def main():
 
-    out_filename = f'{folder_frame}\\{energy_flow}_{data_type}.csv'
-    folder,files = get_folder(folder_frame,energy_flow, data_type) # Get folder with files to be joined
+    out_filename = get_path(a = f'{energy_flow}_{data_type}.csv')
+    folder,files = get_folder(energy_flow, data_type) # Get folder with files to be joined
 
     if len(files):
 

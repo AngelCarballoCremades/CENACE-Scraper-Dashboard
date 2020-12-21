@@ -23,7 +23,7 @@ markets = ['MDA','MTR']
 years = [1,2,3]
 
 # Download Folder, it should have appropiate folder structure
-download_folder_frame = '..\\files\\{node_type}\\{market}'
+# download_folder_frame = '..\\files\\{node_type}\\{market}'
 
 # urls to all data
 urls = {'PML-MDA':'https://www.cenace.gob.mx/Paginas/SIM/Reportes/H_PreciosEnergiaSisMEM.aspx?N=6&opc=divCssPreEnergia&site=Precios%20de%20la%20energ%C3%ADa/Precios%20Marginales%20Locales/MDA/Mensuales&tipoArch=C&tipoUni=SIN&tipo=Mensuales&nombrenodop=Precios%20Marginales%20Locales',
@@ -63,7 +63,7 @@ def main():
         for market in markets:
 
             # assigning download folder path for data to be downloaded
-            download_folder = download_folder_frame.format(node_type = node_type, market = market)
+            download_folder = get_path(a = node_type, b = market)
 
             # data page url
             main_url = urls[f'{node_type}-{market}']
