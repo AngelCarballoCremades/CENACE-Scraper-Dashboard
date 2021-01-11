@@ -6,6 +6,7 @@ This scraper file downloads data from CENACE web pages.
 import os
 import sys
 import time
+from datetime import date
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -17,7 +18,8 @@ from functions import *
 
 
 # 1 = current year, 2 = last year, 3 = lastlast year.... data exists from 2017
-years = [1,2,3]
+# years = [1,2,3]
+years = [i for i in range(1,date.today().year-2016)]
 
 # Download folder, it should have appropiate folder structure
 download_folder = get_path(a = 'generation', b = 'forecast')
@@ -66,7 +68,7 @@ def main(last_date='0000-00-00'):
     download = True
 
     for year_selected in years:
-        print(f'\nDownloading Intermitent Energy Generation Forecast from {2021 - year_selected}')
+        print(f'\nDownloading Intermitent Energy Generation Forecast from {date.today().year + 1 - year_selected}')
         print(f'Last day on record: {last_date}\n')
 
         driver = open_browser(download_folder)

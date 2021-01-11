@@ -13,8 +13,6 @@ import zipfile
 from functions import *
 
 
-years = [1,2,3]
-
 # Download folder, it should have appropiate folder structure
 download_folder = get_path(a = 'generation', b = 'real')
 
@@ -199,7 +197,8 @@ def main(last_month = 0,last_year = 2018):
             wait_download(directorio,f'{first_date} to {second_date}', download_folder)
 
         if not valid:
-            break
+            if not len(os.listdir(download_folder)):
+                break
 
         print('Download done.')
 

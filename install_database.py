@@ -39,7 +39,7 @@ if __name__ == '__main__':
     join_files_generation_real.main()
 
     SQL_make_database.main()
-    # update_database.main()
+    update_database.main()
 
     end = time.time()
 

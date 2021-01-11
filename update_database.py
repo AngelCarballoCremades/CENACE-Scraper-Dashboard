@@ -16,7 +16,6 @@ import join_files_consumption_forecast
 energy_flows = ['generation','consumption']
 data_types = ['forecast','real']
 db_name = 'cenace'
-# folder = '..\\files'
 
 
 def get_last_date(cursor, table_name):
@@ -71,6 +70,8 @@ def main():
             delete_files(get_path(a = energy_flow, b = data_type))
 
     conn.close()
+
+    print("------------Update Done---------------")
 
 if __name__ == '__main__':
     main()
