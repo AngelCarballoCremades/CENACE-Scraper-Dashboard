@@ -1,3 +1,4 @@
 cenacedashboardvenv
 __pycache__
 *.log
+psql_password.txt
