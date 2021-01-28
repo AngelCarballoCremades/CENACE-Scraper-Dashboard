@@ -108,7 +108,8 @@ def create_table(cursor, table, table_name):
 def main():
 
     # make_directory('files2')
-    conn = pg2.connect(user='postgres', password=postgres_password())
+    conn = pg2.connect(host="cenacedbinstance.cspsfg8wwv6z.us-east-2.rds.amazonaws.com", user='postgres', password=postgres_password())
+
 
     print('Making database.')
 
@@ -131,8 +132,10 @@ def main():
 
     print(f'Connecting to {db_name}...')
 
-    conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+    conn = pg2.connect(host="cenacedbinstance.cspsfg8wwv6z.us-east-2.rds.amazonaws.com", user='postgres', password=postgres_password(), database=db_name)
     cursor = conn.cursor()
+
+    cursor.execute("""SET datestyle TO 'ISO, DMY';""".format(db_name))
 
     for energy_flow in energy_flows:
         for data_type in data_types:

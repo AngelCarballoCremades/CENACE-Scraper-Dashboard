@@ -6,7 +6,7 @@ import os
 import sys
 from functions import *
 import datetime
-import geopandas as gpd
+# import geopandas as gpd
 from shapely.geometry import Point
 
 

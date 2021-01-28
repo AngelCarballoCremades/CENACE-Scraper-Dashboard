@@ -17,8 +17,7 @@ import update_database
 pio.templates.default = "plotly_white"
 db_name = 'cenace'
 
-
-conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+conn = pg2.connect(host="cenacedbinstance.cspsfg8wwv6z.us-east-2.rds.amazonaws.com", user='postgres', password=postgres_password(), database=db_name)
 cursor = conn.cursor()
 
 cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM consumption_real;""")
@@ -47,6 +46,8 @@ dropdown_style = {'width': '28%', 'display': 'inline-block', 'font-family': 'Ari
 dropdown_style_2 = {'width': '90%', 'font-family': 'Arial', 'vertical-align': 'middle'}
 
 app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...', external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+server = app.server
 
 
 app.layout = html.Div(html.Center(html.Div([
