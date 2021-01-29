@@ -202,7 +202,7 @@ app.layout = html.Div(html.Center(html.Div([
                                     {'label': 'OAXACA vs Nodos Locales', 'value': 'nodos'},
                                     {'label': 'OAXACA vs Zonas de Carga', 'value': 'zonas'}],
                                 multi = False,
-                                value = 'nodos',
+                                value = 'zonas',
                                 clearable=False,
                                 style = {'text-align':'center'}),
                             style = dropdown_style_2
@@ -267,7 +267,7 @@ app.layout = html.Div(html.Center(html.Div([
                             children=[html.Div(
                                 dcc.Graph(
                                     id = 'marginal_zones_prices_graph',
-                                    figure = marginal_prices(cursor)
+                                    figure = zones_prices(cursor)
                                     )
                             )]
                         ),
