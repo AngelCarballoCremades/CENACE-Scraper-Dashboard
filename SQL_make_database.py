@@ -126,66 +126,61 @@ def make_table_index(cursor,table_name):
 
 def main():
 
-    # # make_directory('files2')
-    # conn = pg2.connect(user='postgres', password=postgres_password())
+    # make_directory('files2')
+    conn = pg2.connect(user='postgres', password=postgres_password())
 
-    # print('Making database.')
+    print('Making database.')
 
-    # # This is to allow creation of databases
-    # conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    # cursor = conn.cursor()
+    # This is to allow creation of databases
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    cursor = conn.cursor()
 
-    # databases = get_databases(cursor)
+    databases = get_databases(cursor)
 
-    # print()
+    print()
 
-    # if db_name in databases:
-    #     print(f'Database {db_name} already exists.')
-    # else:
-    #     cursor.execute("CREATE DATABASE {}".format(db_name))
-    #     print(f'Database {db_name} created.')
+    if db_name in databases:
+        print(f'Database {db_name} already exists.')
+    else:
+        cursor.execute("CREATE DATABASE {}".format(db_name))
+        print(f'Database {db_name} created.')
 
-    # conn.commit()
-    # conn.close()
+    conn.commit()
+    conn.close()
 
-    # print(f'Connecting to {db_name}...')
+    print(f'Connecting to {db_name}...')
 
     conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
     cursor = conn.cursor()
 
-    # for energy_flow in energy_flows:
-    #     for data_type in data_types:
-    #         table_name = f'{energy_flow}_{data_type}'
-    #         create_table(cursor = cursor,
-    #                      table = tables[table_name],
-    #                      table_name = table_name)
+    for energy_flow in energy_flows:
+        for data_type in data_types:
+            table_name = f'{energy_flow}_{data_type}'
+            create_table(cursor = cursor,
+                         table = tables[table_name],
+                         table_name = table_name)
 
-    # for system in systems:
-    #     for market in markets:
-    #         for node in node_types:
-    #             table_name = f'{system}_{node}_{market}'
-    #             create_table(cursor = cursor,
-    #                          table = tables[node],
-    #                          table_name = table_name)
+    for system in systems:
+        for market in markets:
+            for node in node_types:
+                table_name = f'{system}_{node}_{market}'
+                create_table(cursor = cursor,
+                             table = tables[node],
+                             table_name = table_name)
 
-    # for energy_flow in energy_flows:
-    #     for data_type in data_types:
-    #         table_name = f'{energy_flow}_{data_type}'
-    #         upload_file_to_database(folder_frame, cursor, table_name)
+    for energy_flow in energy_flows:
+        for data_type in data_types:
+            table_name = f'{energy_flow}_{data_type}'
+            upload_file_to_database(folder_frame, cursor, table_name)
 
-    # for system in systems:
-    #     for market in markets:
-    #         for node_type in node_types:
-    #             table_name = f'{system}_{node_type}_{market}'
-    #             upload_file_to_database(folder_frame, cursor, table_name)
+    for system in systems:
+        for market in markets:
+            for node_type in node_types:
+                table_name = f'{system}_{node_type}_{market}'
+                upload_file_to_database(folder_frame, cursor, table_name)
 
 
-    # conn.commit()
-
-    # for energy_flow in energy_flows:
-    #     for data_type in data_types:
-    #         table_name = f'{energy_flow}_{data_type}'
-    #         make_table_index(cursor, table_name)
+    conn.commit()
 
     for system in systems:
         for market in markets:
@@ -196,12 +191,12 @@ def main():
     conn.commit()
     conn.close()
 
-    # for energy_flow in energy_flows:
-    #     for data_type in data_types:
-    #         # subfolder = f'{energy_flow}\\{data_type}'
-    #         folder = get_path(a = energy_flow, b = data_type)
-    #         delete_files(folder)
-    #         # delete_files(folder_frame, subfolder)
+    for energy_flow in energy_flows:
+        for data_type in data_types:
+            # subfolder = f'{energy_flow}\\{data_type}'
+            folder = get_path(a = energy_flow, b = data_type)
+            delete_files(folder)
+            # delete_files(folder_frame, subfolder)
 
 
 if __name__ == '__main__':
