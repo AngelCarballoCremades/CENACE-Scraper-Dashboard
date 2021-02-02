@@ -54,26 +54,13 @@ app.layout = html.Div(html.Center(html.Div([
             style = style0
             ),
         html.Div([
-            # html.Div(dcc.Loading(
-            #                 id="loading_element_update_database",
-            #                 type="circle",
-            #                 children=[
-            #                     dbc.Button("Actualizar BD",
-            #                         id = 'update_database_button',
-            #                         color="primary",
-            #                         className="mr-1"
-            #                         ),
-            #                     ]
-            #                 ),
-            #     style = {'marginBottom': 1, 'float':'right'}
-            #     ),
             html.Div(dcc.Loading(
-                id="loading_element_SQL_reconnect_button",
+                id="loading_element_about_button",
                 type="circle",
                 children=[
-                    dbc.Button("Conectar de nuevo con SQL",
-                        id = 'SQL_reconnect_button',
-                        color="warning",
+                    dbc.Button("About",
+                        id = 'about_open_button',
+                        color="secondary",
                         className="mr-1"
                         )
                     ]
@@ -86,23 +73,37 @@ app.layout = html.Div(html.Center(html.Div([
         ],
         style = {'vertical-align': 'middle'}
         ),
-    html.Div(html.P()),
+    html.Div(html.P(dcc.Markdown('**Hecho por Ángel Carballo Cremades para uso de la comunidad :)**'))),
     dcc.Tabs([
         dcc.Tab(label='Generación y Demanda',
             style = style1,
             selected_style = style1,
             children=[
-                html.Div(
+                html.Div([
                     dcc.Graph(
                         id = 'daily_generation_graph',
-                        figure = generation_daily(cursor)),
+                        figure = generation_daily(cursor)
+                        ),
+                    dbc.Tooltip(
+                        "Haz click en un punto graficado para conocer el detalle por hora de esa fecha +- 10 días",
+                        target="daily_generation_graph",
+                        placement='top'
+                        )
+                    ],
                     style = {'width': '50%', 'display': 'inline-block'}
                     ),
-                html.Div(
-                    dcc.Graph(
-                        id = 'hourly_generation_graph',
-                        figure = generation_hourly(cursor)),
-                    style = {'width': '50%', 'display': 'inline-block'}),
+                html.Div(dcc.Loading(
+                            id="loading_element_hourly_generation_graph",
+                            type="circle",
+                            children=[
+                                dcc.Graph(
+                                    id = 'hourly_generation_graph',
+                                    figure = generation_hourly(cursor)
+                                    )
+                                ]
+                            ),
+                    style = {'width': '50%', 'display': 'inline-block'}
+                    ),
                 html.Div(children = [
                     html.Div(
                         dcc.Dropdown(
@@ -115,7 +116,7 @@ app.layout = html.Div(html.Center(html.Div([
                         style = {'width': '20%', 'display': 'inline-block','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial'},
                         ),
                     html.Div(dcc.Loading(
-                            id="loading_element_consumption",
+                            id="loading_element_consumption_graph",
                             type="circle",
                             children=[html.Div(
                                 dcc.Graph(
@@ -160,21 +161,40 @@ app.layout = html.Div(html.Center(html.Div([
                     ),
                 html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                 html.Div(html.P()),
-                html.Div(
-                    dcc.Graph(
-                        id = 'zone_daily_price_graph',
-                        figure = zone_daily_prices(cursor,'mda','OAXACA')),
+                html.Div([dcc.Loading(
+                    id="loading_element_zone_daily_price_graph",
+                    type="circle",
+                    children=[
+                        dcc.Graph(
+                            id = 'zone_daily_price_graph',
+                            figure = zone_daily_prices(cursor,'mda','OAXACA')
+                            )
+                        ]
+                    ),
+                    dbc.Tooltip(
+                        "Haz click en un punto graficado para conocer el detalle por hora de esa fecha +- 10 días",
+                        target="zone_daily_price_graph",
+                        placement='top'
+                        )
+                    ],
                     style = {'width': '50%', 'display': 'inline-block'}
                     ),
-                html.Div(
-                    dcc.Graph(
-                        id = 'zone_hourly_price_graph',
-                        figure = zone_hourly_prices(cursor)),
-                    style = {'width': '50%', 'display': 'inline-block'}),
+                html.Div(dcc.Loading(
+                    id="loading_element_zone_hourly_price_graph",
+                    type="circle",
+                    children=[
+                        dcc.Graph(
+                            id = 'zone_hourly_price_graph',
+                            figure = zone_hourly_prices(cursor)
+                            )
+                        ]
+                    ),
+                    style = {'width': '50%', 'display': 'inline-block'}
+                    ),
                 html.P([]),
                 html.Div(
                     children=[
-                        html.Div(
+                        html.Div([
                             dcc.Dropdown(
                                 id = 'price_graph_comparisson_dropdown',
                                 options = [
@@ -183,7 +203,16 @@ app.layout = html.Div(html.Center(html.Div([
                                 multi = False,
                                 value = 'zonas',
                                 clearable=False,
-                                style = {'text-align':'center'}),
+                                style = {'text-align':'center'}
+                                ),
+                            dbc.Tooltip(
+                                "Seleccionar 'vs Nodos Locales' puede tardar "
+                                "demasiado y paralizar la página. "
+                                "Se optimizará en actualizaciones futuras.",
+                                target="price_graph_comparisson_dropdown",
+                                placement='top'
+                                )
+                            ],
                             style = dropdown_style_2
                             ),
                         html.Div(html.P()),
@@ -286,6 +315,14 @@ app.layout = html.Div(html.Center(html.Div([
             selected_style = style1,
             children=[
                 html.Div(html.P()),
+                dbc.Alert([
+                    "Ingresa una latitud y longitud para ubicar nodos cercanos, puedes obtener latutid y lungitud de ",
+                    html.A("Google Maps.", href="https://www.google.com/maps/@24.209122,-103.736408,5.23z", className="alert-link", target='_blank')],
+                    id="alert-fade",
+                    dismissable=True,
+                    is_open=True
+                    ),
+                html.Div(html.P()),
                 html.Div(
                     dbc.Input(
                         id="latitud_input",
@@ -344,6 +381,11 @@ app.layout = html.Div(html.Center(html.Div([
                             figure = locate_close_nodes(cursor)
                             ),
                         )]
+                    ),
+                dbc.Tooltip(
+                    "Haz click en un punto para obtener más información",
+                    target="map_graph",
+                    placement='top'
                     ),
                 html.Div(html.P()),
                 html.H3([f"Información de nodos seleccionados - {datetime.datetime.now().year}"]),
@@ -685,90 +727,91 @@ app.layout = html.Div(html.Center(html.Div([
                                     ]
                                 )
                             ]
-                    #     ),
-                    # dcc.Tab(label='SQL - Query',
-                    #     style = style1,
-                    #     selected_style = style1,
-                    #     children=[
-                    #         html.P(),
-                    #         html.P(),
-                    #         html.Div([
-                    #             html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                    #             html.Div([
-                    #                 dbc.Input(id="SQL_input", placeholder="Escribe una query de SQL...", type="text")
-                    #                 ],
-                    #                 style = {'width': '50%', 'display': 'inline-block'}
-                    #                 ),
-                    #             html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                    #             html.Div([
-                    #                 dcc.Loading(
-                    #                     id = 'loading_element_data_SQL_preview',
-                    #                     children =[
-                    #                         dbc.Button("Ejecutar",
-                    #                             id = 'data_SQL_preview_button',
-                    #                             color="success",
-                    #                             className="mr-1"
-                    #                             )
-                    #                         ]
-                    #                     )
-                    #                 ],
-                    #                 style = {'width': '10%', 'display': 'inline-block'}
-                    #                 ),
-                    #             html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                    #             # html.Div([
-                    #             #     dcc.Loading(
-                    #             #         id = 'loading_element_data_SQL_download',
-                    #             #         children =[
-                    #             #             dbc.Button("Descargar",
-                    #             #                 id = 'data_SQL_download_button',
-                    #             #                 color="success",
-                    #             #                 className="mr-1"
-                    #             #                 )
-                    #             #             ]
-                    #             #         )
-                    #             #     ],
-                    #             #     style = {'width': '10%', 'display': 'inline-block'}
-                    #             #     ),
-                    #             # html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                    #             ],
-                    #             style = {'align-items':'center'}
-                    #             ),
-                    #         html.Div(html.P()),
-                    #         dcc.Loading(
-                    #             id = 'loading_element_table_data_SQL',
-                    #             type = 'circle',
-                    #             children = [
-                    #                 html.Div(
-                    #                     id = 'data_SQL_table_div',
-                    #                     children=[' ']
-                    #                     ),
-                    #                 ]
-                    #             )
-                    #         ]
                         )
                     ]
                     )
                 ]
             )
         ]
-    #     ),
-    # dcc.ConfirmDialog(
-    #     id='update_database_popup',
-    #     message='Actualizar la base de datos puede tardar unos minutos, ¿Estás seguro?',
-    #     displayed = False
-    )
+    ),
+    dbc.Modal([
+        dbc.ModalBody(dbc.Tabs([
+                dbc.Tab(
+                    label="¡Bienvenid@!",
+                    tab_id="about_esp",
+                    children=dcc.Markdown("""
+
+                        ¡Hola!
+
+                        Este proyecto lo he creado para que puedas acceder fácilmente a los datos públicos del Sistema Electrico Mexicano en cualquier momento.
+
+                        Te encontrarás con varias visualizaciones de generación, consumo y precios de energía. Así como una pestaña dedicada a la descarga de datos (algunas funciones no se encuentran habilitadas por ahora :( pero próximamente podrás utilizarla).
+
+                        Tal vez necesites algo de tiempo para aprender a manejar las gráficas *Plotly*, pero aquí te dejo un [instructivo](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) por si tienes alguna duda de cómo manipular las gráficas dinámicas.
+
+                        ¡Con los datos del mercado eléctrico se pueden crear muchos análisis y visualizaciones! No dudes en contactarme por [LinkedIn](https://www.linkedin.com/in/angelcarballo/) o [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) para agregar algo que te parezca útil o necesario. Siempre estaré disponible para platicar sobre preguntas o comentarios que tengas sobre el proyecto :).
+
+                        Espero que este proyecto te ayude a lograr alún proyecto, trabajo o simplemente conocer más sobre el mercado eléctrico mexicano.
+
+                        Ángel Carballo.
+
+                        """)
+                    ),
+                dbc.Tab(
+                    label="Welcome!",
+                    tab_id="about_eng",
+                    children=dcc.Markdown("""
+
+                        Hi!
+
+                        I created this project so you could get Mexico's Energy Market info quickly and easily.
+
+                        You will find several plots and graphs showing energy generation, consumption and price data. Also, there is a tab dedicated to data download (some features are disabled :( they will be fixed in the next updates).
+
+                        You may need some time to get used to *Plotly's* graphs, [here](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) is a quick tutorial in case you have any doubton how to interact with them.
+
+                        There are tons of different analysis and visualizations that can be made with this data! Do not hesitate to contact me via [LinkedIn](https://www.linkedin.com/in/angelcarballo/) or [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) if you want me to add, fix or modify something you think is usefull and needed. I will always be available to talk about any question or comment you have about this project :).
+
+                        I hope this project helps you achieve some task, project or simply gives ou more information about the electrical market in Mexico.
+
+                        Ángel Carballo.
+
+                        """)
+                    ),
+            ],
+            active_tab="about_esp",
+            )),
+        dbc.ModalFooter(
+            dbc.Button("Cerrar/Close", id="about_close_button", className="ml-auto")
+            )
+        ],
+        id="about_message",
+        size="lg",
+        is_open = True
+        )
     ],
     style = {'width': '95%'}
     )))
 
 @app.callback(
-    Output('SQL_reconnect_button','cildren'),
-    Input('SQL_reconnect_button', 'n_clicks'))
-def reconnect_sql_function(n_clicks):
-    cursor.execute("ROLLBACK")
-    conn.commit()
-    print('---ROLLBACK---')
-    return 'Conectar de nuevo con SQL'
+    Output("about_message", "is_open"),[
+    Input("about_open_button", "n_clicks"),
+    Input("about_close_button", "n_clicks"),
+    State("about_message", "is_open")]
+)
+def toggle_modal(open_click, close_click, is_open):
+    if open_click or close_click:
+        return not is_open
+    return is_open
+
+# @app.callback(
+#     Output('SQL_reconnect_button','cildren'),
+#     Input('SQL_reconnect_button', 'n_clicks'))
+# def reconnect_sql_function(n_clicks):
+#     cursor.execute("ROLLBACK")
+#     conn.commit()
+#     print('---ROLLBACK---')
+#     return 'Conectar de nuevo con SQL'
 
 
 # @app.callback(Output('update_database_popup', 'displayed'),
