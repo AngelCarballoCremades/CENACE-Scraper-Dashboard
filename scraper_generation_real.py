@@ -74,12 +74,18 @@ def pack_dates(last_month, last_year):
     if year < last_year:
         return None
 
+    if last_month == 12:
+        last_month = 0
+        last_year += 1
+
     if month > last_month or year > last_year:
         dates_packed = []
 
         while month != last_month or year != last_year:
 
             if year != last_year:
+                print(last_month)
+                print(last_year)
                 dates_packed.append([date_numeric_to_string(last_month + 1, last_year), date_numeric_to_string(12, last_year)])
                 last_month = 0
                 last_year += 1

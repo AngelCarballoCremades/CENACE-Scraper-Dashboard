@@ -84,9 +84,13 @@ def download_by_xpath(driver, folder_path, xpath):
 def postgres_password(file_path = 'psql_password.txt'):
 
     with open(file_path, 'r') as file:
-        password = file.readline()
+        params = {
+        'host':file.readline()[:-1],
+        'user':file.readline()[:-1],
+        'password':file.readline()[:-1]
+        }
 
-    return password
+    return params
 
 
 def textbox_fill(driver, xpath, date_string, attribute):
@@ -165,6 +169,4 @@ def get_download_file_name(file_name = 'dashboard_energia_mexico_datos'):
     return file_name + '.csv'
 
 if __name__ == '__main__':
-    # make_directory(main_folder='testfiles')
-    # print(get_path(a = 'file.csv'))
     pass
