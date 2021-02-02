@@ -73,7 +73,7 @@ app.layout = html.Div(html.Center(html.Div([
         ],
         style = {'vertical-align': 'middle'}
         ),
-    html.Div(html.P(dcc.Markdown('**Hecho por Ángel Carballo Cremades para uso de la comunidad :)**'))),
+    html.Div(html.P(dcc.Markdown('**Hecho por [Ángel Carballo Cremades](https://www.linkedin.com/in/angelcarballo/) para uso de la comunidad :)**'))),
     dcc.Tabs([
         dcc.Tab(label='Generación y Demanda',
             style = style1,
@@ -383,7 +383,7 @@ app.layout = html.Div(html.Center(html.Div([
                         )]
                     ),
                 dbc.Tooltip(
-                    "Haz click en un punto para obtener más información",
+                    "Ingresa las coordenadas y haz click en un punto para obtener más información",
                     target="map_graph",
                     placement='top'
                     ),
@@ -465,6 +465,11 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_generation_preview_button',
                                                 color="primary",
                                                 className="mr-1"
+                                                ),
+                                            dbc.Tooltip(
+                                                "Muestra primeras 50 filas de la información solicitada",
+                                                target="data_generation_preview_button",
+                                                placement='top'
                                                 )
                                             ]
                                         )
@@ -548,6 +553,11 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_consumption_preview_button',
                                                 color="primary",
                                                 className="mr-1"
+                                                ),
+                                            dbc.Tooltip(
+                                                "Muestra primeras 50 filas de la información solicitada",
+                                                target="data_consumption_preview_button",
+                                                placement='top'
                                                 )
                                             ]
                                         )
@@ -642,6 +652,11 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_prices_preview_button',
                                                 color="primary",
                                                 className="mr-1"
+                                                ),
+                                            dbc.Tooltip(
+                                                "Muestra primeras 50 filas de la información solicitada",
+                                                target="data_prices_preview_button",
+                                                placement='top'
                                                 )
                                             ]
                                         )
@@ -745,13 +760,13 @@ app.layout = html.Div(html.Center(html.Div([
 
                         Este proyecto lo he creado para que puedas acceder fácilmente a los datos públicos del Sistema Electrico Mexicano en cualquier momento.
 
-                        Te encontrarás con varias visualizaciones de generación, consumo y precios de energía. Así como una pestaña dedicada a la descarga de datos (algunas funciones no se encuentran habilitadas por ahora :( pero próximamente podrás utilizarla).
+                        Te encontrarás con varias visualizaciones de generación, consumo y precios de energía. Así como una pestaña dedicada a la descarga de datos (algunas funciones no se encuentran habilitadas por ahora :( pero próximamente podrás utilizarlas).
 
                         Tal vez necesites algo de tiempo para aprender a manejar las gráficas *Plotly*, pero aquí te dejo un [instructivo](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) por si tienes alguna duda de cómo manipular las gráficas dinámicas.
 
-                        ¡Con los datos del mercado eléctrico se pueden crear muchos análisis y visualizaciones! No dudes en contactarme por [LinkedIn](https://www.linkedin.com/in/angelcarballo/) o [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) para agregar algo que te parezca útil o necesario. Siempre estaré disponible para platicar sobre preguntas o comentarios que tengas sobre el proyecto :).
+                        ¡Con los datos del mercado eléctrico se pueden crear muchos análisis y visualizaciones! No dudes en contactarme por [LinkedIn](https://www.linkedin.com/in/angelcarballo/) o [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) para agregar algo que te parezca útil o necesario. Siempre estaré disponible para platicar sobre preguntas o comentarios que tengas acerca del proyecto :).
 
-                        Espero que este proyecto te ayude a lograr alún proyecto, trabajo o simplemente conocer más sobre el mercado eléctrico mexicano.
+                        Espero que este proyecto te ayude a conocer más el mercado eléctrico mexicano.
 
                         Ángel Carballo.
 
@@ -768,11 +783,11 @@ app.layout = html.Div(html.Center(html.Div([
 
                         You will find several plots and graphs showing energy generation, consumption and price data. Also, there is a tab dedicated to data download (some features are disabled :( they will be fixed in the next updates).
 
-                        You may need some time to get used to *Plotly's* graphs, [here](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) is a quick tutorial in case you have any doubton how to interact with them.
+                        You may need some time to get used to *Plotly's* graphs, [here](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) is a quick tutorial in case you have any doubt on how to interact with them.
 
-                        There are tons of different analysis and visualizations that can be made with this data! Do not hesitate to contact me via [LinkedIn](https://www.linkedin.com/in/angelcarballo/) or [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) if you want me to add, fix or modify something you think is usefull and needed. I will always be available to talk about any question or comment you have about this project :).
+                        There are tons of different analysis and visualizations that can be made with this data! Do not hesitate to contact me via [LinkedIn](https://www.linkedin.com/in/angelcarballo/) or [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) if you want me to add, fix or modify something you think is usefull and needed. I will always be available to go through any question or comment you have about this project :).
 
-                        I hope this project helps you achieve some task, project or simply gives ou more information about the electrical market in Mexico.
+                        I hope this project helps you understand the electrical market in Mexico.
 
                         Ángel Carballo.
 
