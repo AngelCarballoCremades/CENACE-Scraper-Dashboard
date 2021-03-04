@@ -39,7 +39,9 @@ style0 = {'text-align':'center','font-family': 'Arial', 'font-size': '100%', 'wi
 dropdown_style = {'width': '28%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
 dropdown_style_2 = {'width': '90%', 'font-family': 'Arial', 'vertical-align': 'middle'}
 
-app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...', external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+
+app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...', external_stylesheets=[dbc.themes.BOOTSTRAP], prevent_initial_callbacks=True)
 
 server = app.server
 
