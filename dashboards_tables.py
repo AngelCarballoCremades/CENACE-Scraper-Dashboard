@@ -321,20 +321,20 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
 #     return df
 
 
-# def data_generation_download(cursor,start_date, end_date, data):
+def data_generation_download(cursor,start_date, end_date, data):
 
-#     print('downloading generation data...')
+    print('downloading generation data...')
 
-#     query_string = """SELECT * FROM generation_{} WHERE fecha >= '{}' AND fecha <= '{}'""".format(data, start_date, end_date)
+    query_string = """SELECT * FROM generation_{} WHERE fecha >= '{}' AND fecha <= '{}'""".format(data, start_date, end_date)
 
-#     SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
+    SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
 
-#     file_name = get_download_file_name(f'generacion_{data}_{start_date[:10]}_{end_date[:10]}')
+    file_name = get_download_file_name(f'generacion_{data}_{start_date[:10]}_{end_date[:10]}')
 
-#     file_path = f"..\\files\\descargas\\{file_name}"
+    file_path = f"..\\files\\descargas\\{file_name}"
 
-#     with open(file_path, 'w') as f:
-#         cursor.copy_expert(SQL_for_file_output, f)
+    with open(file_path, 'w') as f:
+        cursor.copy_expert(SQL_for_file_output, f)
 
 
 # def data_consumption_download(cursor,start_date, end_date, data, zones):

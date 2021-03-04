@@ -40,7 +40,7 @@ def rebuild_table_index(cursor, table_name):
 
 def main():
 
-    # scraper_prices_daily.main()
+    scraper_prices_daily.main()
 
     conn = pg2.connect(**postgres_password(), database=db_name)
     cursor = conn.cursor()

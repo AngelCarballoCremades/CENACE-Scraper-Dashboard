@@ -2,3 +2,6 @@ cenacedashboardvenv
 __pycache__
 *.log
 psql_password.txt
+test_script.py
+*ipynb
+.ipynb_checkpoints

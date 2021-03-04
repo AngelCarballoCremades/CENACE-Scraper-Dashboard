@@ -87,7 +87,8 @@ def postgres_password(file_path = 'psql_password.txt'):
         params = {
         'host':file.readline()[:-1],
         'user':file.readline()[:-1],
-        'password':file.readline()[:-1]
+        'password':file.readline()[:-1],
+        'port':int(file.readline())
         }
 
     return params
@@ -170,3 +171,4 @@ def get_download_file_name(file_name = 'dashboard_energia_mexico_datos'):
 
 if __name__ == '__main__':
     pass
+    # print(postgres_password())

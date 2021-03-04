@@ -758,9 +758,9 @@ app.layout = html.Div(html.Center(html.Div([
 
                         ¡Hola!
 
-                        Este proyecto lo he creado para que puedas acceder fácilmente a los datos públicos del Sistema Electrico Mexicano en cualquier momento.
+                        Este proyecto lo he creado para que puedas acceder fácilmente a los datos públicos del Sistema Eléctrico Mexicano en cualquier momento.
 
-                        Te encontrarás con varias visualizaciones de generación, consumo y precios de energía. Así como una pestaña dedicada a la descarga de datos (algunas funciones no se encuentran habilitadas por ahora :( pero próximamente podrás utilizarlas).
+                        Te encontrarás con varias visualizaciones de generación, consumo y precios de energía, así como una pestaña dedicada a la descarga de datos (algunas funciones no se encuentran habilitadas por ahora :( pero próximamente podrás utilizarlas).
 
                         Tal vez necesites algo de tiempo para aprender a manejar las gráficas *Plotly*, pero aquí te dejo un [instructivo](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) por si tienes alguna duda de cómo manipular las gráficas dinámicas.
 
