@@ -321,32 +321,31 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
         return df
 
 
-# def data_SQL_preview(cursor,query_string):
-
-#     print('requesting SQL data...')
-
-#     cursor.execute(query_string)
-
-#     colnames = [desc[0] for desc in cursor.description]
-#     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-
-#     return df
-
-
-def data_generation_download(cursor,start_date, end_date, data):
+def data_generation_download(cursor, start_date, end_date, data):
 
     print('downloading generation data...')
 
-    query_string = """SELECT * FROM generation_{} WHERE fecha >= '{}' AND fecha <= '{}'""".format(data, start_date, end_date)
+    try:
+        cursor.execute("""
+            SELECT * FROM generation_{}
+            WHERE
+                fecha >= '{}' AND
+                fecha <= '{}'
+            ORDER BY
+                fecha ASC
+            ;""".format(data, start_date, end_date))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
-    SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
 
-    file_name = get_download_file_name(f'generacion_{data}_{start_date[:10]}_{end_date[:10]}')
+    for col in df.columns:
+        if col not in ['sistema','fecha','hora']:
+            df[col] = df[col].astype('float').round(2)
 
-    file_path = f"..\\files\\descargas\\{file_name}"
-
-    with open(file_path, 'w') as f:
-        cursor.copy_expert(SQL_for_file_output, f)
+    return df
 
 
 # def data_consumption_download(cursor,start_date, end_date, data, zones):

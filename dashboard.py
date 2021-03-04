@@ -800,7 +800,8 @@ app.layout = html.Div(html.Center(html.Div([
         is_open = True
         ),
     Download(id='download1'),
-    Download(id='download2')
+    Download(id='download2'),
+    Download(id='download3')
     ],
     style = {'width': '95%'}
     )))
@@ -1056,18 +1057,22 @@ def data_generation_preview_function(n_clicks, start_date, end_date, data):
                             hover=True)
 
 
-# @app.callback(
-#     Output('data_generation_download_button','children'),[
-#     Input('data_generation_download_button','n_clicks'),
-#     State('data_generation_date_picker', 'start_date'),
-#     State('data_generation_date_picker', 'end_date'),
-#     State('data_generation_real_forecast_select_dropdown','value')
-#     ])
-# def data_generation_download_function(n_clicks, start_date, end_date, data):
+@app.callback([
+    Output("download3", "data"),
+    Output('data_generation_download_button','children')],[
+    Input('data_generation_download_button','n_clicks'),
+    State('data_generation_date_picker', 'start_date'),
+    State('data_generation_date_picker', 'end_date'),
+    State('data_generation_real_forecast_select_dropdown','value')
+    ])
+def data_generation_download_function(n_clicks, start_date, end_date, data):
 
-#     data_generation_download(cursor,start_date, end_date, data)
+    df = data_generation_download(cursor,start_date, end_date, data)
 
-#     return 'Descargar'
+    filename = 'generacion_{}_{}_{}.csv'.format(data, start_date, end_date)
+    df = df.set_index(df.columns[0])
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
 
 @app.callback(
