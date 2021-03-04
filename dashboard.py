@@ -3,6 +3,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+from dash_extensions import Download
+from dash_extensions.snippets import send_data_frame
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
@@ -12,7 +14,7 @@ import psycopg2 as pg2
 from functions import *
 from dashboard_graphs import *
 from dashboards_tables import *
-import update_database
+# import update_database
 
 pio.templates.default = "plotly_white"
 db_name = 'cenace'
@@ -42,6 +44,7 @@ dropdown_style_2 = {'width': '90%', 'font-family': 'Arial', 'vertical-align': 'm
 
 
 app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...', external_stylesheets=[dbc.themes.BOOTSTRAP], prevent_initial_callbacks=True)
+
 
 server = app.server
 
@@ -301,11 +304,6 @@ app.layout = html.Div(html.Center(html.Div([
                             id = 'download_table_prices_button',
                             color="primary",
                             className="mr-1"
-                            ),
-                        dbc.Tooltip(
-                            "No disponible por el momento",
-                            target="download_table_prices_button",
-                            placement='top'
                             )
                         ]
                     ),
@@ -409,11 +407,6 @@ app.layout = html.Div(html.Center(html.Div([
                             id = 'download_table_map_button',
                             color="primary",
                             className="mr-1"
-                            ),
-                        dbc.Tooltip(
-                            "No disponible por el momento",
-                            target="download_table_map_button",
-                            placement='top'
                             )
                         ]
                     ),
@@ -805,7 +798,9 @@ app.layout = html.Div(html.Center(html.Div([
         id="about_message",
         size="lg",
         is_open = True
-        )
+        ),
+    Download(id='download1'),
+    Download(id='download2')
     ],
     style = {'width': '95%'}
     )))
@@ -821,28 +816,6 @@ def toggle_modal(open_click, close_click, is_open):
         return not is_open
     return is_open
 
-# @app.callback(
-#     Output('SQL_reconnect_button','cildren'),
-#     Input('SQL_reconnect_button', 'n_clicks'))
-# def reconnect_sql_function(n_clicks):
-#     cursor.execute("ROLLBACK")
-#     conn.commit()
-#     print('---ROLLBACK---')
-#     return 'Conectar de nuevo con SQL'
-
-
-# @app.callback(Output('update_database_popup', 'displayed'),
-#               Input('update_database_button', 'n_clicks'))
-# def display_confirm(n_clicks):
-#     if n_clicks:
-#         return True
-
-# @app.callback(Output('update_database_button','cildren'),
-#               Input('update_database_popup', 'submit_n_clicks'))
-# def update_output(submit_n_clicks):
-#     if submit_n_clicks:
-#         update_database.main()
-#         return 'Actualizar BD'
 
 @app.callback(
     Output('daily_consumption_graph', 'figure'),
@@ -912,6 +885,7 @@ def marginal_prices_graph_function(graph_type, data, zonas_nodos, zones, zona_de
         fig = marginal_prices(cursor, zona_de_carga, market, data, graph_type)
     return fig
 
+
 @app.callback(
     Output("price_graph_comparisson_dropdown", 'options'),
     Input('zona_de_carga_prices_dopdown','value'))
@@ -920,6 +894,7 @@ def update_price_dropdown_options(zona_de_carga):
         {'label': f'{zona_de_carga} vs Nodos Locales', 'value': 'nodos'},
         {'label': f'{zona_de_carga} vs Zonas de Carga', 'value': 'zonas'}]
     return options
+
 
 @app.callback([
     Output('zona_de_carga_prices_comparison_dopdown','disabled'),
@@ -931,6 +906,81 @@ def disable_prices_dropdowns(zonas_nodos):
         return False, True
     else:
         return True, False
+
+
+@app.callback(
+    Output('prices_table_div', 'children'),[
+    Input('show_table_prices', 'n_clicks'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def prices_create_table_function(n_clicks, market, zone, zonas_nodos, price_component, zones):
+
+    if zonas_nodos == 'zonas':
+        df = prices_zones_table(cursor, market, zone, zones, price_component)
+    elif zonas_nodos == 'nodos':
+        df = prices_nodes_table(cursor, market, zone, price_component)
+    else:
+        df = pd.DataFrame()
+
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'table_prices',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
+
+@app.callback([
+    Output("download1", "data"),
+    Output('download_table_prices_button', 'children')],[
+    Input('download_table_prices_button', 'n_clicks'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def download_prices_table_function(n_clicks, market, zone, zonas_nodos, price_component, zones):
+
+    if zonas_nodos == 'zonas':
+        df = prices_zones_table(cursor, market, zone, zones, price_component)
+    elif zonas_nodos == 'nodos':
+        df = prices_nodes_table(cursor, market, zone, price_component)
+
+    titulos = {
+        'precio_e':'total',
+        'c_energia':'energia',
+        'c_perdidas':'perdidas',
+        'c_congestion':'congestion',}
+
+    filename = 'precio_{}_{}_{}.csv'.format(zonas_nodos, market, titulos[price_component])
+    df = df.set_index(df.columns[0])
+
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
+
+
+@app.callback(
+    Output('prices_table_header', 'children'),[
+    Input('show_table_prices', 'n_clicks'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def update_prices_table_header_function(n_clicks, market, zone, zonas_nodos, price_component, zones):
+
+    titulos = {
+        'precio_e':'Precio Total  De Energía',
+        'c_energia':'Componente de Energía',
+        'c_perdidas':'Componente de Pérdidas',
+        'c_congestion':'Componente de Congestión',}
+
+    if zonas_nodos == 'zonas':
+        return f'Información de Zonas de Carga de {datetime.datetime.now().year} - {market.upper()} - {titulos[price_component]}'
+    if zonas_nodos == 'nodos':
+        return f'Información de {zone} y Precios Marginales de {datetime.datetime.now().year} - {market.upper()} - {titulos[price_component]}'
 
 
 @app.callback(
@@ -966,93 +1016,26 @@ def map_clickdata_table_function(clickData):
                             bordered=True,
                             hover=True)
 
-# @app.callback(
-#     Output('download_table_map_button', 'children'),[
-#     Input('download_table_map_button', 'n_clicks'),
-#     State('map_graph','clickData')])
-# def download_map_table_function(n_clicks, clickData):
+@app.callback([
+    Output("download2", "data"),
+    Output('download_table_map_button', 'children')],[
+    Input('download_table_map_button', 'n_clicks'),
+    State('map_graph','clickData')])
+def download_map_table_function(n_clicks, clickData):
 
-#     if clickData['points'][0]['customdata'][:2] != ['-','-']:
-#         estado = clickData['points'][0]['customdata'][0]
-#         municipio =clickData['points'][0]['customdata'][1]
-#         df = map_click_table(cursor, estado, municipio)
+    if clickData['points'][0]['customdata'][:2] != ['-','-']:
+        estado = clickData['points'][0]['customdata'][0]
+        municipio =clickData['points'][0]['customdata'][1]
+        df = map_click_table(cursor, estado, municipio)
 
-#     else:
-#         df = map_click_table(cursor, clickData['points'][0]['customdata'][4])
-
-#     file_name = get_download_file_name('nodos_de_mapa')
-#     df.to_csv(f"..\\files\\descargas\\{file_name}", index = False)
-
-#     return 'Descargar'
-
-
-@app.callback(
-    Output('prices_table_div', 'children'),[
-    Input('show_table_prices', 'n_clicks'),
-    State('market_dropdown', 'value'),
-    State('zona_de_carga_prices_dopdown', 'value'),
-    State('price_graph_comparisson_dropdown', 'value'),
-    State('price_component_dropdown','value'),
-    State('zona_de_carga_prices_comparison_dopdown','value')])
-def prices_create_table_function(n_clicks, market, zone, zonas_nodos, price_component, zones):
-
-    if zonas_nodos == 'zonas':
-        df = prices_zones_table(cursor, market, zone, zones, price_component)
-    elif zonas_nodos == 'nodos':
-        df = prices_nodes_table(cursor, market, zone, price_component)
     else:
-        df = pd.DataFrame()
+        df = map_click_table(cursor, clickData['points'][0]['customdata'][4])
 
-    return dbc.Table.from_dataframe(
-                            df,
-                            id = 'table_prices',
-                            striped=True,
-                            bordered=True,
-                            hover=True)
+    filename = 'nodos_de_mapa.csv'
+    df = df.set_index(df.columns[0])
 
-# @app.callback(
-#     Output('download_table_prices_button', 'children'),[
-#     Input('download_table_prices_button', 'n_clicks'),
-#     State('system_dropdown', 'value'),
-#     State('market_dropdown', 'value'),
-#     State('zona_de_carga_prices_dopdown', 'value'),
-#     State('price_graph_comparisson_dropdown', 'value'),
-#     State('price_component_dropdown','value'),
-#     State('zona_de_carga_prices_comparison_dopdown','value')])
-# def download_prices_table_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
-#     if zonas_nodos == 'zonas':
-#         df = prices_zones_table(cursor, system, market, zone, zones, price_component)
-#     if zonas_nodos == 'nodos':
-#         df = prices_nodes_table(cursor, system, market, zone, price_component)
-
-#     file_name = get_download_file_name('precios_de_energia')
-#     df.to_csv(f"..\\files\\descargas\\{file_name}", index = False)
-
-#     return 'Descargar'
-
-
-@app.callback(
-    Output('prices_table_header', 'children'),[
-    Input('download_table_prices_button', 'n_clicks'),
-    State('system_dropdown', 'value'),
-    State('market_dropdown', 'value'),
-    State('zona_de_carga_prices_dopdown', 'value'),
-    State('price_graph_comparisson_dropdown', 'value'),
-    State('price_component_dropdown','value'),
-    State('zona_de_carga_prices_comparison_dopdown','value')])
-def update_prices_table_header_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
-
-    titulos = {
-        'precio_e':'Precio Total  De Energía',
-        'c_energia':'Componente de Energía',
-        'c_perdidas':'Componente de Pérdidas',
-        'c_congestion':'Componente de Congestión',}
-
-    if zonas_nodos == 'zonas':
-        return f'Información de Zonas de Carga de {datetime.datetime.now().year} - {system.upper()} - {market.upper()} - {titulos[price_component]}'
-    if zonas_nodos == 'nodos':
-        return f'Información de {zone} y Precios Marginales de {datetime.datetime.now().year} - {system.upper()} - {market.upper()} - {titulos[price_component]}'
 
 @app.callback(
     Output('data_generation_table_div','children'),[

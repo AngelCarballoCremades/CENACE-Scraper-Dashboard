@@ -126,11 +126,23 @@ def prices_zones_table(cursor, market, zone, zones, price_component):
     return df
 
 
-def prices_nodes_table(cursor, system, market, zona_de_carga, price_component):
+def prices_nodes_table(cursor, market, zona_de_carga, price_component):
 
     year = datetime.datetime.now().year
 
     print('requesting nodes prices...')
+    try:
+        cursor.execute("""
+            SELECT sistema FROM nodes_info
+            WHERE zona_de_carga = '{}'
+            LIMIT 1
+            ;""".format(zona_de_carga))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
+
+    system = cursor.fetchall()[0][0]
+
     try:
         cursor.execute("""
             SELECT
