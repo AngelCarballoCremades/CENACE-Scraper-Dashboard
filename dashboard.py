@@ -480,11 +480,6 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_generation_download_button',
                                                 color="success",
                                                 className="mr-1"
-                                                ),
-                                            dbc.Tooltip(
-                                                "No disponible por el momento",
-                                                target="data_generation_download_button",
-                                                placement='top'
                                                 )
                                             ]
                                         )
@@ -568,11 +563,6 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_consumption_download_button',
                                                 color="success",
                                                 className="mr-1"
-                                                ),
-                                            dbc.Tooltip(
-                                                "No disponible por el momento",
-                                                target="data_consumption_download_button",
-                                                placement='top'
                                                 )
                                             ]
                                         )
@@ -667,11 +657,6 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_prices_download_button',
                                                 color="success",
                                                 className="mr-1"
-                                                ),
-                                            dbc.Tooltip(
-                                                "No disponible por el momento",
-                                                target="data_prices_download_button",
-                                                placement='top'
                                                 )
                                             ]
                                         )
