@@ -801,7 +801,9 @@ app.layout = html.Div(html.Center(html.Div([
         ),
     Download(id='download1'),
     Download(id='download2'),
-    Download(id='download3')
+    Download(id='download3'),
+    Download(id='download4'),
+    Download(id='download5')
     ],
     style = {'width': '95%'}
     )))
@@ -1094,19 +1096,23 @@ def data_consumption_preview_function(n_clicks, start_date, end_date, data, zone
                             bordered=True,
                             hover=True)
 
-# @app.callback(
-#     Output('data_consumption_download_button','children'),[
-#     Input('data_consumption_download_button','n_clicks'),
-#     State('data_consumption_date_picker', 'start_date'),
-#     State('data_consumption_date_picker', 'end_date'),
-#     State('data_consumption_real_forecast_select_dropdown','value'),
-#     State('data_consumption_zona_de_carga_dopdown','value')
-#     ])
-# def data_consumption_download_function(n_clicks, start_date, end_date, data, zones):
+@app.callback([
+    Output("download4", "data"),
+    Output('data_consumption_download_button','children')],[
+    Input('data_consumption_download_button','n_clicks'),
+    State('data_consumption_date_picker', 'start_date'),
+    State('data_consumption_date_picker', 'end_date'),
+    State('data_consumption_real_forecast_select_dropdown','value'),
+    State('data_consumption_zona_de_carga_dopdown','value')
+    ])
+def data_consumption_download_function(n_clicks, start_date, end_date, data, zones):
 
-#     data_consumption_download(cursor,start_date, end_date, data, zones)
+    df = data_consumption_download(cursor,start_date, end_date, data, zones)
 
-#     return 'Descargar'
+    filename = 'demanda_{}_{}_{}.csv'.format(data, start_date, end_date)
+    df = df.set_index(df.columns[0])
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
 
 @app.callback(
@@ -1131,21 +1137,25 @@ def data_prices_preview_function(n_clicks, start_date, end_date, market, zonas_n
                             hover=True)
 
 
-# @app.callback(
-#     Output('data_prices_download_button','children'),[
-#     Input('data_prices_download_button','n_clicks'),
-#     State('data_prices_date_picker','start_date'),
-#     State('data_prices_date_picker','end_date'),
-#     State('data_prices_market_select_dropdown', 'value'),
-#     State('data_prices_zone_or_node_dopdown','value'),
-#     State('data_prices_zona_de_carga_dopdown','value'),
-#     State('data_prices_nodes_dropdown','value')
-#     ])
-# def data_prices_download_function(n_clicks, start_date, end_date, market, zonas_nodos, zones, nodes):
+@app.callback([
+    Output("download5", "data"),
+    Output('data_prices_download_button','children')],[
+    Input('data_prices_download_button','n_clicks'),
+    State('data_prices_date_picker','start_date'),
+    State('data_prices_date_picker','end_date'),
+    State('data_prices_market_select_dropdown', 'value'),
+    State('data_prices_zone_or_node_dopdown','value'),
+    State('data_prices_zona_de_carga_dopdown','value'),
+    State('data_prices_nodes_dropdown','value')
+    ])
+def data_prices_download_function(n_clicks, start_date, end_date, market, zonas_nodos, zones, nodes):
 
-#     data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
+    df = data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
 
-#     return 'Descargar'
+    filename = 'precios__{}_{}_{}_{}.csv'.format(zonas_nodos, market, start_date, end_date)
+    df = df.set_index(df.columns[0])
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
 
 @app.callback(
