@@ -1,7 +1,10 @@
-
 # Mexico's Energy Market ETL & Dashboard
 
+Online webpage showing dashboard: [](https://mexico-energy-dashboard.herokuapp.com/)
+
 This project scrapes, cleans and loads data to a PostgreSQL database, keeps the data up to date and displays the information in a Dashboard made with Plotly's Dash.
+
+The information can be download to a local database or a connection can be made to an AWS RDS instance (default).
 
 ## Setup & Run (Online database)
 1. Install: python 3.8 or higher (Developed initially in 3.8.5), Virtualenv
