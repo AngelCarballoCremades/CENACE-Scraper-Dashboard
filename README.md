@@ -1,6 +1,6 @@
 # Mexico's Energy Market ETL & Dashboard
 
-Online webpage showing dashboard: [](https://mexico-energy-dashboard.herokuapp.com/)
+Online webpage showing dashboard: <https://mexico-energy-dashboard.herokuapp.com/>
 
 This project scrapes, cleans and loads data to a PostgreSQL database, keeps the data up to date and displays the information in a Dashboard made with Plotly's Dash.
 
