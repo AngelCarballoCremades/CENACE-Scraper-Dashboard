@@ -1,7 +1,6 @@
 cenacedashboardvenv
 __pycache__
 *.log
-
 test_script.py
 *ipynb
 .ipynb_checkpoints

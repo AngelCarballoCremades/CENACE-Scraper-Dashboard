@@ -1,4 +1,3 @@
-# from io import StringIO
 import os
 import sys
 import psycopg2 as pg2
@@ -195,10 +194,8 @@ def main():
 
     for energy_flow in energy_flows:
         for data_type in data_types:
-            # subfolder = f'{energy_flow}\\{data_type}'
             folder = get_path(a = energy_flow, b = data_type)
             delete_files(folder)
-            # delete_files(folder_frame, subfolder)
 
 
 if __name__ == '__main__':
