@@ -46,6 +46,8 @@ def main():
 
         df = pd.read_csv(out_filename)
         df.columns = [column.strip(' ').replace(' ','_').lower() for column in df.columns]
+        df['dia'] = pd.to_datetime(df.dia, dayfirst=True)
+        df['dia'] = df['dia'].dt.strftime('%Y-%m-%d')
         df.to_csv(out_filename, index=False, float_format='%.3f', header=False)
 
         print('Done')

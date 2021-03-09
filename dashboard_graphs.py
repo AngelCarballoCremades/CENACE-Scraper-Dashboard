@@ -6,27 +6,23 @@ import os
 import sys
 from functions import *
 import datetime
-import geopandas as gpd
 from shapely.geometry import Point
-
-
-def get_zones_list(cursor, system='sin', market='mda'):
-
-    cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM {}_pnd_{};""".format(system, market))
-    zone_list = cursor.fetchall()
-    # print(zone_list)
-    return [zone[0] for zone in zone_list]
 
 
 def generation_daily(cursor):
 
     print('requesting daily generation...')
-    cursor.execute("""
-        SELECT * FROM generation_real
-        ORDER BY
-            fecha ASC,
-            hora ASC
-        ;""")
+
+    try:
+        cursor.execute("""
+            SELECT * FROM generation_real
+            ORDER BY
+                fecha ASC,
+                hora ASC
+            ;""")
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
@@ -36,13 +32,11 @@ def generation_daily(cursor):
         if col not in ['sistema','fecha','hora']:
             df[col] = df[col].astype('float')
 
-    # df['total_gen'] = sum([df[col] for col in df.columns if col not in ['sistema','fecha','hora']])
     df_filtered = df.groupby(['fecha']).sum()
     df_filtered.drop(columns=['hora'], inplace=True)
     df_filtered = df_filtered.stack().to_frame()
     df_filtered.reset_index(inplace=True)
     df_filtered.columns = ['fecha','gen_type','generation_mwh']
-    # print(df_filtered)
 
     fig = px.area(
         data_frame=df_filtered,
@@ -78,19 +72,23 @@ def generation_daily(cursor):
             family="Arial",
             size=12.5))
     return fig
-# fig.show()
 
 
 
 def generation_month_hourly_average(cursor):
 
-    print('requesting hourly generation...\n')
-    cursor.execute("""
-        SELECT * FROM generation_real
-        ORDER BY
-            fecha ASC,
-            hora ASC
-        ;""")
+    print('requesting hourly generation...')
+
+    try:
+        cursor.execute("""
+            SELECT * FROM generation_real
+            ORDER BY
+                fecha ASC,
+                hora ASC
+            ;""")
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
@@ -106,16 +104,10 @@ def generation_month_hourly_average(cursor):
     df['month'] = df.fecha.apply(lambda x: x.month)
 
     df_filtered = df.groupby(['year','month','hora']).mean()
-    # print(df_filtered)
-    # df_filtered = df_filtered.stack().to_frame()
     df_filtered.reset_index(inplace=True)
     df_filtered = df_filtered[['year','month','hora','total_gen']]
-    # df_filtered.columns = ['year','month','hora','gen_type','generation_mwh']
     df_filtered['month_hour'] =  df_filtered['month'].astype('str')+' '+df_filtered['hora'].astype('str')
     df_filtered['month_hour'] = df_filtered['month_hour'].apply(lambda x: datetime.datetime.strptime(x, '%m %d'))
-
-    # print(df_filtered)
-    # print(df_filtered)
 
     fig = px.line(
         data_frame=df_filtered,
@@ -128,37 +120,39 @@ def generation_month_hourly_average(cursor):
     fig.update_layout(template="plotly_white")
     fig.update_xaxes(tickformat="%b")# %b\n%Y
     return fig
-    # fig.show()
 
-
-
-
-
-# # HOURLY GRAPH-----------------------------------------------------
 
 def generation_hourly(cursor, dates = 0):
 
     print('requesting hourly generation...')
 
     if not dates:
-        cursor.execute("""
-            SELECT * FROM generation_real
-            WHERE
-                fecha = (SELECT MAX(fecha) FROM generation_real)
-            ORDER BY
-                fecha ASC,
-                hora ASC
-            ;""")
+        try:
+            cursor.execute("""
+                SELECT * FROM generation_real
+                WHERE
+                    fecha = (SELECT MAX(fecha) FROM generation_real)
+                ORDER BY
+                    fecha ASC,
+                    hora ASC
+                ;""")
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     elif type(dates) == type([]):
-        cursor.execute("""
-            SELECT * FROM generation_real
-            WHERE
-                fecha BETWEEN '{}' AND '{}'
-            ORDER BY
-                fecha ASC,
-                hora ASC
-            ;""".format(dates[0],dates[1]))
+        try:
+            cursor.execute("""
+                SELECT * FROM generation_real
+                WHERE
+                    fecha BETWEEN '{}' AND '{}'
+                ORDER BY
+                    fecha ASC,
+                    hora ASC
+                ;""".format(dates[0],dates[1]))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     colnames = [desc[0] for desc in cursor.description]
     df_hourly = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
@@ -170,13 +164,10 @@ def generation_hourly(cursor, dates = 0):
         if col not in ['sistema','fecha','hora']:
             df_hourly[col] = df_hourly[col].astype('float')
 
-
     df_hourly = df_hourly.groupby(['fecha']).sum()
     df_hourly = df_hourly.stack().to_frame()
     df_hourly.reset_index(inplace=True)
     df_hourly.columns = ['fecha','gen_type','generation_mwh']
-
-    # print(df_hourly)
 
     fig = px.area(
         data_frame=df_hourly,
@@ -199,7 +190,6 @@ def generation_hourly(cursor, dates = 0):
                 'fotovoltaica'
                 ]),
         )
-    # fig.update_traces(legendgroup='generation')
     fig.update_layout(
         title= dict(
             text = "Generación Real Por Hora",
@@ -216,15 +206,6 @@ def generation_hourly(cursor, dates = 0):
     return fig
 
 
-# # fig.show()
-
-
-# db_name = 'cenace'
-
-# conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
-# cursor = conn.cursor()
-
-
 def consumption_daily(cursor, zonas_de_carga = ['OAXACA']):
 
     print('requesting zonas...')
@@ -233,54 +214,53 @@ def consumption_daily(cursor, zonas_de_carga = ['OAXACA']):
         total = True
 
     if total:
-        cursor.execute("""
-            SELECT fecha, SUM(energia) AS energia FROM consumption_real
-            GROUP BY fecha
-            ORDER BY
-                fecha ASC
-            ;""")
+        try:
+            cursor.execute("""
+                SELECT fecha, SUM(energia) AS energia FROM consumption_real
+                GROUP BY fecha
+                ORDER BY
+                    fecha ASC
+                ;""")
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     else:
         zonas_string = "','".join([zona for zona in zonas_de_carga])
 
-        cursor.execute("""
-            SELECT * FROM consumption_real
-            WHERE zona_de_carga in ('{}')
-            ORDER BY
-                fecha ASC,
-                hora ASC
-            ;""".format(zonas_string))
+        try:
+            cursor.execute("""
+                SELECT * FROM consumption_real
+                WHERE zona_de_carga in ('{}')
+                ORDER BY
+                    fecha ASC,
+                    hora ASC
+                ;""".format(zonas_string))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
     df['fecha'] = pd.to_datetime(df['fecha'])
     df['energia'] = df['energia'].astype('float')
 
-    # print(df)
-
-
     if total:
         fig = px.line(
             data_frame=df,
             x="fecha",
             y="energia",
-            # color="zona_de_carga",
-            # hover_data=['zona_de_carga','energia']
             )
 
         fig.update_layout(clickmode='event+select')
         fig.update_layout(template="plotly_white")
-        # fig.update_traces(legendgroup='group')
         return fig
 
     if not total:
         df_filtered = df.groupby(['fecha','zona_de_carga']).sum()
         df_filtered.drop(columns=['hora'], inplace=True)
         df_filtered.reset_index(inplace=True)
-        # print(df_filtered)
         df_filtered.columns = ['fecha','zona_de_carga','energia']
-
-        # print(df_filtered)
 
         fig = px.line(
             data_frame=df_filtered,
@@ -303,45 +283,50 @@ def consumption_daily(cursor, zonas_de_carga = ['OAXACA']):
             font=dict(
                 family="Arial",
                 size=12.5))
-        # fig.update_traces(legendgroup='group')
         return fig
 
 
-
-
-
-def zone_daily_prices(cursor, system='sin', market='mda', zone='OAXACA'):
+def zone_daily_prices(cursor, market='mda', zone='OAXACA'):
 
     print('requesting prices...', zone)
-    cursor.execute("""
-        SELECT * FROM {}_pnd_{}
-        WHERE zona_de_carga = '{}'
-        ORDER BY
-            fecha ASC,
-            hora ASC
-        ;""".format(system,market, zone))
+    try:
+        cursor.execute("""
+            SELECT sistema FROM nodes_info
+            WHERE zona_de_carga = '{}'
+            LIMIT 1
+            ;""".format(zone))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
+
+    system = cursor.fetchall()[0][0]
+
+    try:
+        cursor.execute("""
+            SELECT * FROM {}_pnd_{}
+            WHERE zona_de_carga = '{}'
+            ORDER BY
+                fecha ASC,
+                hora ASC
+            ;""".format(system,market, zone))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-    # print(df)
     df['fecha'] = pd.to_datetime(df['fecha'])
     df.drop(columns=['hora','sistema','mercado','zona_de_carga'], inplace=True)
 
-    # print(df.T)
-
     for col in ['c_energia','c_perdidas','c_congestion','precio_e']:
         df[col] = df[col].astype('float')
-
 
     df = df.groupby(['fecha', 'precio_e']).mean()
     df = df.stack().to_frame()
     df.reset_index(inplace=True)
     df.columns = ['fecha','precio_e','price_component','$/MWh']
-    # print(df)
     df = df.groupby(['fecha','price_component']).mean()
     df.reset_index(inplace=True)
-    # print(df)
-    # print('\n\n\n\n\n\n')
 
     fig = px.area(
         data_frame=df,
@@ -356,7 +341,6 @@ def zone_daily_prices(cursor, system='sin', market='mda', zone='OAXACA'):
                 'c_congestion'
                 ])
         )
-    # fig.show()
     fig.update_layout(template="plotly_white")
     fig.update_layout(
         title= dict(
@@ -373,57 +357,67 @@ def zone_daily_prices(cursor, system='sin', market='mda', zone='OAXACA'):
     return fig
 
 
-def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates = 0):
+def zone_hourly_prices(cursor, market='mda', zone='OAXACA', dates = 0):
 
     print('requesting zone hourly prices...')
 
-    if not dates:
+    try:
         cursor.execute("""
-            SELECT * FROM {}_pnd_{}
-            WHERE
-                zona_de_carga = '{}' AND
-                fecha = (SELECT MAX(fecha) from {}_pnd_{})
-            ORDER BY
-                fecha ASC,
-                hora ASC
-            ;""".format(system,market, zone, system, market))
+            SELECT sistema FROM nodes_info
+            WHERE zona_de_carga = '{}'
+            LIMIT 1
+            ;""".format(zone))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
+
+    system = cursor.fetchall()[0][0].lower()
+    print('system {}'.format(system))
+
+    if not dates:
+        try:
+            cursor.execute("""
+                SELECT * FROM {}_pnd_{}
+                WHERE
+                    zona_de_carga = '{}' AND
+                    fecha = (SELECT MAX(fecha) from {}_pnd_{})
+                ORDER BY
+                    fecha ASC,
+                    hora ASC
+                ;""".format(system,market, zone, system, market))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     elif type(dates) == type([]):
-        cursor.execute("""
-            SELECT * FROM {}_pnd_{}
-            WHERE
-                zona_de_carga = '{}' AND
-                fecha BETWEEN '{}' AND '{}'
-            ORDER BY
-                fecha ASC,
-                hora ASC
-            ;""".format(system,market, zone, dates[0], dates[1]))
+        try:
+            cursor.execute("""
+                SELECT * FROM {}_pnd_{}
+                WHERE
+                    zona_de_carga = '{}' AND
+                    fecha BETWEEN '{}' AND '{}'
+                ORDER BY
+                    fecha ASC,
+                    hora ASC
+                ;""".format(system,market, zone, dates[0], dates[1]))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-    # print(df)
     df['fecha'] = pd.to_datetime(df['fecha'])
     df['fecha'] +=  pd.to_timedelta(df.hora, unit='h')
     df.drop(columns=['hora'], inplace=True)
 
-    # print(df)
-
     for col in ['c_energia','c_perdidas','c_congestion','precio_e']:
         df[col] = df[col].astype('float')
-
-
 
     df = df.groupby(['fecha', 'precio_e']).mean()
     df = df.stack().to_frame()
     df.reset_index(inplace=True)
-    # print(df)
-    df.columns = ['fecha','precio_e','price_component','$/MWh']
-    # print(df)
 
-    # df = df.groupby(['fecha']).sum()
-    # df = df.stack().to_frame()
-    # df.reset_index(inplace=True)
-    # df.columns = ['fecha','gen_type','generation_mwh']
+    df.columns = ['fecha','precio_e','price_component','$/MWh']
 
     fig = px.area(
         data_frame=df,
@@ -453,62 +447,71 @@ def zone_hourly_prices(cursor, system='sin', market='mda', zone='OAXACA', dates 
     return fig
 
 
-
-
-
-
-def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = 'mda', data = 'precio_e', graph_type = 'real'):
-
-    # zona_de_carga = 'OAXACA'
-    # system = 'sin'
-    # market = 'mda'
-    # data = 'precio_e'
+def marginal_prices(cursor, zona_de_carga = 'OAXACA', market = 'mda', data = 'precio_e', graph_type = 'real'):
 
     print('requesting marginal prices...')
-    cursor.execute("""
-        SELECT
-            fecha,
-            main.clave_nodo AS clave_nodo,
-            AVG({}) AS {}
-        FROM {}_pml_{} AS main
-        INNER JOIN nodes_info AS inf
-            ON main.clave_nodo = inf.clave_nodo
-        WHERE zona_de_carga = '{}'
-        GROUP BY
-            fecha,
-            main.clave_nodo
-        ORDER BY
-            fecha ASC,
-            clave_nodo ASC
-        ;""".format(data, data, system, market, zona_de_carga))
+
+    try:
+        cursor.execute("""
+            SELECT sistema FROM nodes_info
+            WHERE zona_de_carga = '{}'
+            LIMIT 1
+            ;""".format(zona_de_carga))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
+
+    system = cursor.fetchall()[0][0]
+
+    print('...requesting nodes data...')
+    try:
+        cursor.execute("""
+            SELECT
+                fecha,
+                main.clave_nodo AS clave_nodo,
+                AVG({}) AS {}
+            FROM {}_pml_{} AS main
+            INNER JOIN nodes_info AS inf
+                ON main.clave_nodo = inf.clave_nodo
+            WHERE zona_de_carga = '{}'
+            GROUP BY
+                fecha,
+                main.clave_nodo
+            ORDER BY
+                fecha ASC,
+                clave_nodo ASC
+            ;""".format(data, data, system, market, zona_de_carga))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
     df['fecha'] = pd.to_datetime(df['fecha'])
     df[data] = df[data].astype('float')
 
-    # print(df.T)
-    # print(df.dtypes)
-
-    cursor.execute("""
-        SELECT
-            fecha,
-            zona_de_carga AS clave_nodo,
-            AVG({}) AS {}
-        FROM {}_pnd_{}
-        WHERE zona_de_carga = '{}'
-        GROUP BY
-            fecha,
-            zona_de_carga
-        ORDER BY
-            fecha ASC
-        ;""".format(data, data, system,market, zona_de_carga))
+    print('...requesting zone data...')
+    try:
+        cursor.execute("""
+            SELECT
+                fecha,
+                zona_de_carga AS clave_nodo,
+                AVG({}) AS {}
+            FROM {}_pnd_{}
+            WHERE zona_de_carga = '{}'
+            GROUP BY
+                fecha,
+                zona_de_carga
+            ORDER BY
+                fecha ASC
+            ;""".format(data, data, system,market, zona_de_carga))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df2 = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
     df2['fecha'] = pd.to_datetime(df2['fecha'])
-    # print(df2.T)
-    # print(df2.dtypes)
 
     if graph_type == 'percent':
         df2[data] = df2[data].astype('float')
@@ -521,25 +524,26 @@ def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = '
         df = pd.concat([df2, df])
 
     print('Requesting info...')
-    cursor.execute("""
-        SELECT
-            clave_nodo,
-            nombre_nodo,
-            zona_de_carga,
-            nodop_nivel_de_tensión_kv AS tension_kv,
-            ubicación_entidad_federativa AS entidad_federativa,
-            ubicación_municipio AS municipio
-        FROM nodes_info
-        WHERE zona_de_carga = '{}'
-        ;""".format(zona_de_carga))
+    try:
+        cursor.execute("""
+            SELECT
+                clave_nodo,
+                nombre_nodo,
+                zona_de_carga,
+                nodop_nivel_de_tensión_kv AS tension_kv,
+                ubicación_entidad_federativa AS entidad_federativa,
+                ubicación_municipio AS municipio
+            FROM nodes_info
+            WHERE zona_de_carga = '{}'
+            ;""".format(zona_de_carga))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df_info = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-    # print(df_info.T)
-
     df = pd.merge(left=df, right=df_info, on='clave_nodo', how='left')
     df.fillna('---')
-    # print(df.T)
 
     titulos = {
         'precio_e':'Precio Total  De Energía',
@@ -584,11 +588,9 @@ def marginal_prices(cursor, zona_de_carga = 'OAXACA', system = 'sin', market = '
             size=12.5))
 
     return fig
-    # fig.show()
 
 
-
-def zones_prices(cursor, zones = [], zone = 'OAXACA', system='sin', market='mda', data = 'precio_e'):
+def zones_prices(cursor, zones = [], zone = 'OAXACA', market='mda', data = 'precio_e'):
 
     if not zones:
         zones = [zone]
@@ -601,24 +603,34 @@ def zones_prices(cursor, zones = [], zone = 'OAXACA', system='sin', market='mda'
     zones = "','".join(zones)
 
     print('requesting prices...', zones)
-    cursor.execute("""
-        SELECT
-            fecha,
-            zona_de_carga,
-            AVG({}) AS {}
-        FROM {}_pnd_{}
-        WHERE zona_de_carga in ('{}')
-        GROUP BY
-            fecha,
-            zona_de_carga
-        ORDER BY
-            fecha ASC
-        ;""".format(data, data, system,market, zones))
 
-    colnames = [desc[0] for desc in cursor.description]
-    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-    print(df.T)
-    print(df.zona_de_carga.unique())
+    dfs = []
+    for system in ['sin','bca','bcs']:
+
+        try:
+            cursor.execute("""
+                SELECT
+                    fecha,
+                    zona_de_carga,
+                    AVG({}) AS {}
+                FROM {}_pnd_{}
+                WHERE zona_de_carga in ('{}')
+                GROUP BY
+                    fecha,
+                    zona_de_carga
+                ORDER BY
+                    fecha ASC
+                ;""".format(data, data, system, market, zones))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
+
+        colnames = [desc[0] for desc in cursor.description]
+        df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+        dfs.append(df)
+
+    df = pd.concat(dfs)
+
     df['fecha'] = pd.to_datetime(df['fecha'])
     df[data] = df[data].astype('float')
 
@@ -636,7 +648,6 @@ def zones_prices(cursor, zones = [], zone = 'OAXACA', system='sin', market='mda'
         color="zona_de_carga",
         hover_data=['fecha','zona_de_carga',f'{data}']
         )
-    # fig.show()
     fig.update_layout(template="plotly_white")
     fig.update_layout(
         title= dict(
@@ -663,7 +674,6 @@ def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=
         zoom = 4
 
         fig = px.scatter_mapbox(
-            # df_final,
             lat=[0],
             lon=[0],
             zoom=zoom,
@@ -700,18 +710,13 @@ def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=
     distances_ordered = sorted(list(set(distances)))
 
     df_final = pd.DataFrame(columns = df.columns)
-    # print(df.T)
-
 
     largo = df_final.copy()
     while largo.shape[0] < number_of_nodes and largo.shape[0] < df.shape[0]:
         largo = pd.concat([largo,df[df.distance == distances_ordered[0]]])
         df_final = df_final.append(df[df.distance == distances_ordered.pop(0)].iloc[0])
 
-
-    # print(df_final)
     edo_mun = df_final['ubicación_entidad_federativa'] + '___' + df_final['ubicación_municipio']
-    # print((edo_mun).unique())
 
     lista_nodos = []
     estados = []
@@ -723,19 +728,25 @@ def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=
         estados.append(estado)
         municipios.append(municipio)
 
-        cursor.execute("""SELECT clave_nodo, nombre_nodo FROM nodes_info
-            WHERE
-                ubicación_entidad_federativa = '{}' AND
-                ubicación_municipio = '{}';""".format(estado, municipio))
+        try:
+            cursor.execute("""
+                SELECT
+                    clave_nodo,
+                    nombre_nodo
+                FROM nodes_info
+                WHERE
+                    ubicación_entidad_federativa = '{}' AND
+                    ubicación_municipio = '{}'
+                ;""".format(estado, municipio))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
+
         lista_nodos.append([f'<br>{node[0]}/{node[1]}' for node in cursor.fetchall()])
 
-    # print(lista_nodos)
     edos_muns = '-<span style="display: none">'+('___').join([ ('_').join(couple) for couple in list(zip(estados, municipios)) ])+'</span>'
-    # print(edos_muns)
+
     df_final['nodos'] = lista_nodos
-
-    # print(df_final.T)
-
     df_final['color'] = 1
     selected_point_df = pd.DataFrame.from_dict(data = {
                                                     'lat':[latitud],
@@ -746,9 +757,6 @@ def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=
                                                     'ubicación_municipio':'-'}, orient = 'columns')
     df_final = df_final.append(selected_point_df)
     df_final['marker_size'] = 12
-
-    # print(df_final.T)
-
 
     fig = px.scatter_mapbox(df_final,
         lat=df_final['lat'].astype('float'),
@@ -776,14 +784,4 @@ def locate_close_nodes(cursor, latitud = None, longitud = None, number_of_nodes=
     return fig
 
 if __name__ == '__main__':
-
-    db_name = 'cenace'
-
-    conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
-    cursor = conn.cursor()
-
-    # fig = zones_prices(cursor, zones = ['OAXACA','PUEBLA','ORIZABA'])
-    fig = locate_close_nodes(cursor, latitud = '22', longitud = '-98', number_of_nodes=20, mapbox_style="open-street-map", zoom = 7)
-    fig.show()
-
-    conn.close()
+    pass

@@ -15,6 +15,9 @@ import join_files_consumption_forecast
 
 energy_flows = ['generation','consumption']
 data_types = ['forecast','real']
+systems = ['BCA','BCS','SIN']
+markets = ['MTR','MDA']
+node_types = ['PND','PML']
 db_name = 'cenace'
 
 
@@ -23,11 +26,23 @@ def get_last_date(cursor, table_name):
     cursor.execute("SELECT MAX(fecha) FROM {};".format(table_name))
     return cursor.fetchall()
 
+def rebuild_table_index(cursor, table_name):
+
+    print('Rebuilding index on table {}...'.format(table_name), end='')
+    sys.stdout.flush()
+
+    try:
+        cursor.execute("""REINDEX TABLE {};""".format(table_name))
+        print('Done')
+    except:
+        print('Failed')
+
+
 def main():
 
     scraper_prices_daily.main()
 
-    conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+    conn = pg2.connect(**postgres_password(), database=db_name)
     cursor = conn.cursor()
 
     for energy_flow in energy_flows:
@@ -68,6 +83,12 @@ def main():
             conn.commit()
 
             delete_files(get_path(a = energy_flow, b = data_type))
+
+    for system in systems:
+        for market in markets:
+            for node_type in node_types:
+                table_name = f'{system}_{node_type}_{market}'
+                rebuild_table_index(cursor, table_name)
 
     conn.close()
 

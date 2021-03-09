@@ -73,7 +73,8 @@ def main():
 
     print(f'Connecting to {db_name}...')
 
-    conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+    # conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+    conn = pg2.connect(host="cenacedbinstance.cspsfg8wwv6z.us-east-2.rds.amazonaws.com", user='postgres', password=postgres_password(), database=db_name)
     cursor = conn.cursor()
 
     table_name = f'nodes_info'

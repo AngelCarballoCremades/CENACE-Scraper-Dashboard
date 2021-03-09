@@ -7,7 +7,6 @@ from functions import *
 import datetime
 
 
-
 def map_click_table(cursor, estado, municipio = None, node_info = False):
 
     if not municipio:
@@ -20,17 +19,21 @@ def map_click_table(cursor, estado, municipio = None, node_info = False):
     dfs = []
 
     for estado, municipio in edos_muns:
-        cursor.execute("""
-            SELECT
-                ubicación_entidad_federativa,
-                ubicación_municipio,
-                clave_nodo,
-                nombre_nodo
-            FROM nodes_info
-            WHERE
-                ubicación_entidad_federativa = '{}' AND
-                ubicación_municipio = '{}'
-                ;""".format(estado, municipio))
+        try:
+            cursor.execute("""
+                SELECT
+                    ubicación_entidad_federativa,
+                    ubicación_municipio,
+                    clave_nodo,
+                    nombre_nodo
+                FROM nodes_info
+                WHERE
+                    ubicación_entidad_federativa = '{}' AND
+                    ubicación_municipio = '{}'
+                    ;""".format(estado, municipio))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
         colnames = [desc[0] for desc in cursor.description]
         df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
@@ -45,7 +48,8 @@ def map_click_table(cursor, estado, municipio = None, node_info = False):
 
     for system in ['sin','bca','bcs']:
         print(f'requesting {system}...')
-        cursor.execute("""
+        try:
+            cursor.execute("""
                 SELECT
                     clave_nodo,
                     MAX(precio_e) AS precio_maximo,
@@ -58,6 +62,9 @@ def map_click_table(cursor, estado, municipio = None, node_info = False):
                     EXTRACT(YEAR FROM fecha) = {}
                 GROUP BY clave_nodo
                 ;""".format(system, nodos, year))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
         colnames = [desc[0] for desc in cursor.description]
         df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
@@ -71,7 +78,7 @@ def map_click_table(cursor, estado, municipio = None, node_info = False):
     return df
 
 
-def prices_zones_table(cursor, system, market, zone, zones, price_component):
+def prices_zones_table(cursor, market, zone, zones, price_component):
 
     if not zones:
         zones = [zone]
@@ -85,22 +92,32 @@ def prices_zones_table(cursor, system, market, zone, zones, price_component):
     year = datetime.datetime.now().year
 
     print(f'requesting zones table...')
-    cursor.execute("""
-            SELECT
-                zona_de_carga,
-                MAX({}) AS precio_maximo,
-                MIN({}) AS precio_minimo,
-                AVG({}) AS precio_promedio,
-                STDDEV_POP({}) AS desviacion_estandar
-            FROM {}_pnd_{}
-            WHERE
-                zona_de_carga in ('{}') AND
-                EXTRACT(YEAR FROM fecha) = {}
-            GROUP BY zona_de_carga
-            ;""".format(price_component, price_component, price_component, price_component, system, market, zones, year))
 
-    colnames = [desc[0] for desc in cursor.description]
-    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    dfs = []
+    for system in ['sin','bca','bcs']:
+        try:
+            cursor.execute("""
+                SELECT
+                    zona_de_carga,
+                    MAX({}) AS precio_maximo,
+                    MIN({}) AS precio_minimo,
+                    AVG({}) AS precio_promedio,
+                    STDDEV_POP({}) AS desviacion_estandar
+                FROM {}_pnd_{}
+                WHERE
+                    zona_de_carga in ('{}') AND
+                    EXTRACT(YEAR FROM fecha) = {}
+                GROUP BY zona_de_carga
+                ;""".format(price_component, price_component, price_component, price_component, system, market, zones, year))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
+
+        colnames = [desc[0] for desc in cursor.description]
+        df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+        dfs.append(df)
+
+    df = pd.concat(dfs)
 
     for col in df.columns:
         if col != 'zona_de_carga':
@@ -109,45 +126,65 @@ def prices_zones_table(cursor, system, market, zone, zones, price_component):
     return df
 
 
-def prices_nodes_table(cursor, system, market, zona_de_carga, price_component):
+def prices_nodes_table(cursor, market, zona_de_carga, price_component):
 
     year = datetime.datetime.now().year
 
     print('requesting nodes prices...')
-    cursor.execute("""
-        SELECT
-            main.clave_nodo AS clave_nodo,
-            MAX({}) AS precio_maximo,
-            MIN({}) AS precio_minimo,
-            AVG({}) AS precio_promedio,
-            STDDEV_POP({}) AS desviacion_estandar
-        FROM {}_pml_{} AS main
-        INNER JOIN nodes_info AS inf
-            ON main.clave_nodo = inf.clave_nodo
-        WHERE
-            zona_de_carga = '{}' AND
-            EXTRACT(YEAR FROM fecha) = {}
-        GROUP BY
-            main.clave_nodo
-        ;""".format(price_component, price_component, price_component, price_component, system, market, zona_de_carga, year))
+    try:
+        cursor.execute("""
+            SELECT sistema FROM nodes_info
+            WHERE zona_de_carga = '{}'
+            LIMIT 1
+            ;""".format(zona_de_carga))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
+
+    system = cursor.fetchall()[0][0]
+
+    try:
+        cursor.execute("""
+            SELECT
+                main.clave_nodo AS clave_nodo,
+                MAX({}) AS precio_maximo,
+                MIN({}) AS precio_minimo,
+                AVG({}) AS precio_promedio,
+                STDDEV_POP({}) AS desviacion_estandar
+            FROM {}_pml_{} AS main
+            INNER JOIN nodes_info AS inf
+                ON main.clave_nodo = inf.clave_nodo
+            WHERE
+                zona_de_carga = '{}' AND
+                EXTRACT(YEAR FROM fecha) = {}
+            GROUP BY
+                main.clave_nodo
+            ;""".format(price_component, price_component, price_component, price_component, system, market, zona_de_carga, year))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df_nodes = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
 
     print('...')
-    cursor.execute("""
-        SELECT
-            zona_de_carga AS clave_nodo,
-            MAX({}) AS precio_maximo,
-            MIN({}) AS precio_minimo,
-            AVG({}) AS precio_promedio,
-            STDDEV_POP({}) AS desviacion_estandar
-        FROM {}_pnd_{}
-        WHERE
-            zona_de_carga = '{}' AND
-            EXTRACT(YEAR FROM fecha) = {}
-        GROUP BY zona_de_carga
-        ;""".format(price_component, price_component, price_component, price_component, system, market, zona_de_carga, year))
+    try:
+        cursor.execute("""
+            SELECT
+                zona_de_carga AS clave_nodo,
+                MAX({}) AS precio_maximo,
+                MIN({}) AS precio_minimo,
+                AVG({}) AS precio_promedio,
+                STDDEV_POP({}) AS desviacion_estandar
+            FROM {}_pnd_{}
+            WHERE
+                zona_de_carga = '{}' AND
+                EXTRACT(YEAR FROM fecha) = {}
+            GROUP BY zona_de_carga
+            ;""".format(price_component, price_component, price_component, price_component, system, market, zona_de_carga, year))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df_zone = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
@@ -160,11 +197,6 @@ def prices_nodes_table(cursor, system, market, zona_de_carga, price_component):
         if col != 'clave_nodo':
             df[col] = df[col].astype('float').round(2)
 
-    # print(df_nodes.T)
-    # print(df_zone.T)
-    # print(df.T)
-
-
     return df
 
 
@@ -172,12 +204,17 @@ def data_generation_preview(cursor,start_date, end_date, data):
 
     print('requesting generation data...')
 
-    cursor.execute("""
-        SELECT * FROM generation_{}
-        WHERE
-            fecha >= '{}' AND
-            fecha <= '{}'
-        LIMIT 50;""".format(data, start_date, end_date))
+    try:
+        cursor.execute("""
+            SELECT * FROM generation_{}
+            WHERE
+                fecha >= '{}' AND
+                fecha <= '{}'
+            LIMIT 50
+            ;""".format(data, start_date, end_date))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
@@ -194,33 +231,39 @@ def data_consumption_preview(cursor,start_date, end_date, data, zones):
     print('requesting consumption data...')
 
     if zones == ['MEXICO (PAIS)']:
-        cursor.execute("""
-            SELECT * FROM consumption_{}
-            WHERE
-                fecha >= '{}' AND
-                fecha <= '{}'
-            LIMIT 50;""".format(data, start_date, end_date))
+        try:
+            cursor.execute("""
+                SELECT * FROM consumption_{}
+                WHERE
+                    fecha >= '{}' AND
+                    fecha <= '{}'
+                LIMIT 50
+                ;""".format(data, start_date, end_date))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     else:
         zones = ("','").join(zones)
 
-        cursor.execute("""
-            SELECT * FROM consumption_{}
-            WHERE
-                fecha >= '{}' AND
-                fecha <= '{}' AND
-                zona_de_carga in ('{}')
-            LIMIT 50;""".format(data, start_date, end_date, zones))
-
+        try:
+            cursor.execute("""
+                SELECT * FROM consumption_{}
+                WHERE
+                    fecha >= '{}' AND
+                    fecha <= '{}' AND
+                    zona_de_carga in ('{}')
+                LIMIT 50
+                ;""".format(data, start_date, end_date, zones))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
-    # print(df)
-
     df['energia'] = df['energia'].astype('float')
 
     return df
-
 
 
 def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones, nodes):
@@ -237,20 +280,24 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
 
         for system in ['sin','bca','bcs']:
 
-            cursor.execute("""
-                SELECT * FROM {}_pnd_{}
-                WHERE
-                    fecha >= '{}' AND
-                    fecha <= '{}' AND
-                    zona_de_carga in ('{}')
-                LIMIT 30;""".format(system, market, start_date, end_date, zones))
+            try:
+                cursor.execute("""
+                    SELECT * FROM {}_pnd_{}
+                    WHERE
+                        fecha >= '{}' AND
+                        fecha <= '{}' AND
+                        zona_de_carga in ('{}')
+                    LIMIT 30
+                    ;""".format(system, market, start_date, end_date, zones))
+            except:
+                cursor.execute("ROLLBACK")
+                pass
 
             colnames = [desc[0] for desc in cursor.description]
             df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
             dfs.append(df)
 
         df = pd.concat(dfs)
-        # print(df)
         return df
 
     else:
@@ -271,36 +318,34 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
             dfs.append(df)
 
         df = pd.concat(dfs)
-        # print(df)
         return df
 
 
-def data_SQL_preview(cursor,query_string):
+def data_generation_download(cursor, start_date, end_date, data):
 
-    print('requesting SQL data...')
+    print('downloading generation data...')
 
-    cursor.execute(query_string)
+    try:
+        cursor.execute("""
+            SELECT * FROM generation_{}
+            WHERE
+                fecha >= '{}' AND
+                fecha <= '{}'
+            ORDER BY
+                fecha ASC, hora ASC
+            ;""".format(data, start_date, end_date))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
 
     colnames = [desc[0] for desc in cursor.description]
     df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
 
+    for col in df.columns:
+        if col not in ['sistema','fecha','hora']:
+            df[col] = df[col].astype('float').round(2)
+
     return df
-
-
-def data_generation_download(cursor,start_date, end_date, data):
-
-    print('downloading generation data...')
-
-    query_string = """SELECT * FROM generation_{} WHERE fecha >= '{}' AND fecha <= '{}'""".format(data, start_date, end_date)
-
-    SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
-
-    file_name = get_download_file_name(f'generacion_{data}_{start_date[:10]}_{end_date[:10]}')
-
-    file_path = f"..\\files\\descargas\\{file_name}"
-
-    with open(file_path, 'w') as f:
-        cursor.copy_expert(SQL_for_file_output, f)
 
 
 def data_consumption_download(cursor,start_date, end_date, data, zones):
@@ -308,22 +353,41 @@ def data_consumption_download(cursor,start_date, end_date, data, zones):
     print('downloading generation data...')
 
     if zones == ['MEXICO (PAIS)']:
-        query_string = """SELECT * FROM consumption_{} WHERE fecha >= '{}' AND fecha <= '{}'""".format(data, start_date, end_date)
+        try:
+            cursor.execute("""
+                SELECT * FROM consumption_{}
+                WHERE
+                    fecha >= '{}' AND
+                    fecha <= '{}'
+                ORDER BY
+                    sistema ASC, zona_de_carga ASC, fecha ASC, hora ASC
+                ;""".format(data, start_date, end_date))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
     else:
         zones = ("','").join(zones)
 
-        query_string = """SELECT * FROM consumption_{} WHERE fecha >= '{}' AND fecha <= '{}' AND zona_de_carga in ('{}')""".format(data, start_date, end_date, zones)
+        try:
+            cursor.execute("""
+                SELECT * FROM consumption_{}
+                WHERE
+                    fecha >= '{}' AND
+                    fecha <= '{}' AND
+                    zona_de_carga in ('{}')
+                ORDER BY
+                    sistema ASC, zona_de_carga ASC, fecha ASC, hora ASC
+                ;""".format(data, start_date, end_date, zones))
+        except:
+            cursor.execute("ROLLBACK")
+            pass
 
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+    df['energia'] = df['energia'].astype('float')
 
-    SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
-
-    file_name = get_download_file_name(f'consumption_{data}_{start_date[:10]}_{end_date[:10]}')
-
-    file_path = f"..\\files\\descargas\\{file_name}"
-
-    with open(file_path, 'w') as f:
-        cursor.copy_expert(SQL_for_file_output, f)
+    return df
 
 
 def data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones, nodes):
@@ -331,64 +395,59 @@ def data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones
     print('downloading prices data...')
 
     if not zones:
-        return None
+        return pd.DataFrame()
 
-    queries = []
+    dfs = []
+
     if zonas_nodos == 'zones':
 
         zones = ("','").join(zones)
+
         for system in ['sin','bca','bcs']:
 
-            queries.append("""SELECT * FROM {}_pnd_{} WHERE fecha >= '{}' AND fecha <= '{}' AND zona_de_carga in ('{}')""".format(system, market, start_date, end_date, zones))
+            try:
+                cursor.execute("""
+                    SELECT * FROM {}_pnd_{}
+                    WHERE
+                        fecha >= '{}' AND
+                        fecha <= '{}' AND
+                        zona_de_carga in ('{}')
+                    ORDER BY
+                    sistema ASC, zona_de_carga ASC, fecha ASC, hora ASC
+                    ;""".format(system, market, start_date, end_date, zones))
+            except:
+                cursor.execute("ROLLBACK")
+                pass
+
+            colnames = [desc[0] for desc in cursor.description]
+            df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+            dfs.append(df)
+
+        df = pd.concat(dfs)
+        return df
 
     else:
         nodes = ("','").join(nodes)
+
         for system in ['sin','bca','bcs']:
-
-            queries.append("""SELECT * FROM {}_pml_{} WHERE fecha >= '{}' AND fecha <= '{}' AND clave_nodo in ('{}')""".format(system, market, start_date, end_date, nodes))
-
-    file_name = get_download_file_name(f'precios_{zonas_nodos}_{market}_{start_date[:10]}_{end_date[:10]}')
-    file_path = f"..\\files\\descargas\\{file_name}"
-
-    for i,query_string in enumerate(queries):
-        if i == 0:
-            SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
-
-        else:
-            SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV".format(query_string)
-
-        with open(file_path, 'a') as f:
-            cursor.copy_expert(SQL_for_file_output, f)
+            cursor.execute("""
+                SELECT * FROM {}_pml_{}
+                WHERE
+                    fecha >= '{}' AND
+                    fecha <= '{}' AND
+                    clave_nodo in ('{}')
+                ORDER BY
+                    sistema ASC, clave_nodo ASC, fecha ASC, hora ASC
+                ;""".format(system, market, start_date, end_date, nodes))
 
 
-def data_SQL_download(cursor,query_string):
+            colnames = [desc[0] for desc in cursor.description]
+            df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+            dfs.append(df)
 
-    print('requesting SQL data...')
-
-    SQL_for_file_output = "COPY ({}) TO STDOUT WITH CSV HEADER".format(query_string)
-
-    file_name = get_download_file_name('SQL_query')
-
-    file_path = f"..\\files\\descargas\\{file_name}"
-
-    with open(file_path, 'w') as f:
-        cursor.copy_expert(SQL_for_file_output, f)
-
+        df = pd.concat(dfs)
+        return df
 
 
 if __name__ == '__main__':
-
-    db_name = 'cenace'
-
-    conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
-    cursor = conn.cursor()
-
-    # fig = zones_prices(cursor, zones = ['OAXACA','PUEBLA','ORIZABA'])
-    # fig.show()
-    # print(prices_zones_table(cursor, system = 'sin', market = 'mda', zone = 'OAXACA', zones = [], price_component = 'precio_e'))
-    # print(prices_nodes_table(cursor, system = 'sin', market = 'mtr', zona_de_carga='OAXACA', price_component='c_congestion'))
-
-
-
-
-    conn.close()
+    pass

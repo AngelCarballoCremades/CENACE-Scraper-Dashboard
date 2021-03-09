@@ -120,14 +120,16 @@ def make_table_index(cursor,table_name):
         cursor.execute("CREATE INDEX ix_{} ON {}({});".format(table_name.lower(), table_name.lower(), column_name))
         print('Done')
     except:
-        print("-----Failed")
+        print("Failed")
+
+
 
 
 
 def main():
 
-    # make_directory('files2')
-    conn = pg2.connect(user='postgres', password=postgres_password())
+    make_directory('files2')
+    conn = pg2.connect(**postgres_password())
 
     print('Making database.')
 
@@ -150,7 +152,7 @@ def main():
 
     print(f'Connecting to {db_name}...')
 
-    conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+    conn = pg2.connect(**postgres_password(), database=db_name)
     cursor = conn.cursor()
 
     for energy_flow in energy_flows:

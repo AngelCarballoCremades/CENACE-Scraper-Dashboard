@@ -3,6 +3,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+from dash_extensions import Download
+from dash_extensions.snippets import send_data_frame
 import plotly.express as px
 import plotly.io as pio
 import pandas as pd
@@ -12,15 +14,15 @@ import psycopg2 as pg2
 from functions import *
 from dashboard_graphs import *
 from dashboards_tables import *
-import update_database
+# import update_database
 
 pio.templates.default = "plotly_white"
 db_name = 'cenace'
 
-
-conn = pg2.connect(user='postgres', password=postgres_password(), database=db_name)
+conn = pg2.connect(**postgres_password(), database=db_name)
 cursor = conn.cursor()
 
+print("Getting dropdown values...")
 cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM consumption_real;""")
 zonas_de_carga = [zona[0] for zona in cursor.fetchall()]
 zonas_de_carga_alone = zonas_de_carga.copy()
@@ -34,19 +36,17 @@ nodos_oaxaca = [nodo[0] for nodo in cursor.fetchall()]
 
 
 
-zones_list = {'sin':get_zones_list(cursor, system='sin', market='mda'),
-            'bca':get_zones_list(cursor, system='bca', market='mda'),
-            'bcs':get_zones_list(cursor, system='bcs', market='mda')}
-
-
-
-
 style1 = {'font-family': 'Arial', 'font-size': '150%'}
 style0 = {'text-align':'center','font-family': 'Arial', 'font-size': '100%', 'width': '50%', 'display': 'inline-block', 'vertical-align': 'middle'}
 dropdown_style = {'width': '28%', 'display': 'inline-block', 'font-family': 'Arial', 'vertical-align': 'middle'}
 dropdown_style_2 = {'width': '90%', 'font-family': 'Arial', 'vertical-align': 'middle'}
 
-app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...', external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+
+app = dash.Dash(__name__, title='Energía de México', update_title='Cargando...', external_stylesheets=[dbc.themes.BOOTSTRAP], prevent_initial_callbacks=True)
+
+
+server = app.server
 
 
 app.layout = html.Div(html.Center(html.Div([
@@ -60,25 +60,12 @@ app.layout = html.Div(html.Center(html.Div([
             ),
         html.Div([
             html.Div(dcc.Loading(
-                            id="loading_element_update_database",
-                            type="circle",
-                            children=[
-                                dbc.Button("Actualizar BD",
-                                    id = 'update_database_button',
-                                    color="primary",
-                                    className="mr-1"
-                                    ),
-                                ]
-                            ),
-                style = {'marginBottom': 1, 'float':'right'}
-                ),
-            html.Div(dcc.Loading(
-                id="loading_element_SQL_reconnect_button",
+                id="loading_element_about_button",
                 type="circle",
                 children=[
-                    dbc.Button("Conectar de nuevo con SQL",
-                        id = 'SQL_reconnect_button',
-                        color="warning",
+                    dbc.Button("About",
+                        id = 'about_open_button',
+                        color="secondary",
                         className="mr-1"
                         )
                     ]
@@ -91,23 +78,37 @@ app.layout = html.Div(html.Center(html.Div([
         ],
         style = {'vertical-align': 'middle'}
         ),
-    html.Div(html.P()),
+    html.Div(html.P(dcc.Markdown('**Hecho por [Ángel Carballo Cremades](https://www.linkedin.com/in/angelcarballo/) para uso de la comunidad :)**'))),
     dcc.Tabs([
         dcc.Tab(label='Generación y Demanda',
             style = style1,
             selected_style = style1,
             children=[
-                html.Div(
+                html.Div([
                     dcc.Graph(
                         id = 'daily_generation_graph',
-                        figure = generation_daily(cursor)),
+                        figure = generation_daily(cursor)
+                        ),
+                    dbc.Tooltip(
+                        "Haz click en un punto graficado para conocer el detalle por hora de esa fecha +- 10 días",
+                        target="daily_generation_graph",
+                        placement='top'
+                        )
+                    ],
                     style = {'width': '50%', 'display': 'inline-block'}
                     ),
-                html.Div(
-                    dcc.Graph(
-                        id = 'hourly_generation_graph',
-                        figure = generation_hourly(cursor)),
-                    style = {'width': '50%', 'display': 'inline-block'}),
+                html.Div(dcc.Loading(
+                            id="loading_element_hourly_generation_graph",
+                            type="circle",
+                            children=[
+                                dcc.Graph(
+                                    id = 'hourly_generation_graph',
+                                    figure = generation_hourly(cursor)
+                                    )
+                                ]
+                            ),
+                    style = {'width': '50%', 'display': 'inline-block'}
+                    ),
                 html.Div(children = [
                     html.Div(
                         dcc.Dropdown(
@@ -120,7 +121,7 @@ app.layout = html.Div(html.Center(html.Div([
                         style = {'width': '20%', 'display': 'inline-block','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial'},
                         ),
                     html.Div(dcc.Loading(
-                            id="loading_element_consumption",
+                            id="loading_element_consumption_graph",
                             type="circle",
                             children=[html.Div(
                                 dcc.Graph(
@@ -142,20 +143,6 @@ app.layout = html.Div(html.Center(html.Div([
                 html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                 html.Div(
                     dcc.Dropdown(
-                        id = 'system_dropdown',
-                        options = [
-                            {'label': 'Sistema Interconectado Nacional (SIN)', 'value': 'sin'},
-                            {'label': 'Sistema Interconectado Baja California (BCA)', 'value': 'bca'},
-                            {'label': 'Sistema Interconectado Baja California Sur (BCS)', 'value': 'bcs'}],
-                        placeholder = "Selecciona un sistema",
-                        value = 'sin',
-                        clearable=False,
-                        style = {'text-align':'center'}),
-                    style = dropdown_style
-                    ),
-                html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                html.Div(
-                    dcc.Dropdown(
                         id = 'market_dropdown',
                         options = [
                             {'label': 'Mercado del Día en Adelanto (MDA)', 'value': 'mda'},
@@ -170,7 +157,7 @@ app.layout = html.Div(html.Center(html.Div([
                 html.Div(
                     dcc.Dropdown(
                         id = 'zona_de_carga_prices_dopdown',
-                        options = [{'label': zona, 'value': zona} for zona in zones_list['sin']],
+                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_precios],
                         placeholder = "Selecciona una Zona de Carga",
                         value = 'OAXACA',
                         clearable=False,
@@ -179,35 +166,61 @@ app.layout = html.Div(html.Center(html.Div([
                     ),
                 html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                 html.Div(html.P()),
-                html.Div(
-                    dcc.Graph(
-                        id = 'zone_daily_price_graph',
-                        figure = zone_daily_prices(cursor, 'sin','mda','OAXACA')),
+                html.Div([dcc.Loading(
+                    id="loading_element_zone_daily_price_graph",
+                    type="circle",
+                    children=[
+                        dcc.Graph(
+                            id = 'zone_daily_price_graph',
+                            figure = zone_daily_prices(cursor,'mda','OAXACA')
+                            )
+                        ]
+                    ),
+                    dbc.Tooltip(
+                        "Haz click en un punto graficado para conocer el detalle por hora de esa fecha +- 10 días",
+                        target="zone_daily_price_graph",
+                        placement='top'
+                        )
+                    ],
                     style = {'width': '50%', 'display': 'inline-block'}
                     ),
-                html.Div(
-                    dcc.Graph(
-                        id = 'zone_hourly_price_graph',
-                        figure = zone_hourly_prices(cursor)),
-                    style = {'width': '50%', 'display': 'inline-block'}),
+                html.Div(dcc.Loading(
+                    id="loading_element_zone_hourly_price_graph",
+                    type="circle",
+                    children=[
+                        dcc.Graph(
+                            id = 'zone_hourly_price_graph',
+                            figure = zone_hourly_prices(cursor)
+                            )
+                        ]
+                    ),
+                    style = {'width': '50%', 'display': 'inline-block'}
+                    ),
                 html.P([]),
                 html.Div(
                     children=[
-                        # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
-                        html.Div(
+                        html.Div([
                             dcc.Dropdown(
                                 id = 'price_graph_comparisson_dropdown',
                                 options = [
                                     {'label': 'OAXACA vs Nodos Locales', 'value': 'nodos'},
                                     {'label': 'OAXACA vs Zonas de Carga', 'value': 'zonas'}],
                                 multi = False,
-                                value = 'nodos',
+                                value = 'zonas',
                                 clearable=False,
-                                style = {'text-align':'center'}),
+                                style = {'text-align':'center'}
+                                ),
+                            dbc.Tooltip(
+                                "Seleccionar 'vs Nodos Locales' puede tardar "
+                                "demasiado y paralizar la página. "
+                                "Se optimizará en actualizaciones futuras.",
+                                target="price_graph_comparisson_dropdown",
+                                placement='top'
+                                )
+                            ],
                             style = dropdown_style_2
                             ),
                         html.Div(html.P()),
-                        # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                         html.Div(
                             dcc.Dropdown(
                                 id = 'price_component_dropdown',
@@ -223,7 +236,6 @@ app.layout = html.Div(html.Center(html.Div([
                             style = dropdown_style_2
                             ),
                         html.Div(html.P()),
-                        # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                         html.Div(
                             dcc.Dropdown(
                                 id = 'price_component_graph_type_dropdown',
@@ -237,11 +249,10 @@ app.layout = html.Div(html.Center(html.Div([
                             style = dropdown_style_2
                             ),
                         html.Div(html.P()),
-                        # html.Div([], style = {'width': '4%', 'display': 'inline-block'}),
                         html.Div(
                             dcc.Dropdown(
                                 id = 'zona_de_carga_prices_comparison_dopdown',
-                                options = [{'label': zona, 'value': zona} for zona in zones_list['sin']],
+                                options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_precios],
                                 multi = True,
                                 placeholder = "Selecciona una Zona de Carga",
                                 style = {'text-align':'center'}),
@@ -266,7 +277,7 @@ app.layout = html.Div(html.Center(html.Div([
                             children=[html.Div(
                                 dcc.Graph(
                                     id = 'marginal_zones_prices_graph',
-                                    figure = marginal_prices(cursor)
+                                    figure = zones_prices(cursor)
                                     )
                             )]
                         ),
@@ -288,7 +299,12 @@ app.layout = html.Div(html.Center(html.Div([
                 dcc.Loading(
                     id = 'loading_element_download_table_prices',
                     children =[
-                        dbc.Button("Descargar",id = 'download_table_prices_button', color="primary", className="mr-1"),
+                        dbc.Button(
+                            "Descargar",
+                            id = 'download_table_prices_button',
+                            color="primary",
+                            className="mr-1"
+                            )
                         ]
                     ),
                 html.Div(html.P())
@@ -298,6 +314,14 @@ app.layout = html.Div(html.Center(html.Div([
             style = style1,
             selected_style = style1,
             children=[
+                html.Div(html.P()),
+                dbc.Alert([
+                    "Ingresa una latitud y longitud para ubicar nodos cercanos, puedes obtener latutid y lungitud de ",
+                    html.A("Google Maps.", href="https://www.google.com/maps/@24.209122,-103.736408,5.23z", className="alert-link", target='_blank')],
+                    id="alert-fade",
+                    dismissable=True,
+                    is_open=True
+                    ),
                 html.Div(html.P()),
                 html.Div(
                     dbc.Input(
@@ -358,6 +382,11 @@ app.layout = html.Div(html.Center(html.Div([
                             ),
                         )]
                     ),
+                dbc.Tooltip(
+                    "Ingresa las coordenadas y haz click en un punto para obtener más información",
+                    target="map_graph",
+                    placement='top'
+                    ),
                 html.Div(html.P()),
                 html.H3([f"Información de nodos seleccionados - {datetime.datetime.now().year}"]),
                 dcc.Loading(
@@ -366,7 +395,6 @@ app.layout = html.Div(html.Center(html.Div([
                     children = [
                         html.Div(
                             id = 'map_table_div',
-                            # children = [html.P(),html.P()]
                             ),
                         ]
                     ),
@@ -374,7 +402,12 @@ app.layout = html.Div(html.Center(html.Div([
                 dcc.Loading(
                     id = 'loading_element_download_table_map',
                     children =[
-                        dbc.Button("Descargar",id = 'download_table_map_button', color="primary", className="mr-1"),
+                        dbc.Button(
+                            "Descargar",
+                            id = 'download_table_map_button',
+                            color="primary",
+                            className="mr-1"
+                            )
                         ]
                     ),
                 html.Div(html.P())
@@ -427,6 +460,11 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_generation_preview_button',
                                                 color="primary",
                                                 className="mr-1"
+                                                ),
+                                            dbc.Tooltip(
+                                                "Muestra primeras 50 filas de la información solicitada",
+                                                target="data_generation_preview_button",
+                                                placement='top'
                                                 )
                                             ]
                                         )
@@ -505,6 +543,11 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_consumption_preview_button',
                                                 color="primary",
                                                 className="mr-1"
+                                                ),
+                                            dbc.Tooltip(
+                                                "Muestra primeras 50 filas de la información solicitada",
+                                                target="data_consumption_preview_button",
+                                                placement='top'
                                                 )
                                             ]
                                         )
@@ -594,6 +637,11 @@ app.layout = html.Div(html.Center(html.Div([
                                                 id = 'data_prices_preview_button',
                                                 color="primary",
                                                 className="mr-1"
+                                                ),
+                                            dbc.Tooltip(
+                                                "Muestra primeras 50 filas de la información solicitada",
+                                                target="data_prices_preview_button",
+                                                placement='top'
                                                 )
                                             ]
                                         )
@@ -650,7 +698,7 @@ app.layout = html.Div(html.Center(html.Div([
                                 html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
                                 html.Div(
                                     dcc.Dropdown(
-                                        id = 'data_prices_nodes_dopdown',
+                                        id = 'data_prices_nodes_dropdown',
                                         options = [{'label': nodo, 'value': nodo} for nodo in nodos_oaxaca],
                                         multi = True,
                                         placeholder = "Selecciona un Nodo",
@@ -674,103 +722,88 @@ app.layout = html.Div(html.Center(html.Div([
                                     ]
                                 )
                             ]
-                        ),
-                    dcc.Tab(label='SQL - Query',
-                        style = style1,
-                        selected_style = style1,
-                        children=[
-                            html.P(),
-                            html.P(),
-                            html.Div([
-                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                                html.Div([
-                                    dbc.Input(id="SQL_input", placeholder="Escribe una query de SQL...", type="text")
-                                    ],
-                                    style = {'width': '50%', 'display': 'inline-block'}
-                                    ),
-                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                                html.Div([
-                                    dcc.Loading(
-                                        id = 'loading_element_data_SQL_preview',
-                                        children =[
-                                            dbc.Button("Ejecutar",
-                                                id = 'data_SQL_preview_button',
-                                                color="success",
-                                                className="mr-1"
-                                                )
-                                            ]
-                                        )
-                                    ],
-                                    style = {'width': '10%', 'display': 'inline-block'}
-                                    ),
-                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                                # html.Div([
-                                #     dcc.Loading(
-                                #         id = 'loading_element_data_SQL_download',
-                                #         children =[
-                                #             dbc.Button("Descargar",
-                                #                 id = 'data_SQL_download_button',
-                                #                 color="success",
-                                #                 className="mr-1"
-                                #                 )
-                                #             ]
-                                #         )
-                                #     ],
-                                #     style = {'width': '10%', 'display': 'inline-block'}
-                                #     ),
-                                # html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                                ],
-                                style = {'align-items':'center'}
-                                ),
-                            html.Div(html.P()),
-                            dcc.Loading(
-                                id = 'loading_element_table_data_SQL',
-                                type = 'circle',
-                                children = [
-                                    html.Div(
-                                        id = 'data_SQL_table_div',
-                                        children=[' ']
-                                        ),
-                                    ]
-                                )
-                            ]
                         )
                     ]
                     )
                 ]
             )
         ]
+    ),
+    dbc.Modal([
+        dbc.ModalBody(dbc.Tabs([
+                dbc.Tab(
+                    label="¡Bienvenid@!",
+                    tab_id="about_esp",
+                    children=dcc.Markdown("""
+
+                        ¡Hola!
+
+                        Este proyecto lo he creado para que puedas acceder fácilmente a los datos públicos del Sistema Eléctrico Mexicano en cualquier momento.
+
+                        Te encontrarás con varias visualizaciones de generación, consumo y precios de energía, así como una pestaña dedicada a la descarga de datos (algunas funciones no se encuentran habilitadas por ahora :( pero próximamente podrás utilizarlas).
+
+                        Tal vez necesites algo de tiempo para aprender a manejar las gráficas *Plotly*, pero aquí te dejo un [instructivo](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) por si tienes alguna duda de cómo manipular las gráficas dinámicas.
+
+                        ¡Con los datos del mercado eléctrico se pueden crear muchos análisis y visualizaciones! No dudes en contactarme por [LinkedIn](https://www.linkedin.com/in/angelcarballo/) o [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) para agregar algo que te parezca útil o necesario. Siempre estaré disponible para platicar sobre preguntas o comentarios que tengas acerca del proyecto :).
+
+                        Espero que este proyecto te ayude a conocer más el mercado eléctrico mexicano.
+
+                        Ángel Carballo.
+
+                        """)
+                    ),
+                dbc.Tab(
+                    label="Welcome!",
+                    tab_id="about_eng",
+                    children=dcc.Markdown("""
+
+                        Hi!
+
+                        I created this project so you could get Mexico's Energy Market info quickly and easily.
+
+                        You will find several plots and graphs showing energy generation, consumption and price data. Also, there is a tab dedicated to data download (some features are disabled :( they will be fixed in the next updates).
+
+                        You may need some time to get used to *Plotly's* graphs, [here](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) is a quick tutorial in case you have any doubt on how to interact with them.
+
+                        There are tons of different analysis and visualizations that can be made with this data! Do not hesitate to contact me via [LinkedIn](https://www.linkedin.com/in/angelcarballo/) or [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) if you want me to add, fix or modify something you think is usefull and needed. I will always be available to go through any question or comment you have about this project :).
+
+                        I hope this project helps you understand the electrical market in Mexico.
+
+                        Ángel Carballo.
+
+                        """)
+                    ),
+            ],
+            active_tab="about_esp",
+            )),
+        dbc.ModalFooter(
+            dbc.Button("Cerrar/Close", id="about_close_button", className="ml-auto")
+            )
+        ],
+        id="about_message",
+        size="lg",
+        is_open = True
         ),
-    dcc.ConfirmDialog(
-        id='update_database_popup',
-        message='Actualizar la base de datos puede tardar unos minutos, ¿Estás seguro?',
-        displayed = False
-    )
+    Download(id='download1'),
+    Download(id='download2'),
+    Download(id='download3'),
+    Download(id='download4'),
+    Download(id='download5')
     ],
     style = {'width': '95%'}
     )))
 
 @app.callback(
-    Output('SQL_reconnect_button','cildren'),
-    Input('SQL_reconnect_button', 'n_clicks'))
-def reconnect_sql_function(n_clicks):
-    cursor.execute("ROLLBACK")
-    conn.commit()
-    return 'Conectar de nuevo con SQL'
+    Output("about_message", "is_open"),[
+    Input("about_open_button", "n_clicks"),
+    Input("about_close_button", "n_clicks"),
+    State("about_message", "is_open")]
+)
+def toggle_modal(open_click, close_click, is_open):
+    if open_click or close_click:
+        return not is_open
+    return is_open
 
-
-@app.callback(Output('update_database_popup', 'displayed'),
-              Input('update_database_button', 'n_clicks'))
-def display_confirm(n_clicks):
-    if n_clicks:
-        return True
-
-@app.callback(Output('update_database_button','cildren'),
-              Input('update_database_popup', 'submit_n_clicks'))
-def update_output(submit_n_clicks):
-    if submit_n_clicks:
-        update_database.main()
-        return 'Actualizar BD'
 
 @app.callback(
     Output('daily_consumption_graph', 'figure'),
@@ -796,41 +829,29 @@ def hourly_generation_graph_function(clickData):
     return fig
 
 @app.callback(
-    Output("zona_de_carga_prices_dopdown", "options"),
-    [Input("system_dropdown", "value"),
-    State('market_dropdown','value')])
-def zone_options_pnd(system, market):
-
-    zone_list = zones_list[system]
-    return [{'label': zone, 'value': zone} for zone in zone_list]
-
-
-@app.callback(
     Output('zone_daily_price_graph', 'figure'),
     [Input('zona_de_carga_prices_dopdown','value'),
-    State("system_dropdown", "value"),
-    State('market_dropdown','value')])
-def daily_zone_prices_graph_function(zone,system, market):
+    Input('market_dropdown','value')])
+def daily_zone_prices_graph_function(zone, market):
 
     if not zone:
         return 0
-    fig = zone_daily_prices(cursor,system, market, zone)
+    fig = zone_daily_prices(cursor, market, zone)
 
     return fig
 
 @app.callback(
     Output('zone_hourly_price_graph', 'figure'),[
     Input('zone_daily_price_graph', 'clickData'),
-    State("system_dropdown", "value"),
     State('market_dropdown','value'),
     State('zona_de_carga_prices_dopdown','value')])
-def hourly_zone_prices_graph_function(clickData, system, market, zone):
+def hourly_zone_prices_graph_function(clickData, market, zone):
 
     days, date = 10 , []
     if clickData:
         date.append((datetime.datetime.strptime(clickData['points'][0]['x'], '%Y-%m-%d') - datetime.timedelta(days=days)).strftime('%Y-%m-%d'))
         date.append((datetime.datetime.strptime(clickData['points'][0]['x'], '%Y-%m-%d') + datetime.timedelta(days=days)).strftime('%Y-%m-%d'))
-        fig = zone_hourly_prices(cursor,system, market, zone, date)
+        fig = zone_hourly_prices(cursor, market, zone, date)
     else:
         fig = zone_hourly_prices(cursor)
 
@@ -844,14 +865,14 @@ def hourly_zone_prices_graph_function(clickData, system, market, zone):
     Input('price_graph_comparisson_dropdown','value'),
     Input('zona_de_carga_prices_comparison_dopdown', 'value'),
     State('zona_de_carga_prices_dopdown', 'value'),
-    State("system_dropdown", "value"),
     State('market_dropdown','value')])
-def marginal_prices_graph_function(graph_type, data, zonas_nodos, zones, zona_de_carga, system, market):
+def marginal_prices_graph_function(graph_type, data, zonas_nodos, zones, zona_de_carga, market):
     if zonas_nodos == 'zonas':
-        fig = zones_prices(cursor, zones, zona_de_carga, system, market, data)
+        fig = zones_prices(cursor, zones, zona_de_carga, market, data)
     elif zonas_nodos == 'nodos':
-        fig = marginal_prices(cursor, zona_de_carga, system, market, data, graph_type)
+        fig = marginal_prices(cursor, zona_de_carga, market, data, graph_type)
     return fig
+
 
 @app.callback(
     Output("price_graph_comparisson_dropdown", 'options'),
@@ -861,14 +882,6 @@ def update_price_dropdown_options(zona_de_carga):
         {'label': f'{zona_de_carga} vs Nodos Locales', 'value': 'nodos'},
         {'label': f'{zona_de_carga} vs Zonas de Carga', 'value': 'zonas'}]
     return options
-
-@app.callback(
-    Output("zona_de_carga_prices_comparison_dopdown", "options"),
-    [Input("system_dropdown", "value")])
-def zone_options_prices_comparisson(system):
-
-    zone_list = zones_list[system]
-    return [{'label': zone, 'value': zone} for zone in zone_list]
 
 
 @app.callback([
@@ -881,6 +894,81 @@ def disable_prices_dropdowns(zonas_nodos):
         return False, True
     else:
         return True, False
+
+
+@app.callback(
+    Output('prices_table_div', 'children'),[
+    Input('show_table_prices', 'n_clicks'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def prices_create_table_function(n_clicks, market, zone, zonas_nodos, price_component, zones):
+
+    if zonas_nodos == 'zonas':
+        df = prices_zones_table(cursor, market, zone, zones, price_component)
+    elif zonas_nodos == 'nodos':
+        df = prices_nodes_table(cursor, market, zone, price_component)
+    else:
+        df = pd.DataFrame()
+
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'table_prices',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
+
+@app.callback([
+    Output("download1", "data"),
+    Output('download_table_prices_button', 'children')],[
+    Input('download_table_prices_button', 'n_clicks'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def download_prices_table_function(n_clicks, market, zone, zonas_nodos, price_component, zones):
+
+    if zonas_nodos == 'zonas':
+        df = prices_zones_table(cursor, market, zone, zones, price_component)
+    elif zonas_nodos == 'nodos':
+        df = prices_nodes_table(cursor, market, zone, price_component)
+
+    titulos = {
+        'precio_e':'total',
+        'c_energia':'energia',
+        'c_perdidas':'perdidas',
+        'c_congestion':'congestion',}
+
+    filename = 'precio_{}_{}_{}.csv'.format(zonas_nodos, market, titulos[price_component])
+    df = df.set_index(df.columns[0])
+
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
+
+
+@app.callback(
+    Output('prices_table_header', 'children'),[
+    Input('show_table_prices', 'n_clicks'),
+    State('market_dropdown', 'value'),
+    State('zona_de_carga_prices_dopdown', 'value'),
+    State('price_graph_comparisson_dropdown', 'value'),
+    State('price_component_dropdown','value'),
+    State('zona_de_carga_prices_comparison_dopdown','value')])
+def update_prices_table_header_function(n_clicks, market, zone, zonas_nodos, price_component, zones):
+
+    titulos = {
+        'precio_e':'Precio Total  De Energía',
+        'c_energia':'Componente de Energía',
+        'c_perdidas':'Componente de Pérdidas',
+        'c_congestion':'Componente de Congestión',}
+
+    if zonas_nodos == 'zonas':
+        return f'Información de Zonas de Carga de {datetime.datetime.now().year} - {market.upper()} - {titulos[price_component]}'
+    if zonas_nodos == 'nodos':
+        return f'Información de {zone} y Precios Marginales de {datetime.datetime.now().year} - {market.upper()} - {titulos[price_component]}'
 
 
 @app.callback(
@@ -899,8 +987,6 @@ def update_map(button, mapbox_style, latitud, longitud, number_of_nodes):
     Output('map_table_div', 'children'),[
     Input('map_graph', 'clickData')])
 def map_clickdata_table_function(clickData):
-    # print(clickData)
-    # print()
 
     if clickData['points'][0]['customdata'][:2] != ['-','-']:
 
@@ -911,7 +997,6 @@ def map_clickdata_table_function(clickData):
     else:
         df = map_click_table(cursor, clickData['points'][0]['customdata'][4])
 
-    # print()
     return dbc.Table.from_dataframe(
                             df,
                             id = 'table_map',
@@ -919,8 +1004,9 @@ def map_clickdata_table_function(clickData):
                             bordered=True,
                             hover=True)
 
-@app.callback(
-    Output('download_table_map_button', 'children'),[
+@app.callback([
+    Output("download2", "data"),
+    Output('download_table_map_button', 'children')],[
     Input('download_table_map_button', 'n_clicks'),
     State('map_graph','clickData')])
 def download_map_table_function(n_clicks, clickData):
@@ -933,80 +1019,11 @@ def download_map_table_function(n_clicks, clickData):
     else:
         df = map_click_table(cursor, clickData['points'][0]['customdata'][4])
 
-    file_name = get_download_file_name('nodos_de_mapa')
-    df.to_csv(f"..\\files\\descargas\\{file_name}", index = False)
+    filename = 'nodos_de_mapa.csv'
+    df = df.set_index(df.columns[0])
 
-    return 'Descargar'
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
-
-@app.callback(
-    Output('prices_table_div', 'children'),[
-    Input('show_table_prices', 'n_clicks'),
-    State('system_dropdown', 'value'),
-    State('market_dropdown', 'value'),
-    State('zona_de_carga_prices_dopdown', 'value'),
-    State('price_graph_comparisson_dropdown', 'value'),
-    State('price_component_dropdown','value'),
-    State('zona_de_carga_prices_comparison_dopdown','value')])
-def prices_create_table_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
-
-    if zonas_nodos == 'zonas':
-        df = prices_zones_table(cursor, system, market, zone, zones, price_component)
-    elif zonas_nodos == 'nodos':
-        df = prices_nodes_table(cursor, system, market, zone, price_component)
-    else:
-        df = pd.DataFrame()
-
-    return dbc.Table.from_dataframe(
-                            df,
-                            id = 'table_prices',
-                            striped=True,
-                            bordered=True,
-                            hover=True)
-
-@app.callback(
-    Output('download_table_prices_button', 'children'),[
-    Input('download_table_prices_button', 'n_clicks'),
-    State('system_dropdown', 'value'),
-    State('market_dropdown', 'value'),
-    State('zona_de_carga_prices_dopdown', 'value'),
-    State('price_graph_comparisson_dropdown', 'value'),
-    State('price_component_dropdown','value'),
-    State('zona_de_carga_prices_comparison_dopdown','value')])
-def download_prices_table_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
-
-    if zonas_nodos == 'zonas':
-        df = prices_zones_table(cursor, system, market, zone, zones, price_component)
-    if zonas_nodos == 'nodos':
-        df = prices_nodes_table(cursor, system, market, zone, price_component)
-
-    file_name = get_download_file_name('precios_de_energia')
-    df.to_csv(f"..\\files\\descargas\\{file_name}", index = False)
-
-    return 'Descargar'
-
-
-@app.callback(
-    Output('prices_table_header', 'children'),[
-    Input('download_table_prices_button', 'n_clicks'),
-    State('system_dropdown', 'value'),
-    State('market_dropdown', 'value'),
-    State('zona_de_carga_prices_dopdown', 'value'),
-    State('price_graph_comparisson_dropdown', 'value'),
-    State('price_component_dropdown','value'),
-    State('zona_de_carga_prices_comparison_dopdown','value')])
-def update_prices_table_header_function(n_clicks, system, market, zone, zonas_nodos, price_component, zones):
-
-    titulos = {
-        'precio_e':'Precio Total  De Energía',
-        'c_energia':'Componente de Energía',
-        'c_perdidas':'Componente de Pérdidas',
-        'c_congestion':'Componente de Congestión',}
-
-    if zonas_nodos == 'zonas':
-        return f'Información de Zonas de Carga de {datetime.datetime.now().year} - {system.upper()} - {market.upper()} - {titulos[price_component]}'
-    if zonas_nodos == 'nodos':
-        return f'Información de {zone} y Precios Marginales de {datetime.datetime.now().year} - {system.upper()} - {market.upper()} - {titulos[price_component]}'
 
 @app.callback(
     Output('data_generation_table_div','children'),[
@@ -1027,8 +1044,9 @@ def data_generation_preview_function(n_clicks, start_date, end_date, data):
                             hover=True)
 
 
-@app.callback(
-    Output('data_generation_download_button','children'),[
+@app.callback([
+    Output("download3", "data"),
+    Output('data_generation_download_button','children')],[
     Input('data_generation_download_button','n_clicks'),
     State('data_generation_date_picker', 'start_date'),
     State('data_generation_date_picker', 'end_date'),
@@ -1036,9 +1054,12 @@ def data_generation_preview_function(n_clicks, start_date, end_date, data):
     ])
 def data_generation_download_function(n_clicks, start_date, end_date, data):
 
-    data_generation_download(cursor,start_date, end_date, data)
+    df = data_generation_download(cursor,start_date, end_date, data)
 
-    return 'Descargar'
+    filename = 'generacion_{}_{}_{}.csv'.format(data, start_date, end_date)
+    df = df.set_index(df.columns[0])
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
 
 @app.callback(
@@ -1060,8 +1081,9 @@ def data_consumption_preview_function(n_clicks, start_date, end_date, data, zone
                             bordered=True,
                             hover=True)
 
-@app.callback(
-    Output('data_consumption_download_button','children'),[
+@app.callback([
+    Output("download4", "data"),
+    Output('data_consumption_download_button','children')],[
     Input('data_consumption_download_button','n_clicks'),
     State('data_consumption_date_picker', 'start_date'),
     State('data_consumption_date_picker', 'end_date'),
@@ -1070,9 +1092,12 @@ def data_consumption_preview_function(n_clicks, start_date, end_date, data, zone
     ])
 def data_consumption_download_function(n_clicks, start_date, end_date, data, zones):
 
-    data_consumption_download(cursor,start_date, end_date, data, zones)
+    df = data_consumption_download(cursor,start_date, end_date, data, zones)
 
-    return 'Descargar'
+    filename = 'demanda_{}_{}_{}.csv'.format(data, start_date, end_date)
+    df = df.set_index(df.columns[0])
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
 
 @app.callback(
@@ -1083,7 +1108,7 @@ def data_consumption_download_function(n_clicks, start_date, end_date, data, zon
     State('data_prices_market_select_dropdown', 'value'),
     State('data_prices_zone_or_node_dopdown','value'),
     State('data_prices_zona_de_carga_dopdown','value'),
-    State('data_prices_nodes_dopdown','value')
+    State('data_prices_nodes_dropdown','value')
     ])
 def data_prices_preview_function(n_clicks, start_date, end_date, market, zonas_nodos, zones, nodes):
 
@@ -1097,66 +1122,29 @@ def data_prices_preview_function(n_clicks, start_date, end_date, market, zonas_n
                             hover=True)
 
 
-@app.callback(
-    Output('data_prices_download_button','children'),[
+@app.callback([
+    Output("download5", "data"),
+    Output('data_prices_download_button','children')],[
     Input('data_prices_download_button','n_clicks'),
     State('data_prices_date_picker','start_date'),
     State('data_prices_date_picker','end_date'),
     State('data_prices_market_select_dropdown', 'value'),
     State('data_prices_zone_or_node_dopdown','value'),
     State('data_prices_zona_de_carga_dopdown','value'),
-    State('data_prices_nodes_dopdown','value')
+    State('data_prices_nodes_dropdown','value')
     ])
 def data_prices_download_function(n_clicks, start_date, end_date, market, zonas_nodos, zones, nodes):
 
-    data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
+    df = data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones, nodes)
 
-    return 'Descargar'
+    filename = 'precios__{}_{}_{}_{}.csv'.format(zonas_nodos, market, start_date, end_date)
+    df = df.set_index(df.columns[0])
 
-@app.callback(
-    Output('data_SQL_table_div','children'),[
-    Input('data_SQL_preview_button','n_clicks'),
-    State('SQL_input','value')
-    ])
-def data_SQL_preview_function(n_clicks, query_string):
-
-    if n_clicks:
-        try:
-            df = data_SQL_preview(cursor, query_string)
-        except Exception as error:
-            cursor.execute("ROLLBACK")
-            conn.commit()
-            return f'ERROR: {error}'
-
-        return dbc.Table.from_dataframe(
-                            df,
-                            id = 'data_SQL_table',
-                            striped=True,
-                            bordered=True,
-                            hover=True)
-
-# @app.callback([
-#     Output('data_SQL_download_button','children'),
-#     Output('data_SQL_table_div','children')],[
-#     Input('data_SQL_download_button','n_clicks'),
-#     State('SQL_input','value')
-#     ])
-# def data_SQL_download_function(n_clicks, query_string):
-
-#     # print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-#     if n_clicks:
-#         try:
-#             data_SQL_download(cursor, query_string)
-#         except Exception as error:
-#             cursor.execute("ROLLBACK")
-#             conn.commit()
-#             return 'Descargar', f'ERROR: {error}'
-
-#         return 'Descargar', 'Archivo descargado'
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
 
 @app.callback(
-    Output('data_prices_nodes_dopdown','options'),
+    Output('data_prices_nodes_dropdown','options'),
     Input('data_prices_zona_de_carga_dopdown','value')
     )
 def get_nodes_from_zones(zones):
@@ -1171,7 +1159,7 @@ def get_nodes_from_zones(zones):
     return options
 
 @app.callback(
-    Output('data_prices_nodes_dopdown','disabled'),
+    Output('data_prices_nodes_dropdown','disabled'),
     Input('data_prices_zone_or_node_dopdown','value')
     )
 def disable_data_nodes_dropdown(zonas_nodos):

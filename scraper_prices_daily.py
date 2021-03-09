@@ -221,7 +221,7 @@ def insert_into_table(cursor, system, node_type, market, values):
 
 def main():
 
-    conn = pg2.connect(user='postgres', password=postgres_password(), database='cenace')
+    conn = pg2.connect(**postgres_password(), database='cenace')
     cursor = conn.cursor()
     session = FuturesSession(max_workers=20)
 
