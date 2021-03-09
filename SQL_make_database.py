@@ -124,6 +124,8 @@ def make_table_index(cursor,table_name):
 
 
 
+
+
 def main():
 
     make_directory('files2')
