@@ -14,7 +14,7 @@ import psycopg2 as pg2
 from functions import *
 from dashboard_graphs import *
 from dashboards_tables import *
-# import update_database
+
 
 pio.templates.default = "plotly_white"
 db_name = 'cenace'
@@ -34,6 +34,11 @@ zonas_de_carga_precios = [zona[0] for zona in cursor.fetchall()]
 cursor.execute("""SELECT clave_nodo FROM nodes_info WHERE zona_de_carga = 'OAXACA';""")
 nodos_oaxaca = [nodo[0] for nodo in cursor.fetchall()]
 
+cursor.execute("""SELECT DISTINCT(centro_de_control_regional) AS regiones FROM nodes_info ORDER BY regiones ASC;""")
+regiones = [region[0] for region in cursor.fetchall()]
+
+cursor.execute("""SELECT clave_nodo FROM nodes_info ORDER BY clave_nodo ASC;""")
+nodos_SEN = [nodo[0] for nodo in cursor.fetchall()]
 
 
 style1 = {'font-family': 'Arial', 'font-size': '150%'}
@@ -722,6 +727,170 @@ app.layout = html.Div(html.Center(html.Div([
                                     ]
                                 )
                             ]
+                        ),
+                    dcc.Tab(label='Información del SEN',
+                        style = style1,
+                        selected_style = style1,
+                        children=[
+                            html.P(),
+                            html.P(),
+                            html.Div([
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_nodesinfo_region_dropdown',
+                                        options = [{'label': region, 'value': region} for region in regiones],
+                                        multi = True,
+                                        placeholder = "Selecciona una Región del SEN",
+                                        style = {'text-align':'center'}),
+                                    style = {'width': '50%','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial', 'display': 'inline-block'},
+                                    ),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_nodesinfo_region_preview_button',
+                                        children =[
+                                            dbc.Button("Buscar",
+                                                id = 'data_nodesinfo_region_preview_button',
+                                                color="primary",
+                                                className="mr-1"
+                                                ),
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_nodesinfo_region_download_button',
+                                        children =[
+                                            dbc.Button("Descargar",
+                                                id = 'data_nodesinfo_region_download_button',
+                                                color="success",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                ],
+                                style = {'align-items':'center'}
+                                ),
+                            html.Div(html.P()),
+                            html.Div([
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_nodesinfo_zone_dropdown',
+                                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_precios],
+                                        multi = True,
+                                        placeholder = "Selecciona una Zona de Carga",
+                                        style = {'text-align':'center'}),
+                                    style = {'width': '50%','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial', 'display': 'inline-block'},
+                                    ),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_nodesinfo_zone_preview_button',
+                                        children =[
+                                            dbc.Button("Buscar",
+                                                id = 'data_nodesinfo_zone_preview_button',
+                                                color="primary",
+                                                className="mr-1"
+                                                ),
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_nodesinfo_zone_download_button',
+                                        children =[
+                                            dbc.Button("Descargar",
+                                                id = 'data_nodesinfo_zone_download_button',
+                                                color="success",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                ],
+                                style = {'align-items':'center'}
+                                ),
+                            html.Div(html.P()),
+                            html.Div([
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div(
+                                    dcc.Dropdown(
+                                        id = 'data_nodesinfo_node_dropdown',
+                                        options = [{'label': nodo, 'value': nodo} for nodo in nodos_SEN],
+                                        multi = True,
+                                        placeholder = "Selecciona un Nodo",
+                                        style = {'text-align':'center'}),
+                                    style = {'width': '50%','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial', 'display': 'inline-block'},
+                                    ),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_nodesinfo_node_preview_button',
+                                        children =[
+                                            dbc.Button("Buscar",
+                                                id = 'data_nodesinfo_node_preview_button',
+                                                color="primary",
+                                                className="mr-1"
+                                                ),
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                html.Div([
+                                    dcc.Loading(
+                                        id = 'loading_element_data_nodesinfo_node_download_button',
+                                        children =[
+                                            dbc.Button("Descargar",
+                                                id = 'data_nodesinfo_node_download_button',
+                                                color="success",
+                                                className="mr-1"
+                                                )
+                                            ]
+                                        )
+                                    ],
+                                    style = {'width': '10%', 'display': 'inline-block'}
+                                    ),
+                                html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
+                                ],
+                                style = {'align-items':'center'}
+                                ),
+                            html.Div(html.P()),
+                            dcc.Loading(
+                                id = 'loading_element_table_data_nodesinfo',
+                                type = 'circle',
+                                children = [
+                                    html.Div(
+                                        id = 'data_nodesinfo_table_div',
+                                        children=[]
+                                        )
+                                    ]
+                                ),
+                            html.Div(html.P()),
+                            dcc.Loading(
+                                id = 'loading_element_table_data_nodesinfo2',
+                                type = 'circle',
+                                children = [
+                                    html.Div(
+                                        id = 'data_nodesinfo_table_div2',
+                                        children=[]
+                                        )
+                                    ]
+                                )
+                            ]
                         )
                     ]
                     )
@@ -788,7 +957,10 @@ app.layout = html.Div(html.Center(html.Div([
     Download(id='download2'),
     Download(id='download3'),
     Download(id='download4'),
-    Download(id='download5')
+    Download(id='download5'),
+    Download(id='download6'),
+    Download(id='download7'),
+    Download(id='download8')
     ],
     style = {'width': '95%'}
     )))
@@ -1169,7 +1341,83 @@ def disable_data_nodes_dropdown(zonas_nodos):
     else:
         return False
 
+@app.callback(
+    Output('data_nodesinfo_table_div','children'),[
+    Input('data_nodesinfo_region_preview_button', 'n_clicks'),
+    Input('data_nodesinfo_zone_preview_button', 'n_clicks'),
+    Input('data_nodesinfo_node_preview_button', 'n_clicks'),
+    State('data_nodesinfo_region_dropdown','value'),
+    State('data_nodesinfo_zone_dropdown','value'),
+    State('data_nodesinfo_node_dropdown','value')
+    ])
+def data_nodesinfo_preview_function(click_r, click_z, click_n, regiones, zones, nodes):
 
+    ctx = dash.callback_context
+    button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if button_id == "data_nodesinfo_region_preview_button":
+        df = data_nodesinfo_region(cursor, regiones)
+
+    if button_id == "data_nodesinfo_zone_preview_button":
+        df = data_nodesinfo_zone(cursor, zones)
+
+    if button_id == "data_nodesinfo_node_preview_button":
+        df = data_nodesinfo_node(cursor, nodes)
+
+    return dbc.Table.from_dataframe(
+                            df,
+                            id = 'data_nodesinfo_table',
+                            striped=True,
+                            bordered=True,
+                            hover=True)
+
+
+@app.callback([
+    Output("download6", "data"),
+    Output('data_nodesinfo_region_download_button','children')],[
+    Input('data_nodesinfo_region_download_button', 'n_clicks'),
+    State('data_nodesinfo_region_dropdown','value')
+    ])
+def data_nodesinfo_region_download_function(click, regiones):
+
+    df = data_nodesinfo_region(cursor, regiones)
+
+    filename = 'informacion_SEN.csv'
+    df = df.set_index(df.columns[0])
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
+
+
+@app.callback([
+    Output("download7", "data"),
+    Output('data_nodesinfo_zone_download_button','children')],[
+    Input('data_nodesinfo_zone_download_button', 'n_clicks'),
+    State('data_nodesinfo_zone_dropdown','value')
+    ])
+def data_nodesinfo_zone_download_function(click, zones):
+
+    df = data_nodesinfo_zone(cursor, zones)
+
+    filename = 'informacion_SEN.csv'
+    df = df.set_index(df.columns[0])
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
+
+
+@app.callback([
+    Output("download8", "data"),
+    Output('data_nodesinfo_node_download_button','children')],[
+    Input('data_nodesinfo_node_download_button', 'n_clicks'),
+    State('data_nodesinfo_node_dropdown','value')
+    ])
+def data_nodesinfo_node_download_function(click, nodes):
+
+    df = data_nodesinfo_node(cursor, nodes)
+
+    filename = 'informacion_SEN.csv'
+    df = df.set_index(df.columns[0])
+
+    return send_data_frame(df.to_csv, filename), 'Descargar'
 
 
 

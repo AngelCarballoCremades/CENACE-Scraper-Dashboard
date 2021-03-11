@@ -449,5 +449,72 @@ def data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones
         return df
 
 
+def data_nodesinfo_region(cursor,regiones):
+
+    print('requesting nodes_info regiones data...')
+
+    regiones = ("','").join(regiones)
+
+    try:
+        cursor.execute("""
+            SELECT * FROM nodes_info
+            WHERE
+                centro_de_control_regional IN ('{}')
+            ORDER BY centro_de_control_regional ASC, zona_de_carga ASC, clave_nodo ASC
+            ;""".format(regiones))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+
+    return df
+
+def data_nodesinfo_zone(cursor,zones):
+
+    print('requesting nodes_info zones data...')
+
+    zones = ("','").join(zones)
+
+    try:
+        cursor.execute("""
+            SELECT * FROM nodes_info
+            WHERE
+                zona_de_carga IN ('{}')
+            ORDER BY centro_de_control_regional ASC, zona_de_carga ASC, clave_nodo ASC
+            ;""".format(zones))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+
+    return df
+
+def data_nodesinfo_node(cursor,nodes):
+
+    print('requesting nodes_info nodes data...')
+
+    nodes = ("','").join(nodes)
+
+    try:
+        cursor.execute("""
+            SELECT * FROM nodes_info
+            WHERE
+                clave_nodo IN ('{}')
+            ORDER BY centro_de_control_regional ASC, zona_de_carga ASC, clave_nodo ASC
+            ;""".format(nodes))
+    except:
+        cursor.execute("ROLLBACK")
+        pass
+
+    colnames = [desc[0] for desc in cursor.description]
+    df = pd.DataFrame(data=cursor.fetchall(), columns=colnames)
+
+    return df
+
+
 if __name__ == '__main__':
     pass
