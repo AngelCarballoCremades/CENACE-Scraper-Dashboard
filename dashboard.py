@@ -23,13 +23,13 @@ conn = pg2.connect(**postgres_password(), database=db_name)
 cursor = conn.cursor()
 
 print("Getting dropdown values...")
-cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM consumption_real;""")
+cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM nodes_info;""")
 zonas_de_carga = [zona[0] for zona in cursor.fetchall()]
 zonas_de_carga_alone = zonas_de_carga.copy()
 zonas_de_carga.append('MEXICO (PAIS)')
 
-cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM nodes_info;""")
-zonas_de_carga_precios = [zona[0] for zona in cursor.fetchall()]
+# cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM nodes_info;""")
+# zonas_de_carga_alone = [zona[0] for zona in cursor.fetchall()]
 
 cursor.execute("""SELECT clave_nodo FROM nodes_info WHERE zona_de_carga = 'OAXACA';""")
 nodos_oaxaca = [nodo[0] for nodo in cursor.fetchall()]
@@ -162,7 +162,7 @@ app.layout = html.Div(html.Center(html.Div([
                 html.Div(
                     dcc.Dropdown(
                         id = 'zona_de_carga_prices_dopdown',
-                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_precios],
+                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_alone],
                         placeholder = "Selecciona una Zona de Carga",
                         value = 'OAXACA',
                         clearable=False,
@@ -257,7 +257,7 @@ app.layout = html.Div(html.Center(html.Div([
                         html.Div(
                             dcc.Dropdown(
                                 id = 'zona_de_carga_prices_comparison_dopdown',
-                                options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_precios],
+                                options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_alone],
                                 multi = True,
                                 placeholder = "Selecciona una Zona de Carga",
                                 style = {'text-align':'center'}),
@@ -784,7 +784,7 @@ app.layout = html.Div(html.Center(html.Div([
                                 html.Div(
                                     dcc.Dropdown(
                                         id = 'data_nodesinfo_zone_dropdown',
-                                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_precios],
+                                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_alone],
                                         multi = True,
                                         placeholder = "Selecciona una Zona de Carga",
                                         style = {'text-align':'center'}),
