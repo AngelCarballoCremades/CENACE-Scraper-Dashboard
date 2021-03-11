@@ -28,12 +28,6 @@ zonas_de_carga = [zona[0] for zona in cursor.fetchall()]
 zonas_de_carga_alone = zonas_de_carga.copy()
 zonas_de_carga.append('MEXICO (PAIS)')
 
-# cursor.execute("""SELECT DISTINCT(zona_de_carga) FROM nodes_info;""")
-# zonas_de_carga_alone = [zona[0] for zona in cursor.fetchall()]
-
-cursor.execute("""SELECT clave_nodo FROM nodes_info WHERE zona_de_carga = 'OAXACA';""")
-nodos_oaxaca = [nodo[0] for nodo in cursor.fetchall()]
-
 cursor.execute("""SELECT DISTINCT(centro_de_control_regional) AS regiones FROM nodes_info ORDER BY regiones ASC;""")
 regiones = [region[0] for region in cursor.fetchall()]
 
@@ -695,23 +689,28 @@ app.layout = html.Div(html.Center(html.Div([
                                         options = [{'label': zona, 'value': zona} for zona in zonas_de_carga],
                                         multi = True,
                                         placeholder = "Selecciona una Zona de Carga",
-                                        value = ['OAXACA'],
+                                        value = ['MEXICO (PAIS)'],
                                         style = {'text-align':'center'}
                                         ),
                                     style = {'width': '33%', 'display': 'inline-block'}
                                     ),
                                 html.Div([], style = {'width': '1%', 'display': 'inline-block'}),
-                                html.Div(
+                                html.Div([
                                     dcc.Dropdown(
                                         id = 'data_prices_nodes_dropdown',
-                                        options = [{'label': nodo, 'value': nodo} for nodo in nodos_oaxaca],
+                                        options = [{'label': nodo, 'value': nodo} for nodo in nodos_SEN],
                                         multi = True,
                                         placeholder = "Selecciona un Nodo",
                                         style = {'text-align':'center'}
                                         ),
+                                    dbc.Tooltip(
+                                        "Los nodos que se enlistan son de las Zonas de Carga seleccionadas. Para enlistar todos los nodos del SEN selecciona únicamente 'MEXICO (PAIS)' como Zona de Carga",
+                                        target="data_prices_nodes_dropdown",
+                                        placement='top'
+                                        )
+                                    ],
                                     style = {'width': '33%', 'display': 'inline-block'}
                                     )
-
                                 ],
                                 style = {'width': '100%','vertical-align': 'top', 'align-items': 'center', 'font-family': 'Arial'},
                                 ),
