@@ -692,7 +692,7 @@ app.layout = html.Div(html.Center(html.Div([
                                 html.Div(
                                     dcc.Dropdown(
                                         id = 'data_prices_zona_de_carga_dopdown',
-                                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga_precios],
+                                        options = [{'label': zona, 'value': zona} for zona in zonas_de_carga],
                                         multi = True,
                                         placeholder = "Selecciona una Zona de Carga",
                                         value = ['OAXACA'],
@@ -1321,10 +1321,14 @@ def data_prices_download_function(n_clicks, start_date, end_date, market, zonas_
     )
 def get_nodes_from_zones(zones):
 
-    zones = ("','").join(zones)
-    cursor.execute("""SELECT clave_nodo FROM nodes_info WHERE zona_de_carga in ('{}');""".format(zones))
-    nodos = [nodo[0] for nodo in cursor.fetchall()]
-    print(len(nodos))
+    if zones == ["MEXICO (PAIS)"]:
+        cursor.execute("""SELECT clave_nodo FROM nodes_info ORDER BY clave_nodo ASC;""")
+        nodos = [nodo[0] for nodo in cursor.fetchall()]
+
+    else:
+        zones = ("','").join(zones)
+        cursor.execute("""SELECT clave_nodo FROM nodes_info WHERE zona_de_carga in ('{}');""".format(zones))
+        nodos = [nodo[0] for nodo in cursor.fetchall()]
 
     options = [{'label': nodo, 'value': nodo} for nodo in nodos]
 
