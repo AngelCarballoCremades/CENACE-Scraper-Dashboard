@@ -210,6 +210,7 @@ def data_generation_preview(cursor,start_date, end_date, data):
             WHERE
                 fecha >= '{}' AND
                 fecha <= '{}'
+            ORDER BY fecha ASC, hora ASC
             LIMIT 50
             ;""".format(data, start_date, end_date))
     except:
@@ -237,6 +238,11 @@ def data_consumption_preview(cursor,start_date, end_date, data, zones):
                 WHERE
                     fecha >= '{}' AND
                     fecha <= '{}'
+                ORDER BY
+                    sistema ASC,
+                    zona_de_carga ASC,
+                    fecha ASC,
+                    hora ASC
                 LIMIT 50
                 ;""".format(data, start_date, end_date))
         except:
@@ -253,6 +259,11 @@ def data_consumption_preview(cursor,start_date, end_date, data, zones):
                     fecha >= '{}' AND
                     fecha <= '{}' AND
                     zona_de_carga in ('{}')
+                ORDER BY
+                    sistema ASC,
+                    zona_de_carga ASC,
+                    fecha ASC,
+                    hora ASC
                 LIMIT 50
                 ;""".format(data, start_date, end_date, zones))
         except:
@@ -287,6 +298,11 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
                         fecha >= '{}' AND
                         fecha <= '{}' AND
                         zona_de_carga in ('{}')
+                    ORDER BY
+                        sistema ASC,
+                        zona_de_carga ASC,
+                        fecha ASC,
+                        hora ASC
                     LIMIT 30
                     ;""".format(system, market, start_date, end_date, zones))
             except:
@@ -310,6 +326,11 @@ def data_prices_preview(cursor,start_date, end_date, market, zonas_nodos, zones,
                     fecha >= '{}' AND
                     fecha <= '{}' AND
                     clave_nodo in ('{}')
+                ORDER BY
+                    sistema ASC,
+                    clave_nodo ASC,
+                    fecha ASC,
+                    hora ASC
                 LIMIT 30;""".format(system, market, start_date, end_date, nodes))
 
 
@@ -332,7 +353,8 @@ def data_generation_download(cursor, start_date, end_date, data):
                 fecha >= '{}' AND
                 fecha <= '{}'
             ORDER BY
-                fecha ASC, hora ASC
+                fecha ASC,
+                hora ASC
             ;""".format(data, start_date, end_date))
     except:
         cursor.execute("ROLLBACK")
@@ -360,7 +382,10 @@ def data_consumption_download(cursor,start_date, end_date, data, zones):
                     fecha >= '{}' AND
                     fecha <= '{}'
                 ORDER BY
-                    sistema ASC, zona_de_carga ASC, fecha ASC, hora ASC
+                    sistema ASC,
+                    zona_de_carga ASC,
+                    fecha ASC,
+                    hora ASC
                 ;""".format(data, start_date, end_date))
         except:
             cursor.execute("ROLLBACK")
@@ -377,7 +402,10 @@ def data_consumption_download(cursor,start_date, end_date, data, zones):
                     fecha <= '{}' AND
                     zona_de_carga in ('{}')
                 ORDER BY
-                    sistema ASC, zona_de_carga ASC, fecha ASC, hora ASC
+                    sistema ASC,
+                    zona_de_carga ASC,
+                    fecha ASC,
+                    hora ASC
                 ;""".format(data, start_date, end_date, zones))
         except:
             cursor.execute("ROLLBACK")
@@ -413,7 +441,10 @@ def data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones
                         fecha <= '{}' AND
                         zona_de_carga in ('{}')
                     ORDER BY
-                    sistema ASC, zona_de_carga ASC, fecha ASC, hora ASC
+                        sistema ASC,
+                        zona_de_carga ASC,
+                        fecha ASC,
+                        hora ASC
                     ;""".format(system, market, start_date, end_date, zones))
             except:
                 cursor.execute("ROLLBACK")
@@ -437,7 +468,10 @@ def data_prices_download(cursor,start_date, end_date, market, zonas_nodos, zones
                     fecha <= '{}' AND
                     clave_nodo in ('{}')
                 ORDER BY
-                    sistema ASC, clave_nodo ASC, fecha ASC, hora ASC
+                    sistema ASC,
+                    clave_nodo ASC,
+                    fecha ASC,
+                    hora ASC
                 ;""".format(system, market, start_date, end_date, nodes))
 
 
@@ -460,7 +494,10 @@ def data_nodesinfo_region(cursor,regiones):
             SELECT * FROM nodes_info
             WHERE
                 centro_de_control_regional IN ('{}')
-            ORDER BY centro_de_control_regional ASC, zona_de_carga ASC, clave_nodo ASC
+            ORDER BY
+                centro_de_control_regional ASC,
+                zona_de_carga ASC,
+                clave_nodo ASC
             ;""".format(regiones))
     except:
         cursor.execute("ROLLBACK")
@@ -482,7 +519,10 @@ def data_nodesinfo_zone(cursor,zones):
             SELECT * FROM nodes_info
             WHERE
                 zona_de_carga IN ('{}')
-            ORDER BY centro_de_control_regional ASC, zona_de_carga ASC, clave_nodo ASC
+            ORDER BY
+                centro_de_control_regional ASC,
+                zona_de_carga ASC,
+                clave_nodo ASC
             ;""".format(zones))
     except:
         cursor.execute("ROLLBACK")
@@ -504,7 +544,10 @@ def data_nodesinfo_node(cursor,nodes):
             SELECT * FROM nodes_info
             WHERE
                 clave_nodo IN ('{}')
-            ORDER BY centro_de_control_regional ASC, zona_de_carga ASC, clave_nodo ASC
+            ORDER BY
+                centro_de_control_regional ASC,
+                zona_de_carga ASC,
+                clave_nodo ASC
             ;""".format(nodes))
     except:
         cursor.execute("ROLLBACK")
