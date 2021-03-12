@@ -911,6 +911,7 @@ app.layout = html.Div(html.Center(html.Div([
                         Te encontrarás con varias visualizaciones de generación, consumo y precios de energía, así como una pestaña dedicada a la descarga de datos (algunas funciones no se encuentran habilitadas por ahora :( pero próximamente podrás utilizarlas).
 
                         Tal vez necesites algo de tiempo para aprender a manejar las gráficas *Plotly*, pero aquí te dejo un [instructivo](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) por si tienes alguna duda de cómo manipular las gráficas dinámicas.
+                        Y [aquí hay un video](https://youtu.be/oRogzskua0k) en el que te explico cómo utilizar cada rincón del dashboard.
 
                         ¡Con los datos del mercado eléctrico se pueden crear muchos análisis y visualizaciones! No dudes en contactarme por [LinkedIn](https://www.linkedin.com/in/angelcarballo/) o [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) para agregar algo que te parezca útil o necesario. Siempre estaré disponible para platicar sobre preguntas o comentarios que tengas acerca del proyecto :).
 
@@ -932,6 +933,7 @@ app.layout = html.Div(html.Center(html.Div([
                         You will find several plots and graphs showing energy generation, consumption and price data. Also, there is a tab dedicated to data download (some features are disabled :( they will be fixed in the next updates).
 
                         You may need some time to get used to *Plotly's* graphs, [here](https://plotly.com/chart-studio-help/zoom-pan-hover-controls/) is a quick tutorial in case you have any doubt on how to interact with them.
+                        And [here is an instruction video](https://youtu.be/oRogzskua0k) (in spanish) where I teach you how to use everything in here.
 
                         There are tons of different analysis and visualizations that can be made with this data! Do not hesitate to contact me via [LinkedIn](https://www.linkedin.com/in/angelcarballo/) or [GitHub](https://github.com/AngelCarballoCremades/CENACE-Scraper-Dashboard/tree/online_dashboard) if you want me to add, fix or modify something you think is usefull and needed. I will always be available to go through any question or comment you have about this project :).
 
